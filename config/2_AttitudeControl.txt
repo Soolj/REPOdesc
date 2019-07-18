@@ -1,0 +1,15 @@
+# Attitude control
+
+INCLUDE QuadPhysicalParams.txt
+
+# simulation setup
+Sim.RunMode = Repeat
+Sim.EndTime = 1
+Sim.Vehicle1 = Quad
+
+# Controller selection
+Quad.ControlType = QuadControl
+Quad.ControlConfig = QuadControlParams
+
+# reference trajectory (just the starting position)
+QuadCon

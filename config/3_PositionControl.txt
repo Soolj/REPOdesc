@@ -31,4 +31,14 @@ Commands.6=AddGraph1.WindowThreshold(Quad1.Pos.X,0.1,1.25)
 Commands.7=AddGraph1.WindowThreshold(Quad2.Pos.X,0.1,1.25)
 Commands.8=AddGraph2.WindowThreshold(Quad2.Yaw,0.1,1.0)
 
-INCLUDE QuadControlParams.t
+INCLUDE QuadControlParams.txt
+INCLUDE Simulation.txt
+
+[Quad1:Quad]
+InitialPos=0.5,1,-1
+TrajectoryOffset=0,1,0
+
+[Quad2:Quad]
+InitialPos=0.5,-1,-1
+InitialYPR=.7,0,0
+TrajectoryOffset=0,-1,0

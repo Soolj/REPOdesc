@@ -32,4 +32,6 @@ tauaDown = 0.02
 minMotorThrust = 0.1
 maxMotorThrust = 4.5
 
-# ratio between thrust [N] and torque due to drag [N m
+# ratio between thrust [N] and torque due to drag [N m]
+# torque = kappa * thrust
+kappa = 0.016

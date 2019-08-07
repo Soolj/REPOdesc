@@ -77,4 +77,66 @@ public:
     {
         AxisAngle &v = *this;
         Type ang = (Type)2.0f*acosf(q(0));
-        Type mag = sinf(a
+        Type mag = sinf(ang/2.0f);
+        if (fabs(ang) < 1e-10f) {
+            v(0) = 0;
+            v(1) = 0;
+            v(2) = 0;
+        } else {
+            v(0) = ang*q(1)/mag;
+            v(1) = ang*q(2)/mag;
+            v(2) = ang*q(3)/mag;
+        }
+    }
+
+    /**
+     * Constructor from dcm
+     *
+     * Instance is initialized from a dcm representing coordinate transformation
+     * from frame 2 to frame 1.
+     *
+     * @param dcm dcm to set quaternion to
+     */
+    AxisAngle(const Dcm<Type> &dcm) :
+        Vector<Type, 3>()
+    {
+        AxisAngle &v = *this;
+        v = Quaternion<Type>(dcm);
+    }
+
+    /**
+     * Constructor from euler angles
+     *
+     * This sets the instance to a quaternion representing coordinate transformation from
+     * frame 2 to frame 1 where the rotation from frame 1 to frame 2 is described
+     * by a 3-2-1 intrinsic Tait-Bryan rotation sequence.
+     *
+     * @param euler euler angle instance
+     */
+    AxisAngle(const Euler<Type> &euler) :
+        Vector<Type, 3>()
+    {
+        AxisAngle &v = *this;
+        v = Quaternion<Type>(euler);
+    }
+
+    /**
+     * Constructor from 3 axis angle values (unit vector * angle)
+     *
+     * @param x r_x*angle
+     * @param y r_y*angle
+     * @param z r_z*angle
+     */
+    AxisAngle(Type x, Type y, Type z) :
+        Vector<Type, 3>()
+    {
+        AxisAngle &v = *this;
+        v(0) = x;
+        v(1) = y;
+        v(2) = z;
+    }
+
+    /**
+     * Constructor from axis and angle
+     *
+     * @param axis An axis of rotation, normalized if not unit leng

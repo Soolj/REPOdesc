@@ -139,4 +139,33 @@ public:
     /**
      * Constructor from axis and angle
      *
-     * @param axis An axis of rotation, normalized if not unit leng
+     * @param axis An axis of rotation, normalized if not unit length
+     * @param angle The amount to rotate
+     */
+    AxisAngle(const Matrix31 & axis_, Type angle_) :
+        Vector<Type, 3>()
+    {
+        AxisAngle &v = *this;
+        // make sure axis is a unit vector
+        Vector<Type, 3> a = axis_;
+        a = a.unit();
+        v(0) = a(0)*angle_;
+        v(1) = a(1)*angle_;
+        v(2) = a(2)*angle_;
+    }
+
+
+    Vector<Type, 3> axis() {
+        return Vector<Type, 3>::unit();
+    }
+
+    Type angle() {
+        return Vector<Type, 3>::norm();
+    }
+};
+
+typedef AxisAngle<float> AxisAnglef;
+
+} // namespace matrix
+
+/* vim: set et fenc=utf-8 ff=unix sts=0 sw=4 ts=4 : */

@@ -183,4 +183,75 @@ public:
         const Matrix<Type, M, N> &self = *this;
 
         for (size_t i = 0; i < M; i++) {
-            f
+            for (size_t j = 0; j < N; j++) {
+                res(i , j) = -self(i, j);
+            }
+        }
+
+        return res;
+    }
+
+    void operator+=(const Matrix<Type, M, N> &other)
+    {
+        Matrix<Type, M, N> &self = *this;
+        self = self + other;
+    }
+
+    void operator-=(const Matrix<Type, M, N> &other)
+    {
+        Matrix<Type, M, N> &self = *this;
+        self = self - other;
+    }
+
+    template<size_t P>
+    void operator*=(const Matrix<Type, N, P> &other)
+    {
+        Matrix<Type, M, N> &self = *this;
+        self = self * other;
+    }
+
+    /**
+     * Scalar Operations
+     */
+
+    Matrix<Type, M, N> operator*(Type scalar) const
+    {
+        Matrix<Type, M, N> res;
+        const Matrix<Type, M, N> &self = *this;
+
+        for (size_t i = 0; i < M; i++) {
+            for (size_t j = 0; j < N; j++) {
+                res(i , j) = self(i, j) * scalar;
+            }
+        }
+
+        return res;
+    }
+
+    inline Matrix<Type, M, N> operator/(Type scalar) const
+    {
+        return (*this)*(1/scalar);
+    }
+
+    Matrix<Type, M, N> operator+(Type scalar) const
+    {
+        Matrix<Type, M, N> res;
+        const Matrix<Type, M, N> &self = *this;
+
+        for (size_t i = 0; i < M; i++) {
+            for (size_t j = 0; j < N; j++) {
+                res(i , j) = self(i, j) + scalar;
+            }
+        }
+
+        return res;
+    }
+
+    inline Matrix<Type, M, N> operator-(Type scalar) const
+    {
+        return (*this) + (-1*scalar);
+    }
+
+    void operator*=(Type scalar)
+    {
+    

@@ -318,4 +318,81 @@ public:
     }
 
     // tranpose alias
-    inline 
+    inline Matrix<Type, N, M> T() const
+    {
+        return transpose();
+    }
+
+    template<size_t P, size_t Q>
+    Matrix<Type, P, Q> slice(size_t x0, size_t y0) const
+    {
+        Matrix<Type, P, Q> res(&(_data[x0][y0]));
+        return res;
+    }
+
+    template<size_t P, size_t Q>
+    void set(const Matrix<Type, P, Q> &m, size_t x0, size_t y0)
+    {
+        Matrix<Type, M, N> &self = *this;
+        for (size_t i = 0; i < P; i++) {
+            for (size_t j = 0; j < Q; j++) {
+                self(i + x0, j + y0) = m(i, j);
+            }
+        }
+    }
+
+    void setRow(size_t i, const Matrix<Type, N, 1> &row)
+    {
+        Matrix<Type, M, N> &self = *this;
+        for (size_t j = 0; j < N; j++) {
+            self(i, j) = row(j, 0);
+        }
+    }
+
+    void setCol(size_t j, const Matrix<Type, M, 1> &col)
+    {
+        Matrix<Type, M, N> &self = *this;
+        for (size_t i = 0; i < M; i++) {
+            self(i, j) = col(i, 0);
+        }
+    }
+
+    void setZero()
+    {
+        memset(_data, 0, sizeof(_data));
+    }
+
+    inline void zero()
+    {
+        setZero();
+    }
+
+    void setAll(Type val)
+    {
+        Matrix<Type, M, N> &self = *this;
+
+        for (size_t i = 0; i < M; i++) {
+            for (size_t j = 0; j < N; j++) {
+                self(i, j) = val;
+            }
+        }
+    }
+
+    inline void setOne()
+    {
+        setAll(1);
+    }
+
+    void setIdentity()
+    {
+        setZero();
+        Matrix<Type, M, N> &self = *this;
+
+        for (size_t i = 0; i < M && i < N; i++) {
+            self(i, i) = 1;
+        }
+    }
+
+    inline void identity()
+    {
+        setIdentity();

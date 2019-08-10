@@ -254,4 +254,68 @@ public:
 
     void operator*=(Type scalar)
     {
-    
+        Matrix<Type, M, N> &self = *this;
+
+        for (size_t i = 0; i < M; i++) {
+            for (size_t j = 0; j < N; j++) {
+                self(i, j) = self(i, j) * scalar;
+            }
+        }
+    }
+
+    void operator/=(Type scalar)
+    {
+        Matrix<Type, M, N> &self = *this;
+        self = self * (1.0f / scalar);
+    }
+
+    inline void operator+=(Type scalar)
+    {
+        *this = (*this) + scalar;
+    }
+
+    inline void operator-=(Type scalar)
+    {
+        *this = (*this) - scalar;
+    }
+
+
+    /**
+     * Misc. Functions
+     */
+
+    void write_string(char * buf, size_t n) const
+    {
+        buf[0] = '\0'; // make an empty string to begin with (we need the '\0' for strlen to work)
+        const Matrix<Type, M, N> &self = *this;
+        for (size_t i = 0; i < M; i++) {
+            for (size_t j = 0; j < N; j++) {
+                snprintf(buf + strlen(buf), n - strlen(buf), "\t%g", double(self(i, j))); // directly append to the string buffer
+            }
+            snprintf(buf + strlen(buf), n - strlen(buf), "\n");
+        }
+    }
+
+    void print() const
+    {
+        char buf[200];
+        write_string(buf, 200);
+        printf("%s\n", buf);
+    }
+
+    Matrix<Type, N, M> transpose() const
+    {
+        Matrix<Type, N, M> res;
+        const Matrix<Type, M, N> &self = *this;
+
+        for (size_t i = 0; i < M; i++) {
+            for (size_t j = 0; j < N; j++) {
+                res(j, i) = self(i, j);
+            }
+        }
+
+        return res;
+    }
+
+    // tranpose alias
+    inline 

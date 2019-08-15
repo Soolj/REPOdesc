@@ -396,3 +396,84 @@ public:
     inline void identity()
     {
         setIdentity();
+    }
+
+    inline void swapRows(size_t a, size_t b)
+    {
+        if (a == b) {
+            return;
+        }
+
+        Matrix<Type, M, N> &self = *this;
+
+        for (size_t j = 0; j < N; j++) {
+            Type tmp = self(a, j);
+            self(a, j) = self(b, j);
+            self(b, j) = tmp;
+        }
+    }
+
+    inline void swapCols(size_t a, size_t b)
+    {
+        if (a == b) {
+            return;
+        }
+
+        Matrix<Type, M, N> &self = *this;
+
+        for (size_t i = 0; i < M; i++) {
+            Type tmp = self(i, a);
+            self(i, a) = self(i, b);
+            self(i, b) = tmp;
+        }
+    }
+
+    Matrix<Type, M, N> abs()
+    {
+        Matrix<Type, M, N> r;
+        for (size_t i=0; i<M; i++) {
+            for (size_t j=0; j<N; j++) {
+                r(i,j) = Type(fabs((*this)(i,j)));
+            }
+        }
+        return r;
+    }
+
+    Type max()
+    {
+        Type max_val = (*this)(0,0);
+        for (size_t i=0; i<M; i++) {
+            for (size_t j=0; j<N; j++) {
+                Type val = (*this)(i,j);
+                if (val > max_val) {
+                    max_val = val;
+                }
+            }
+        }
+        return max_val;
+    }
+
+    Type min()
+    {
+        Type min_val = (*this)(0,0);
+        for (size_t i=0; i<M; i++) {
+            for (size_t j=0; j<N; j++) {
+                Type val = (*this)(i,j);
+                if (val < min_val) {
+                    min_val = val;
+                }
+            }
+        }
+        return min_val;
+    }
+
+};
+
+template<typename Type, size_t M, size_t N>
+Matrix<Type, M, N> zeros() {
+    Matrix<Type, M, N> m;
+    m.setZero();
+    return m;
+}
+
+temp

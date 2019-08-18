@@ -541,4 +541,15 @@ std::ostream& operator<<(std::ostream& os,
     for (size_t i = 0; i < M; ++i) {
         os << "[";
         for (size_t j = 0; j < N; ++j) {
-            os << std::setw(10) << static_cast<
+            os << std::setw(10) << static_cast<double>(matrix(i, j));
+            os << "\t";
+        }
+        os << "]" << std::endl;
+    }
+    return os;
+}
+#endif // defined(SUPPORT_STDIOSTREAM)
+
+} // namespace matrix
+
+/* vim: set et fenc=utf-8 ff=unix sts=0 sw=4 ts=4 : */

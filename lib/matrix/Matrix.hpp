@@ -476,4 +476,69 @@ Matrix<Type, M, N> zeros() {
     return m;
 }
 
-temp
+template<typename Type, size_t M, size_t N>
+Matrix<Type, M, N> ones() {
+    Matrix<Type, M, N> m;
+    m.setOne();
+    return m;
+}
+
+template<typename Type, size_t  M, size_t N>
+Matrix<Type, M, N> operator*(Type scalar, const Matrix<Type, M, N> &other)
+{
+    return other * scalar;
+}
+
+template<typename Type, size_t  M, size_t N>
+bool isEqual(const Matrix<Type, M, N> &x,
+             const Matrix<Type, M, N> &y, const Type eps=1e-4f) {
+
+    bool equal = true;
+
+    for (size_t i = 0; i < M; i++) {
+        for (size_t j = 0; j < N; j++) {
+            if (fabs(x(i , j) - y(i, j)) > eps) {
+                equal = false;
+                break;
+            }
+        }
+        if (equal == false) break;
+    }
+
+
+    if (!equal) {
+        char buf_x[100];
+        char buf_y[100];
+        x.write_string(buf_x, 100);
+        y.write_string(buf_y, 100);
+        printf("not equal\nx:\n%s\ny:\n%s\n", buf_x, buf_y);
+    }
+    return equal;
+}
+
+
+template<typename Type>
+bool isEqualF(Type x,
+              Type y, Type eps=1e-4f) {
+
+    bool equal = true;
+
+    if (fabsf(x - y) > eps) {
+        equal = false;
+    }
+
+    if (!equal) {
+        printf("not equal\nx:\n%g\ny:\n%g\n", double(x), double(y));
+    }
+    return equal;
+}
+
+#if defined(SUPPORT_STDIOSTREAM)
+template<typename Type, size_t  M, size_t N>
+std::ostream& operator<<(std::ostream& os,
+                         const matrix::Matrix<Type, M, N>& matrix)
+{
+    for (size_t i = 0; i < M; ++i) {
+        os << "[";
+        for (size_t j = 0; j < N; ++j) {
+            os << std::setw(10) << static_cast<

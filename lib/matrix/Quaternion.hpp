@@ -164,4 +164,67 @@ public:
      * transformation from frame 2 to frame 1.
      * A zero-rotation quaternion is represented by (1,0,0,0).
      *
-     * @param a
+     * @param a set quaternion value 0
+     * @param b set quaternion value 1
+     * @param c set quaternion value 2
+     * @param d set quaternion value 3
+     */
+    Quaternion(Type a, Type b, Type c, Type d) :
+        Vector<Type, 4>()
+    {
+        Quaternion &q = *this;
+        q(0) = a;
+        q(1) = b;
+        q(2) = c;
+        q(3) = d;
+    }
+
+    /**
+     * Quaternion multiplication operator
+     *
+     * @param q quaternion to multiply with
+     * @return product
+     */
+    Quaternion operator*(const Quaternion &q) const
+    {
+        const Quaternion &p = *this;
+        Quaternion r;
+        r(0) = p(0) * q(0) - p(1) * q(1) - p(2) * q(2) - p(3) * q(3);
+        r(1) = p(0) * q(1) + p(1) * q(0) - p(2) * q(3) + p(3) * q(2);
+        r(2) = p(0) * q(2) + p(1) * q(3) + p(2) * q(0) - p(3) * q(1);
+        r(3) = p(0) * q(3) - p(1) * q(2) + p(2) * q(1) + p(3) * q(0);
+        return r;
+    }
+
+    /**
+     * Self-multiplication operator
+     *
+     * @param other quaternion to multiply with
+     */
+    void operator*=(const Quaternion &other)
+    {
+        Quaternion &self = *this;
+        self = self * other;
+    }
+
+    /**
+     * Scalar multiplication operator
+     *
+     * @param scalar scalar to multiply with
+     * @return product
+     */
+    Quaternion operator*(Type scalar) const
+    {
+        const Quaternion &q = *this;
+        return scalar * q;
+    }
+
+    /**
+     * Scalar self-multiplication operator
+     *
+     * @param scalar scalar to multiply with
+     */
+    void operator*=(Type scalar)
+    {
+        Quaternion &q = *this;
+        q = q * 

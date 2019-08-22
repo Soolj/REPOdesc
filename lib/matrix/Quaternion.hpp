@@ -227,4 +227,77 @@ public:
     void operator*=(Type scalar)
     {
         Quaternion &q = *this;
-        q = q * 
+        q = q * scalar;
+    }
+
+    /**
+     * Computes the derivative
+     *
+     * @param w direction
+     */
+    Matrix41 derivative(const Matrix31 &w) const
+    {
+        const Quaternion &q = *this;
+        Quaternion<Type> v(0, w(0, 0), w(1, 0), w(2, 0));
+        return v * q  * Type(0.5);
+    }
+
+    /**
+     * Invert quaternion
+     */
+    void invert()
+    {
+        Quaternion &q = *this;
+        q(1) *= -1;
+        q(2) *= -1;
+        q(3) *= -1;
+    }
+
+    /**
+     * Invert quaternion
+     *
+     * @return inverted quaternion
+     */
+    Quaternion inversed()
+    {
+        Quaternion &q = *this;
+        Quaternion ret;
+        ret(0) = q(0);
+        ret(1) = -q(1);
+        ret(2) = -q(2);
+        ret(3) = -q(3);
+        return ret;
+    }
+
+    /**
+     * Rotate quaternion from rotation vector
+     * TODO replace with AxisAngle call
+     *
+     * @param vec rotation vector
+     */
+    void rotate(const Vector<Type, 3> &vec)
+    {
+        Quaternion res;
+        res.from_axis_angle(vec);
+        (*this) = (*this) * res;
+    }
+
+    Vector3f conjugate(const Vector3f &vec) {
+        Quaternion q = *this;
+        Quaternion v(0, vec(0), vec(1), vec(2));
+        Quaternion res = q*v*q.inversed();
+        return Vector3f(res(1), res(2), res(3));
+    }
+
+    Vector3f conjugate_inversed(const Vector3f &vec) {
+        Quaternion q = *this;
+        Quaternion v(0, vec(0), vec(1), vec(2));
+        Quaternion res = q.inversed()*v*q;
+        return Vector3f(res(1), res(2), res(3));
+    }
+
+    /**
+     * Rotation quaternion from vector
+     *
+     * The axis of rotation is given by vector direction and
+   

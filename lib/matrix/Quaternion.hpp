@@ -358,4 +358,48 @@ public:
     Vector<Type, 3> to_axis_angle()
     {
         Quaternion &q = *this;
-        Type axis_magnitude = Type(sqrt(q(1) * q(
+        Type axis_magnitude = Type(sqrt(q(1) * q(1) + q(2) * q(2) + q(3) * q(3)));
+        Vector<Type, 3> vec;
+        vec(0) = q(1);
+        vec(1) = q(2);
+        vec(2) = q(3);
+
+        if (axis_magnitude >= (Type)1e-10) {
+            vec = vec / axis_magnitude;
+            vec = vec * wrap_pi((Type)2.0 * atan2f(axis_magnitude, q(0)));
+        }
+
+        return vec;
+    }
+
+    /**
+     * Imaginary components of quaternion
+     */
+    Vector3<Type> imag()
+    {
+        Quaternion &q = *this;
+        return Vector3<Type>(q(1), q(2), q(3));
+    }
+
+    /**
+     * XXX DEPRECATED, can use assignment or ctor
+     */
+    Quaternion from_dcm(Matrix<Type, 3, 3> dcm) {
+        return Quaternion(Dcmf(dcm));
+    }
+
+    /**
+     * XXX DEPRECATED, can use assignment or ctor
+     */
+    Dcm<Type> to_dcm() {
+        return Dcm<Type>(*this);
+    }
+
+};
+
+typedef Quaternion<float> Quatf;
+typedef Quaternion<float> Quaternionf;
+
+} // namespace matrix
+
+/* vim: set et fenc=utf-8 ff=unix sts=0 sw=4 ts=4 : */

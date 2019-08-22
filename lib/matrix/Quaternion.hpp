@@ -300,4 +300,62 @@ public:
      * Rotation quaternion from vector
      *
      * The axis of rotation is given by vector direction and
-   
+     * the angle is given by the norm.
+     *
+     * @param vec rotation vector
+     * @return quaternion representing the rotation
+     */
+    void from_axis_angle(Vector<Type, 3> vec)
+    {
+        Quaternion &q = *this;
+        Type theta = vec.norm();
+
+        if (theta < (Type)1e-10) {
+            q(0) = (Type)1.0;
+            q(1) = q(2) = q(3) = 0;
+            return;
+        }
+
+        vec /= theta;
+        from_axis_angle(vec, theta);
+    }
+
+    /**
+     * Rotation quaternion from axis and angle
+     * XXX DEPRECATED, use AxisAngle class
+     *
+     * @param axis axis of rotation
+     * @param theta scalar describing angle of rotation
+     * @return quaternion representing the rotation
+     */
+    void from_axis_angle(const Vector<Type, 3> &axis, Type theta)
+    {
+        Quaternion &q = *this;
+
+        if (theta < (Type)1e-10) {
+            q(0) = (Type)1.0;
+            q(1) = q(2) = q(3) = 0;
+        }
+
+        Type magnitude = sinf(theta / 2.0f);
+
+        q(0) = cosf(theta / 2.0f);
+        q(1) = axis(0) * magnitude;
+        q(2) = axis(1) * magnitude;
+        q(3) = axis(2) * magnitude;
+    }
+
+
+    /**
+     * Rotation vector from quaternion
+     * XXX DEPRECATED, use AxisAngle class
+     *
+     * The axis of rotation is given by vector direction and
+     * the angle is given by the norm.
+     *
+     * @return vector, direction representing rotation axis and norm representing angle
+     */
+    Vector<Type, 3> to_axis_angle()
+    {
+        Quaternion &q = *this;
+        Type axis_magnitude = Type(sqrt(q(1) * q(

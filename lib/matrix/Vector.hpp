@@ -56,4 +56,51 @@ public:
         const Vector &a(*this);
         Type r = 0;
         for (size_t i = 0; i<M; i++) {
-            r += a(i)*b(i,0)
+            r += a(i)*b(i,0);
+        }
+        return r;
+    }
+
+    inline Type operator*(const MatrixM1 & b) const {
+        const Vector &a(*this);
+        return a.dot(b);
+    }
+
+    inline Vector operator*(float b) const {
+        return Vector(MatrixM1::operator*(b));
+    }
+
+    Type norm() const {
+        const Vector &a(*this);
+        return Type(sqrt(a.dot(a)));
+    }
+
+    inline Type length() const {
+        return norm();
+    }
+
+    inline void normalize() {
+        (*this) /= norm();
+    }
+
+    Vector unit() const {
+        return (*this) / norm();
+    }
+
+    inline Vector normalized() const {
+        return unit();
+    }
+
+    Vector pow(Type v) const {
+        const Vector &a(*this);
+        Vector r;
+        for (size_t i = 0; i<M; i++) {
+            r(i) = Type(::pow(a(i), v));
+        }
+        return r;
+    }
+};
+
+} // namespace matrix
+
+/* vim: set et fenc=utf-8 ff=unix sts=0 sw=4 ts=4 : */

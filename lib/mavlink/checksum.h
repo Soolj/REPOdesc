@@ -62,4 +62,34 @@ static inline void crc_init(uint16_t* crcAccum)
  * @param  length  length of the byte array
  * @return the checksum over the buffer bytes
  **/
-stati
+static inline uint16_t crc_calculate(const uint8_t* pBuffer, uint16_t length)
+{
+        uint16_t crcTmp;
+        crc_init(&crcTmp);
+	while (length--) {
+                crc_accumulate(*pBuffer++, &crcTmp);
+        }
+        return crcTmp;
+}
+
+
+/**
+ * @brief Accumulate the X.25 CRC by adding an array of bytes
+ *
+ * The checksum function adds the hash of one char at a time to the
+ * 16 bit checksum (uint16_t).
+ *
+ * @param data new bytes to hash
+ * @param crcAccum the already accumulated checksum
+ **/
+static inline void crc_accumulate_buffer(uint16_t *crcAccum, const char *pBuffer, uint16_t length)
+{
+	const uint8_t *p = (const uint8_t *)pBuffer;
+	while (length--) {
+                crc_accumulate(*p++, crcAccum);
+        }
+}
+
+#if defined(MAVLINK_USE_CXX_NAMESPACE) || defined(__cplusplus)
+}
+#endif

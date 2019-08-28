@@ -774,3 +774,624 @@ typedef enum MAV_SENSOR_ORIENTATION
 {
    MAV_SENSOR_ROTATION_NONE=0, /* Roll: 0, Pitch: 0, Yaw: 0 | */
    MAV_SENSOR_ROTATION_YAW_45=1, /* Roll: 0, Pitch: 0, Yaw: 45 | */
+   MAV_SENSOR_ROTATION_YAW_90=2, /* Roll: 0, Pitch: 0, Yaw: 90 | */
+   MAV_SENSOR_ROTATION_YAW_135=3, /* Roll: 0, Pitch: 0, Yaw: 135 | */
+   MAV_SENSOR_ROTATION_YAW_180=4, /* Roll: 0, Pitch: 0, Yaw: 180 | */
+   MAV_SENSOR_ROTATION_YAW_225=5, /* Roll: 0, Pitch: 0, Yaw: 225 | */
+   MAV_SENSOR_ROTATION_YAW_270=6, /* Roll: 0, Pitch: 0, Yaw: 270 | */
+   MAV_SENSOR_ROTATION_YAW_315=7, /* Roll: 0, Pitch: 0, Yaw: 315 | */
+   MAV_SENSOR_ROTATION_ROLL_180=8, /* Roll: 180, Pitch: 0, Yaw: 0 | */
+   MAV_SENSOR_ROTATION_ROLL_180_YAW_45=9, /* Roll: 180, Pitch: 0, Yaw: 45 | */
+   MAV_SENSOR_ROTATION_ROLL_180_YAW_90=10, /* Roll: 180, Pitch: 0, Yaw: 90 | */
+   MAV_SENSOR_ROTATION_ROLL_180_YAW_135=11, /* Roll: 180, Pitch: 0, Yaw: 135 | */
+   MAV_SENSOR_ROTATION_PITCH_180=12, /* Roll: 0, Pitch: 180, Yaw: 0 | */
+   MAV_SENSOR_ROTATION_ROLL_180_YAW_225=13, /* Roll: 180, Pitch: 0, Yaw: 225 | */
+   MAV_SENSOR_ROTATION_ROLL_180_YAW_270=14, /* Roll: 180, Pitch: 0, Yaw: 270 | */
+   MAV_SENSOR_ROTATION_ROLL_180_YAW_315=15, /* Roll: 180, Pitch: 0, Yaw: 315 | */
+   MAV_SENSOR_ROTATION_ROLL_90=16, /* Roll: 90, Pitch: 0, Yaw: 0 | */
+   MAV_SENSOR_ROTATION_ROLL_90_YAW_45=17, /* Roll: 90, Pitch: 0, Yaw: 45 | */
+   MAV_SENSOR_ROTATION_ROLL_90_YAW_90=18, /* Roll: 90, Pitch: 0, Yaw: 90 | */
+   MAV_SENSOR_ROTATION_ROLL_90_YAW_135=19, /* Roll: 90, Pitch: 0, Yaw: 135 | */
+   MAV_SENSOR_ROTATION_ROLL_270=20, /* Roll: 270, Pitch: 0, Yaw: 0 | */
+   MAV_SENSOR_ROTATION_ROLL_270_YAW_45=21, /* Roll: 270, Pitch: 0, Yaw: 45 | */
+   MAV_SENSOR_ROTATION_ROLL_270_YAW_90=22, /* Roll: 270, Pitch: 0, Yaw: 90 | */
+   MAV_SENSOR_ROTATION_ROLL_270_YAW_135=23, /* Roll: 270, Pitch: 0, Yaw: 135 | */
+   MAV_SENSOR_ROTATION_PITCH_90=24, /* Roll: 0, Pitch: 90, Yaw: 0 | */
+   MAV_SENSOR_ROTATION_PITCH_270=25, /* Roll: 0, Pitch: 270, Yaw: 0 | */
+   MAV_SENSOR_ROTATION_PITCH_180_YAW_90=26, /* Roll: 0, Pitch: 180, Yaw: 90 | */
+   MAV_SENSOR_ROTATION_PITCH_180_YAW_270=27, /* Roll: 0, Pitch: 180, Yaw: 270 | */
+   MAV_SENSOR_ROTATION_ROLL_90_PITCH_90=28, /* Roll: 90, Pitch: 90, Yaw: 0 | */
+   MAV_SENSOR_ROTATION_ROLL_180_PITCH_90=29, /* Roll: 180, Pitch: 90, Yaw: 0 | */
+   MAV_SENSOR_ROTATION_ROLL_270_PITCH_90=30, /* Roll: 270, Pitch: 90, Yaw: 0 | */
+   MAV_SENSOR_ROTATION_ROLL_90_PITCH_180=31, /* Roll: 90, Pitch: 180, Yaw: 0 | */
+   MAV_SENSOR_ROTATION_ROLL_270_PITCH_180=32, /* Roll: 270, Pitch: 180, Yaw: 0 | */
+   MAV_SENSOR_ROTATION_ROLL_90_PITCH_270=33, /* Roll: 90, Pitch: 270, Yaw: 0 | */
+   MAV_SENSOR_ROTATION_ROLL_180_PITCH_270=34, /* Roll: 180, Pitch: 270, Yaw: 0 | */
+   MAV_SENSOR_ROTATION_ROLL_270_PITCH_270=35, /* Roll: 270, Pitch: 270, Yaw: 0 | */
+   MAV_SENSOR_ROTATION_ROLL_90_PITCH_180_YAW_90=36, /* Roll: 90, Pitch: 180, Yaw: 90 | */
+   MAV_SENSOR_ROTATION_ROLL_90_YAW_270=37, /* Roll: 90, Pitch: 0, Yaw: 270 | */
+   MAV_SENSOR_ROTATION_ROLL_315_PITCH_315_YAW_315=38, /* Roll: 315, Pitch: 315, Yaw: 315 | */
+   MAV_SENSOR_ORIENTATION_ENUM_END=39, /*  | */
+} MAV_SENSOR_ORIENTATION;
+#endif
+
+/** @brief Bitmask of (optional) autopilot capabilities (64 bit). If a bit is set, the autopilot supports this capability. */
+#ifndef HAVE_ENUM_MAV_PROTOCOL_CAPABILITY
+#define HAVE_ENUM_MAV_PROTOCOL_CAPABILITY
+typedef enum MAV_PROTOCOL_CAPABILITY
+{
+   MAV_PROTOCOL_CAPABILITY_MISSION_FLOAT=1, /* Autopilot supports MISSION float message type. | */
+   MAV_PROTOCOL_CAPABILITY_PARAM_FLOAT=2, /* Autopilot supports the new param float message type. | */
+   MAV_PROTOCOL_CAPABILITY_MISSION_INT=4, /* Autopilot supports MISSION_INT scaled integer message type. | */
+   MAV_PROTOCOL_CAPABILITY_COMMAND_INT=8, /* Autopilot supports COMMAND_INT scaled integer message type. | */
+   MAV_PROTOCOL_CAPABILITY_PARAM_UNION=16, /* Autopilot supports the new param union message type. | */
+   MAV_PROTOCOL_CAPABILITY_FTP=32, /* Autopilot supports the new FILE_TRANSFER_PROTOCOL message type. | */
+   MAV_PROTOCOL_CAPABILITY_SET_ATTITUDE_TARGET=64, /* Autopilot supports commanding attitude offboard. | */
+   MAV_PROTOCOL_CAPABILITY_SET_POSITION_TARGET_LOCAL_NED=128, /* Autopilot supports commanding position and velocity targets in local NED frame. | */
+   MAV_PROTOCOL_CAPABILITY_SET_POSITION_TARGET_GLOBAL_INT=256, /* Autopilot supports commanding position and velocity targets in global scaled integers. | */
+   MAV_PROTOCOL_CAPABILITY_TERRAIN=512, /* Autopilot supports terrain protocol / data handling. | */
+   MAV_PROTOCOL_CAPABILITY_SET_ACTUATOR_TARGET=1024, /* Autopilot supports direct actuator control. | */
+   MAV_PROTOCOL_CAPABILITY_FLIGHT_TERMINATION=2048, /* Autopilot supports the flight termination command. | */
+   MAV_PROTOCOL_CAPABILITY_COMPASS_CALIBRATION=4096, /* Autopilot supports onboard compass calibration. | */
+   MAV_PROTOCOL_CAPABILITY_MAVLINK2=8192, /* Autopilot supports mavlink version 2. | */
+   MAV_PROTOCOL_CAPABILITY_MISSION_FENCE=16384, /* Autopilot supports mission fence protocol. | */
+   MAV_PROTOCOL_CAPABILITY_MISSION_RALLY=32768, /* Autopilot supports mission rally point protocol. | */
+   MAV_PROTOCOL_CAPABILITY_FLIGHT_INFORMATION=65536, /* Autopilot supports the flight information protocol. | */
+   MAV_PROTOCOL_CAPABILITY_ENUM_END=65537, /*  | */
+} MAV_PROTOCOL_CAPABILITY;
+#endif
+
+/** @brief Type of mission items being requested/sent in mission protocol. */
+#ifndef HAVE_ENUM_MAV_MISSION_TYPE
+#define HAVE_ENUM_MAV_MISSION_TYPE
+typedef enum MAV_MISSION_TYPE
+{
+   MAV_MISSION_TYPE_MISSION=0, /* Items are mission commands for main mission. | */
+   MAV_MISSION_TYPE_FENCE=1, /* Specifies GeoFence area(s). Items are MAV_CMD_FENCE_ GeoFence items. | */
+   MAV_MISSION_TYPE_RALLY=2, /* Specifies the rally points for the vehicle. Rally points are alternative RTL points. Items are MAV_CMD_RALLY_POINT rally point items. | */
+   MAV_MISSION_TYPE_ALL=255, /* Only used in MISSION_CLEAR_ALL to clear all mission types. | */
+   MAV_MISSION_TYPE_ENUM_END=256, /*  | */
+} MAV_MISSION_TYPE;
+#endif
+
+/** @brief Enumeration of estimator types */
+#ifndef HAVE_ENUM_MAV_ESTIMATOR_TYPE
+#define HAVE_ENUM_MAV_ESTIMATOR_TYPE
+typedef enum MAV_ESTIMATOR_TYPE
+{
+   MAV_ESTIMATOR_TYPE_NAIVE=1, /* This is a naive estimator without any real covariance feedback. | */
+   MAV_ESTIMATOR_TYPE_VISION=2, /* Computer vision based estimate. Might be up to scale. | */
+   MAV_ESTIMATOR_TYPE_VIO=3, /* Visual-inertial estimate. | */
+   MAV_ESTIMATOR_TYPE_GPS=4, /* Plain GPS estimate. | */
+   MAV_ESTIMATOR_TYPE_GPS_INS=5, /* Estimator integrating GPS and inertial sensing. | */
+   MAV_ESTIMATOR_TYPE_ENUM_END=6, /*  | */
+} MAV_ESTIMATOR_TYPE;
+#endif
+
+/** @brief Enumeration of battery types */
+#ifndef HAVE_ENUM_MAV_BATTERY_TYPE
+#define HAVE_ENUM_MAV_BATTERY_TYPE
+typedef enum MAV_BATTERY_TYPE
+{
+   MAV_BATTERY_TYPE_UNKNOWN=0, /* Not specified. | */
+   MAV_BATTERY_TYPE_LIPO=1, /* Lithium polymer battery | */
+   MAV_BATTERY_TYPE_LIFE=2, /* Lithium-iron-phosphate battery | */
+   MAV_BATTERY_TYPE_LION=3, /* Lithium-ION battery | */
+   MAV_BATTERY_TYPE_NIMH=4, /* Nickel metal hydride battery | */
+   MAV_BATTERY_TYPE_ENUM_END=5, /*  | */
+} MAV_BATTERY_TYPE;
+#endif
+
+/** @brief Enumeration of battery functions */
+#ifndef HAVE_ENUM_MAV_BATTERY_FUNCTION
+#define HAVE_ENUM_MAV_BATTERY_FUNCTION
+typedef enum MAV_BATTERY_FUNCTION
+{
+   MAV_BATTERY_FUNCTION_UNKNOWN=0, /* Battery function is unknown | */
+   MAV_BATTERY_FUNCTION_ALL=1, /* Battery supports all flight systems | */
+   MAV_BATTERY_FUNCTION_PROPULSION=2, /* Battery for the propulsion system | */
+   MAV_BATTERY_FUNCTION_AVIONICS=3, /* Avionics battery | */
+   MAV_BATTERY_TYPE_PAYLOAD=4, /* Payload battery | */
+   MAV_BATTERY_FUNCTION_ENUM_END=5, /*  | */
+} MAV_BATTERY_FUNCTION;
+#endif
+
+/** @brief Enumeration of VTOL states */
+#ifndef HAVE_ENUM_MAV_VTOL_STATE
+#define HAVE_ENUM_MAV_VTOL_STATE
+typedef enum MAV_VTOL_STATE
+{
+   MAV_VTOL_STATE_UNDEFINED=0, /* MAV is not configured as VTOL | */
+   MAV_VTOL_STATE_TRANSITION_TO_FW=1, /* VTOL is in transition from multicopter to fixed-wing | */
+   MAV_VTOL_STATE_TRANSITION_TO_MC=2, /* VTOL is in transition from fixed-wing to multicopter | */
+   MAV_VTOL_STATE_MC=3, /* VTOL is in multicopter state | */
+   MAV_VTOL_STATE_FW=4, /* VTOL is in fixed-wing state | */
+   MAV_VTOL_STATE_ENUM_END=5, /*  | */
+} MAV_VTOL_STATE;
+#endif
+
+/** @brief Enumeration of landed detector states */
+#ifndef HAVE_ENUM_MAV_LANDED_STATE
+#define HAVE_ENUM_MAV_LANDED_STATE
+typedef enum MAV_LANDED_STATE
+{
+   MAV_LANDED_STATE_UNDEFINED=0, /* MAV landed state is unknown | */
+   MAV_LANDED_STATE_ON_GROUND=1, /* MAV is landed (on ground) | */
+   MAV_LANDED_STATE_IN_AIR=2, /* MAV is in air | */
+   MAV_LANDED_STATE_TAKEOFF=3, /* MAV currently taking off | */
+   MAV_LANDED_STATE_LANDING=4, /* MAV currently landing | */
+   MAV_LANDED_STATE_ENUM_END=5, /*  | */
+} MAV_LANDED_STATE;
+#endif
+
+/** @brief Enumeration of the ADSB altimeter types */
+#ifndef HAVE_ENUM_ADSB_ALTITUDE_TYPE
+#define HAVE_ENUM_ADSB_ALTITUDE_TYPE
+typedef enum ADSB_ALTITUDE_TYPE
+{
+   ADSB_ALTITUDE_TYPE_PRESSURE_QNH=0, /* Altitude reported from a Baro source using QNH reference | */
+   ADSB_ALTITUDE_TYPE_GEOMETRIC=1, /* Altitude reported from a GNSS source | */
+   ADSB_ALTITUDE_TYPE_ENUM_END=2, /*  | */
+} ADSB_ALTITUDE_TYPE;
+#endif
+
+/** @brief ADSB classification for the type of vehicle emitting the transponder signal */
+#ifndef HAVE_ENUM_ADSB_EMITTER_TYPE
+#define HAVE_ENUM_ADSB_EMITTER_TYPE
+typedef enum ADSB_EMITTER_TYPE
+{
+   ADSB_EMITTER_TYPE_NO_INFO=0, /*  | */
+   ADSB_EMITTER_TYPE_LIGHT=1, /*  | */
+   ADSB_EMITTER_TYPE_SMALL=2, /*  | */
+   ADSB_EMITTER_TYPE_LARGE=3, /*  | */
+   ADSB_EMITTER_TYPE_HIGH_VORTEX_LARGE=4, /*  | */
+   ADSB_EMITTER_TYPE_HEAVY=5, /*  | */
+   ADSB_EMITTER_TYPE_HIGHLY_MANUV=6, /*  | */
+   ADSB_EMITTER_TYPE_ROTOCRAFT=7, /*  | */
+   ADSB_EMITTER_TYPE_UNASSIGNED=8, /*  | */
+   ADSB_EMITTER_TYPE_GLIDER=9, /*  | */
+   ADSB_EMITTER_TYPE_LIGHTER_AIR=10, /*  | */
+   ADSB_EMITTER_TYPE_PARACHUTE=11, /*  | */
+   ADSB_EMITTER_TYPE_ULTRA_LIGHT=12, /*  | */
+   ADSB_EMITTER_TYPE_UNASSIGNED2=13, /*  | */
+   ADSB_EMITTER_TYPE_UAV=14, /*  | */
+   ADSB_EMITTER_TYPE_SPACE=15, /*  | */
+   ADSB_EMITTER_TYPE_UNASSGINED3=16, /*  | */
+   ADSB_EMITTER_TYPE_EMERGENCY_SURFACE=17, /*  | */
+   ADSB_EMITTER_TYPE_SERVICE_SURFACE=18, /*  | */
+   ADSB_EMITTER_TYPE_POINT_OBSTACLE=19, /*  | */
+   ADSB_EMITTER_TYPE_ENUM_END=20, /*  | */
+} ADSB_EMITTER_TYPE;
+#endif
+
+/** @brief These flags indicate status such as data validity of each data source. Set = data valid */
+#ifndef HAVE_ENUM_ADSB_FLAGS
+#define HAVE_ENUM_ADSB_FLAGS
+typedef enum ADSB_FLAGS
+{
+   ADSB_FLAGS_VALID_COORDS=1, /*  | */
+   ADSB_FLAGS_VALID_ALTITUDE=2, /*  | */
+   ADSB_FLAGS_VALID_HEADING=4, /*  | */
+   ADSB_FLAGS_VALID_VELOCITY=8, /*  | */
+   ADSB_FLAGS_VALID_CALLSIGN=16, /*  | */
+   ADSB_FLAGS_VALID_SQUAWK=32, /*  | */
+   ADSB_FLAGS_SIMULATED=64, /*  | */
+   ADSB_FLAGS_ENUM_END=65, /*  | */
+} ADSB_FLAGS;
+#endif
+
+/** @brief Bitmask of options for the MAV_CMD_DO_REPOSITION */
+#ifndef HAVE_ENUM_MAV_DO_REPOSITION_FLAGS
+#define HAVE_ENUM_MAV_DO_REPOSITION_FLAGS
+typedef enum MAV_DO_REPOSITION_FLAGS
+{
+   MAV_DO_REPOSITION_FLAGS_CHANGE_MODE=1, /* The aircraft should immediately transition into guided. This should not be set for follow me applications | */
+   MAV_DO_REPOSITION_FLAGS_ENUM_END=2, /*  | */
+} MAV_DO_REPOSITION_FLAGS;
+#endif
+
+/** @brief Flags in EKF_STATUS message */
+#ifndef HAVE_ENUM_ESTIMATOR_STATUS_FLAGS
+#define HAVE_ENUM_ESTIMATOR_STATUS_FLAGS
+typedef enum ESTIMATOR_STATUS_FLAGS
+{
+   ESTIMATOR_ATTITUDE=1, /* True if the attitude estimate is good | */
+   ESTIMATOR_VELOCITY_HORIZ=2, /* True if the horizontal velocity estimate is good | */
+   ESTIMATOR_VELOCITY_VERT=4, /* True if the  vertical velocity estimate is good | */
+   ESTIMATOR_POS_HORIZ_REL=8, /* True if the horizontal position (relative) estimate is good | */
+   ESTIMATOR_POS_HORIZ_ABS=16, /* True if the horizontal position (absolute) estimate is good | */
+   ESTIMATOR_POS_VERT_ABS=32, /* True if the vertical position (absolute) estimate is good | */
+   ESTIMATOR_POS_VERT_AGL=64, /* True if the vertical position (above ground) estimate is good | */
+   ESTIMATOR_CONST_POS_MODE=128, /* True if the EKF is in a constant position mode and is not using external measurements (eg GPS or optical flow) | */
+   ESTIMATOR_PRED_POS_HORIZ_REL=256, /* True if the EKF has sufficient data to enter a mode that will provide a (relative) position estimate | */
+   ESTIMATOR_PRED_POS_HORIZ_ABS=512, /* True if the EKF has sufficient data to enter a mode that will provide a (absolute) position estimate | */
+   ESTIMATOR_GPS_GLITCH=1024, /* True if the EKF has detected a GPS glitch | */
+   ESTIMATOR_STATUS_FLAGS_ENUM_END=1025, /*  | */
+} ESTIMATOR_STATUS_FLAGS;
+#endif
+
+/** @brief  */
+#ifndef HAVE_ENUM_MOTOR_TEST_ORDER
+#define HAVE_ENUM_MOTOR_TEST_ORDER
+typedef enum MOTOR_TEST_ORDER
+{
+   MOTOR_TEST_ORDER_DEFAULT=0, /* default autopilot motor test method | */
+   MOTOR_TEST_ORDER_SEQUENCE=1, /* motor numbers are specified as their index in a predefined vehicle-specific sequence | */
+   MOTOR_TEST_ORDER_BOARD=2, /* motor numbers are specified as the output as labeled on the board | */
+   MOTOR_TEST_ORDER_ENUM_END=3, /*  | */
+} MOTOR_TEST_ORDER;
+#endif
+
+/** @brief  */
+#ifndef HAVE_ENUM_MOTOR_TEST_THROTTLE_TYPE
+#define HAVE_ENUM_MOTOR_TEST_THROTTLE_TYPE
+typedef enum MOTOR_TEST_THROTTLE_TYPE
+{
+   MOTOR_TEST_THROTTLE_PERCENT=0, /* throttle as a percentage from 0 ~ 100 | */
+   MOTOR_TEST_THROTTLE_PWM=1, /* throttle as an absolute PWM value (normally in range of 1000~2000) | */
+   MOTOR_TEST_THROTTLE_PILOT=2, /* throttle pass-through from pilot's transmitter | */
+   MOTOR_TEST_COMPASS_CAL=3, /* per-motor compass calibration test | */
+   MOTOR_TEST_THROTTLE_TYPE_ENUM_END=4, /*  | */
+} MOTOR_TEST_THROTTLE_TYPE;
+#endif
+
+/** @brief  */
+#ifndef HAVE_ENUM_GPS_INPUT_IGNORE_FLAGS
+#define HAVE_ENUM_GPS_INPUT_IGNORE_FLAGS
+typedef enum GPS_INPUT_IGNORE_FLAGS
+{
+   GPS_INPUT_IGNORE_FLAG_ALT=1, /* ignore altitude field | */
+   GPS_INPUT_IGNORE_FLAG_HDOP=2, /* ignore hdop field | */
+   GPS_INPUT_IGNORE_FLAG_VDOP=4, /* ignore vdop field | */
+   GPS_INPUT_IGNORE_FLAG_VEL_HORIZ=8, /* ignore horizontal velocity field (vn and ve) | */
+   GPS_INPUT_IGNORE_FLAG_VEL_VERT=16, /* ignore vertical velocity field (vd) | */
+   GPS_INPUT_IGNORE_FLAG_SPEED_ACCURACY=32, /* ignore speed accuracy field | */
+   GPS_INPUT_IGNORE_FLAG_HORIZONTAL_ACCURACY=64, /* ignore horizontal accuracy field | */
+   GPS_INPUT_IGNORE_FLAG_VERTICAL_ACCURACY=128, /* ignore vertical accuracy field | */
+   GPS_INPUT_IGNORE_FLAGS_ENUM_END=129, /*  | */
+} GPS_INPUT_IGNORE_FLAGS;
+#endif
+
+/** @brief Possible actions an aircraft can take to avoid a collision. */
+#ifndef HAVE_ENUM_MAV_COLLISION_ACTION
+#define HAVE_ENUM_MAV_COLLISION_ACTION
+typedef enum MAV_COLLISION_ACTION
+{
+   MAV_COLLISION_ACTION_NONE=0, /* Ignore any potential collisions | */
+   MAV_COLLISION_ACTION_REPORT=1, /* Report potential collision | */
+   MAV_COLLISION_ACTION_ASCEND_OR_DESCEND=2, /* Ascend or Descend to avoid threat | */
+   MAV_COLLISION_ACTION_MOVE_HORIZONTALLY=3, /* Move horizontally to avoid threat | */
+   MAV_COLLISION_ACTION_MOVE_PERPENDICULAR=4, /* Aircraft to move perpendicular to the collision's velocity vector | */
+   MAV_COLLISION_ACTION_RTL=5, /* Aircraft to fly directly back to its launch point | */
+   MAV_COLLISION_ACTION_HOVER=6, /* Aircraft to stop in place | */
+   MAV_COLLISION_ACTION_ENUM_END=7, /*  | */
+} MAV_COLLISION_ACTION;
+#endif
+
+/** @brief Aircraft-rated danger from this threat. */
+#ifndef HAVE_ENUM_MAV_COLLISION_THREAT_LEVEL
+#define HAVE_ENUM_MAV_COLLISION_THREAT_LEVEL
+typedef enum MAV_COLLISION_THREAT_LEVEL
+{
+   MAV_COLLISION_THREAT_LEVEL_NONE=0, /* Not a threat | */
+   MAV_COLLISION_THREAT_LEVEL_LOW=1, /* Craft is mildly concerned about this threat | */
+   MAV_COLLISION_THREAT_LEVEL_HIGH=2, /* Craft is panicing, and may take actions to avoid threat | */
+   MAV_COLLISION_THREAT_LEVEL_ENUM_END=3, /*  | */
+} MAV_COLLISION_THREAT_LEVEL;
+#endif
+
+/** @brief Source of information about this collision. */
+#ifndef HAVE_ENUM_MAV_COLLISION_SRC
+#define HAVE_ENUM_MAV_COLLISION_SRC
+typedef enum MAV_COLLISION_SRC
+{
+   MAV_COLLISION_SRC_ADSB=0, /* ID field references ADSB_VEHICLE packets | */
+   MAV_COLLISION_SRC_MAVLINK_GPS_GLOBAL_INT=1, /* ID field references MAVLink SRC ID | */
+   MAV_COLLISION_SRC_ENUM_END=2, /*  | */
+} MAV_COLLISION_SRC;
+#endif
+
+/** @brief Type of GPS fix */
+#ifndef HAVE_ENUM_GPS_FIX_TYPE
+#define HAVE_ENUM_GPS_FIX_TYPE
+typedef enum GPS_FIX_TYPE
+{
+   GPS_FIX_TYPE_NO_GPS=0, /* No GPS connected | */
+   GPS_FIX_TYPE_NO_FIX=1, /* No position information, GPS is connected | */
+   GPS_FIX_TYPE_2D_FIX=2, /* 2D position | */
+   GPS_FIX_TYPE_3D_FIX=3, /* 3D position | */
+   GPS_FIX_TYPE_DGPS=4, /* DGPS/SBAS aided 3D position | */
+   GPS_FIX_TYPE_RTK_FLOAT=5, /* RTK float, 3D position | */
+   GPS_FIX_TYPE_RTK_FIXED=6, /* RTK Fixed, 3D position | */
+   GPS_FIX_TYPE_STATIC=7, /* Static fixed, typically used for base stations | */
+   GPS_FIX_TYPE_PPP=8, /* PPP, 3D position. | */
+   GPS_FIX_TYPE_ENUM_END=9, /*  | */
+} GPS_FIX_TYPE;
+#endif
+
+/** @brief Type of landing target */
+#ifndef HAVE_ENUM_LANDING_TARGET_TYPE
+#define HAVE_ENUM_LANDING_TARGET_TYPE
+typedef enum LANDING_TARGET_TYPE
+{
+   LANDING_TARGET_TYPE_LIGHT_BEACON=0, /* Landing target signaled by light beacon (ex: IR-LOCK) | */
+   LANDING_TARGET_TYPE_RADIO_BEACON=1, /* Landing target signaled by radio beacon (ex: ILS, NDB) | */
+   LANDING_TARGET_TYPE_VISION_FIDUCIAL=2, /* Landing target represented by a fiducial marker (ex: ARTag) | */
+   LANDING_TARGET_TYPE_VISION_OTHER=3, /* Landing target represented by a pre-defined visual shape/feature (ex: X-marker, H-marker, square) | */
+   LANDING_TARGET_TYPE_ENUM_END=4, /*  | */
+} LANDING_TARGET_TYPE;
+#endif
+
+/** @brief Direction of VTOL transition */
+#ifndef HAVE_ENUM_VTOL_TRANSITION_HEADING
+#define HAVE_ENUM_VTOL_TRANSITION_HEADING
+typedef enum VTOL_TRANSITION_HEADING
+{
+   VTOL_TRANSITION_HEADING_VEHICLE_DEFAULT=0, /* Respect the heading configuration of the vehicle. | */
+   VTOL_TRANSITION_HEADING_NEXT_WAYPOINT=1, /* Use the heading pointing towards the next waypoint. | */
+   VTOL_TRANSITION_HEADING_TAKEOFF=2, /* Use the heading on takeoff (while sitting on the ground). | */
+   VTOL_TRANSITION_HEADING_SPECIFIED=3, /* Use the specified heading in parameter 4. | */
+   VTOL_TRANSITION_HEADING_ANY=4, /* Use the current heading when reaching takeoff altitude (potentially facing the wind when weather-vaning is active). | */
+   VTOL_TRANSITION_HEADING_ENUM_END=5, /*  | */
+} VTOL_TRANSITION_HEADING;
+#endif
+
+/** @brief Camera capability flags (Bitmap). */
+#ifndef HAVE_ENUM_CAMERA_CAP_FLAGS
+#define HAVE_ENUM_CAMERA_CAP_FLAGS
+typedef enum CAMERA_CAP_FLAGS
+{
+   CAMERA_CAP_FLAGS_CAPTURE_VIDEO=1, /* Camera is able to record video. | */
+   CAMERA_CAP_FLAGS_CAPTURE_IMAGE=2, /* Camera is able to capture images. | */
+   CAMERA_CAP_FLAGS_HAS_MODES=4, /* Camera has separate Video and Image/Photo modes (MAV_CMD_SET_CAMERA_MODE) | */
+   CAMERA_CAP_FLAGS_CAN_CAPTURE_IMAGE_IN_VIDEO_MODE=8, /* Camera can capture images while in video mode | */
+   CAMERA_CAP_FLAGS_CAN_CAPTURE_VIDEO_IN_IMAGE_MODE=16, /* Camera can capture videos while in Photo/Image mode | */
+   CAMERA_CAP_FLAGS_HAS_IMAGE_SURVEY_MODE=32, /* Camera has image survey mode (MAV_CMD_SET_CAMERA_MODE) | */
+   CAMERA_CAP_FLAGS_ENUM_END=33, /*  | */
+} CAMERA_CAP_FLAGS;
+#endif
+
+/** @brief Result from a PARAM_EXT_SET message. */
+#ifndef HAVE_ENUM_PARAM_ACK
+#define HAVE_ENUM_PARAM_ACK
+typedef enum PARAM_ACK
+{
+   PARAM_ACK_ACCEPTED=0, /* Parameter value ACCEPTED and SET | */
+   PARAM_ACK_VALUE_UNSUPPORTED=1, /* Parameter value UNKNOWN/UNSUPPORTED | */
+   PARAM_ACK_FAILED=2, /* Parameter failed to set | */
+   PARAM_ACK_IN_PROGRESS=3, /* Parameter value received but not yet validated or set. A subsequent PARAM_EXT_ACK will follow once operation is completed with the actual result. These are for parameters that may take longer to set. Instead of waiting for an ACK and potentially timing out, you will immediately receive this response to let you know it was received. | */
+   PARAM_ACK_ENUM_END=4, /*  | */
+} PARAM_ACK;
+#endif
+
+/** @brief Camera Modes. */
+#ifndef HAVE_ENUM_CAMERA_MODE
+#define HAVE_ENUM_CAMERA_MODE
+typedef enum CAMERA_MODE
+{
+   CAMERA_MODE_IMAGE=0, /* Camera is in image/photo capture mode. | */
+   CAMERA_MODE_VIDEO=1, /* Camera is in video capture mode. | */
+   CAMERA_MODE_IMAGE_SURVEY=2, /* Camera is in image survey capture mode. It allows for camera controller to do specific settings for surveys. | */
+   CAMERA_MODE_ENUM_END=3, /*  | */
+} CAMERA_MODE;
+#endif
+
+/** @brief  */
+#ifndef HAVE_ENUM_MAV_ARM_AUTH_DENIED_REASON
+#define HAVE_ENUM_MAV_ARM_AUTH_DENIED_REASON
+typedef enum MAV_ARM_AUTH_DENIED_REASON
+{
+   MAV_ARM_AUTH_DENIED_REASON_GENERIC=0, /* Not a specific reason | */
+   MAV_ARM_AUTH_DENIED_REASON_NONE=1, /* Authorizer will send the error as string to GCS | */
+   MAV_ARM_AUTH_DENIED_REASON_INVALID_WAYPOINT=2, /* At least one waypoint have a invalid value | */
+   MAV_ARM_AUTH_DENIED_REASON_TIMEOUT=3, /* Timeout in the authorizer process(in case it depends on network) | */
+   MAV_ARM_AUTH_DENIED_REASON_AIRSPACE_IN_USE=4, /* Airspace of the mission in use by another vehicle, second result parameter can have the waypoint id that caused it to be denied. | */
+   MAV_ARM_AUTH_DENIED_REASON_BAD_WEATHER=5, /* Weather is not good to fly | */
+   MAV_ARM_AUTH_DENIED_REASON_ENUM_END=6, /*  | */
+} MAV_ARM_AUTH_DENIED_REASON;
+#endif
+
+/** @brief RTK GPS baseline coordinate system, used for RTK corrections */
+#ifndef HAVE_ENUM_RTK_BASELINE_COORDINATE_SYSTEM
+#define HAVE_ENUM_RTK_BASELINE_COORDINATE_SYSTEM
+typedef enum RTK_BASELINE_COORDINATE_SYSTEM
+{
+   RTK_BASELINE_COORDINATE_SYSTEM_ECEF=0, /* Earth-centered, Earth-fixed | */
+   RTK_BASELINE_COORDINATE_SYSTEM_NED=1, /* North, East, Down | */
+   RTK_BASELINE_COORDINATE_SYSTEM_ENUM_END=2, /*  | */
+} RTK_BASELINE_COORDINATE_SYSTEM;
+#endif
+
+// MAVLINK VERSION
+
+#ifndef MAVLINK_VERSION
+#define MAVLINK_VERSION 3
+#endif
+
+#if (MAVLINK_VERSION == 0)
+#undef MAVLINK_VERSION
+#define MAVLINK_VERSION 3
+#endif
+
+// MESSAGE DEFINITIONS
+#include "./mavlink_msg_heartbeat.h"
+#include "./mavlink_msg_sys_status.h"
+#include "./mavlink_msg_system_time.h"
+#include "./mavlink_msg_ping.h"
+#include "./mavlink_msg_change_operator_control.h"
+#include "./mavlink_msg_change_operator_control_ack.h"
+#include "./mavlink_msg_auth_key.h"
+#include "./mavlink_msg_set_mode.h"
+#include "./mavlink_msg_param_request_read.h"
+#include "./mavlink_msg_param_request_list.h"
+#include "./mavlink_msg_param_value.h"
+#include "./mavlink_msg_param_set.h"
+#include "./mavlink_msg_gps_raw_int.h"
+#include "./mavlink_msg_gps_status.h"
+#include "./mavlink_msg_scaled_imu.h"
+#include "./mavlink_msg_raw_imu.h"
+#include "./mavlink_msg_raw_pressure.h"
+#include "./mavlink_msg_scaled_pressure.h"
+#include "./mavlink_msg_attitude.h"
+#include "./mavlink_msg_attitude_quaternion.h"
+#include "./mavlink_msg_local_position_ned.h"
+#include "./mavlink_msg_global_position_int.h"
+#include "./mavlink_msg_rc_channels_scaled.h"
+#include "./mavlink_msg_rc_channels_raw.h"
+#include "./mavlink_msg_servo_output_raw.h"
+#include "./mavlink_msg_mission_request_partial_list.h"
+#include "./mavlink_msg_mission_write_partial_list.h"
+#include "./mavlink_msg_mission_item.h"
+#include "./mavlink_msg_mission_request.h"
+#include "./mavlink_msg_mission_set_current.h"
+#include "./mavlink_msg_mission_current.h"
+#include "./mavlink_msg_mission_request_list.h"
+#include "./mavlink_msg_mission_count.h"
+#include "./mavlink_msg_mission_clear_all.h"
+#include "./mavlink_msg_mission_item_reached.h"
+#include "./mavlink_msg_mission_ack.h"
+#include "./mavlink_msg_set_gps_global_origin.h"
+#include "./mavlink_msg_gps_global_origin.h"
+#include "./mavlink_msg_param_map_rc.h"
+#include "./mavlink_msg_mission_request_int.h"
+#include "./mavlink_msg_safety_set_allowed_area.h"
+#include "./mavlink_msg_safety_allowed_area.h"
+#include "./mavlink_msg_attitude_quaternion_cov.h"
+#include "./mavlink_msg_nav_controller_output.h"
+#include "./mavlink_msg_global_position_int_cov.h"
+#include "./mavlink_msg_local_position_ned_cov.h"
+#include "./mavlink_msg_rc_channels.h"
+#include "./mavlink_msg_request_data_stream.h"
+#include "./mavlink_msg_data_stream.h"
+#include "./mavlink_msg_manual_control.h"
+#include "./mavlink_msg_rc_channels_override.h"
+#include "./mavlink_msg_mission_item_int.h"
+#include "./mavlink_msg_vfr_hud.h"
+#include "./mavlink_msg_command_int.h"
+#include "./mavlink_msg_command_long.h"
+#include "./mavlink_msg_command_ack.h"
+#include "./mavlink_msg_manual_setpoint.h"
+#include "./mavlink_msg_set_attitude_target.h"
+#include "./mavlink_msg_attitude_target.h"
+#include "./mavlink_msg_set_position_target_local_ned.h"
+#include "./mavlink_msg_position_target_local_ned.h"
+#include "./mavlink_msg_set_position_target_global_int.h"
+#include "./mavlink_msg_position_target_global_int.h"
+#include "./mavlink_msg_local_position_ned_system_global_offset.h"
+#include "./mavlink_msg_hil_state.h"
+#include "./mavlink_msg_hil_controls.h"
+#include "./mavlink_msg_hil_rc_inputs_raw.h"
+#include "./mavlink_msg_hil_actuator_controls.h"
+#include "./mavlink_msg_optical_flow.h"
+#include "./mavlink_msg_global_vision_position_estimate.h"
+#include "./mavlink_msg_vision_position_estimate.h"
+#include "./mavlink_msg_vision_speed_estimate.h"
+#include "./mavlink_msg_vicon_position_estimate.h"
+#include "./mavlink_msg_highres_imu.h"
+#include "./mavlink_msg_optical_flow_rad.h"
+#include "./mavlink_msg_hil_sensor.h"
+#include "./mavlink_msg_sim_state.h"
+#include "./mavlink_msg_radio_status.h"
+#include "./mavlink_msg_file_transfer_protocol.h"
+#include "./mavlink_msg_timesync.h"
+#include "./mavlink_msg_camera_trigger.h"
+#include "./mavlink_msg_hil_gps.h"
+#include "./mavlink_msg_hil_optical_flow.h"
+#include "./mavlink_msg_hil_state_quaternion.h"
+#include "./mavlink_msg_scaled_imu2.h"
+#include "./mavlink_msg_log_request_list.h"
+#include "./mavlink_msg_log_entry.h"
+#include "./mavlink_msg_log_request_data.h"
+#include "./mavlink_msg_log_data.h"
+#include "./mavlink_msg_log_erase.h"
+#include "./mavlink_msg_log_request_end.h"
+#include "./mavlink_msg_gps_inject_data.h"
+#include "./mavlink_msg_gps2_raw.h"
+#include "./mavlink_msg_power_status.h"
+#include "./mavlink_msg_serial_control.h"
+#include "./mavlink_msg_gps_rtk.h"
+#include "./mavlink_msg_gps2_rtk.h"
+#include "./mavlink_msg_scaled_imu3.h"
+#include "./mavlink_msg_data_transmission_handshake.h"
+#include "./mavlink_msg_encapsulated_data.h"
+#include "./mavlink_msg_distance_sensor.h"
+#include "./mavlink_msg_terrain_request.h"
+#include "./mavlink_msg_terrain_data.h"
+#include "./mavlink_msg_terrain_check.h"
+#include "./mavlink_msg_terrain_report.h"
+#include "./mavlink_msg_scaled_pressure2.h"
+#include "./mavlink_msg_att_pos_mocap.h"
+#include "./mavlink_msg_set_actuator_control_target.h"
+#include "./mavlink_msg_actuator_control_target.h"
+#include "./mavlink_msg_altitude.h"
+#include "./mavlink_msg_resource_request.h"
+#include "./mavlink_msg_scaled_pressure3.h"
+#include "./mavlink_msg_follow_target.h"
+#include "./mavlink_msg_control_system_state.h"
+#include "./mavlink_msg_battery_status.h"
+#include "./mavlink_msg_autopilot_version.h"
+#include "./mavlink_msg_landing_target.h"
+#include "./mavlink_msg_estimator_status.h"
+#include "./mavlink_msg_wind_cov.h"
+#include "./mavlink_msg_gps_input.h"
+#include "./mavlink_msg_gps_rtcm_data.h"
+#include "./mavlink_msg_high_latency.h"
+#include "./mavlink_msg_high_latency2.h"
+#include "./mavlink_msg_vibration.h"
+#include "./mavlink_msg_home_position.h"
+#include "./mavlink_msg_set_home_position.h"
+#include "./mavlink_msg_message_interval.h"
+#include "./mavlink_msg_extended_sys_state.h"
+#include "./mavlink_msg_adsb_vehicle.h"
+#include "./mavlink_msg_collision.h"
+#include "./mavlink_msg_v2_extension.h"
+#include "./mavlink_msg_memory_vect.h"
+#include "./mavlink_msg_debug_vect.h"
+#include "./mavlink_msg_named_value_float.h"
+#include "./mavlink_msg_named_value_int.h"
+#include "./mavlink_msg_statustext.h"
+#include "./mavlink_msg_debug.h"
+#include "./mavlink_msg_setup_signing.h"
+#include "./mavlink_msg_button_change.h"
+#include "./mavlink_msg_play_tune.h"
+#include "./mavlink_msg_camera_information.h"
+#include "./mavlink_msg_camera_settings.h"
+#include "./mavlink_msg_storage_information.h"
+#include "./mavlink_msg_camera_capture_status.h"
+#include "./mavlink_msg_camera_image_captured.h"
+#include "./mavlink_msg_flight_information.h"
+#include "./mavlink_msg_mount_orientation.h"
+#include "./mavlink_msg_logging_data.h"
+#include "./mavlink_msg_logging_data_acked.h"
+#include "./mavlink_msg_logging_ack.h"
+#include "./mavlink_msg_video_stream_information.h"
+#include "./mavlink_msg_set_video_stream_settings.h"
+#include "./mavlink_msg_wifi_config_ap.h"
+#include "./mavlink_msg_protocol_version.h"
+#include "./mavlink_msg_uavcan_node_status.h"
+#include "./mavlink_msg_uavcan_node_info.h"
+#include "./mavlink_msg_param_ext_request_read.h"
+#include "./mavlink_msg_param_ext_request_list.h"
+#include "./mavlink_msg_param_ext_value.h"
+#include "./mavlink_msg_param_ext_set.h"
+#include "./mavlink_msg_param_ext_ack.h"
+#include "./mavlink_msg_obstacle_distance.h"
+
+// base include
+
+
+#undef MAVLINK_THIS_XML_IDX
+#define MAVLINK_THIS_XML_IDX 1
+
+#if MAVLINK_THIS_XML_IDX == MAVLINK_PRIMARY_XML_IDX
+# define MAVLINK_MESSAGE_INFO {MAVLINK_MESSAGE_INFO_HEARTBEAT, MAVLINK_MESSAGE_INFO_SYS_STATUS, MAVLINK_MESSAGE_INFO_SYSTEM_TIME, MAVLINK_MESSAGE_INFO_PING, MAVLINK_MESSAGE_INFO_CHANGE_OPERATOR_CONTROL, MAVLINK_MESSAGE_INFO_CHANGE_OPERATOR_CONTROL_ACK, MAVLINK_MESSAGE_INFO_AUTH_KEY, MAVLINK_MESSAGE_INFO_SET_MODE, MAVLINK_MESSAGE_INFO_PARAM_REQUEST_READ, MAVLINK_MESSAGE_INFO_PARAM_REQUEST_LIST, MAVLINK_MESSAGE_INFO_PARAM_VALUE, MAVLINK_MESSAGE_INFO_PARAM_SET, MAVLINK_MESSAGE_INFO_GPS_RAW_INT, MAVLINK_MESSAGE_INFO_GPS_STATUS, MAVLINK_MESSAGE_INFO_SCALED_IMU, MAVLINK_MESSAGE_INFO_RAW_IMU, MAVLINK_MESSAGE_INFO_RAW_PRESSURE, MAVLINK_MESSAGE_INFO_SCALED_PRESSURE, MAVLINK_MESSAGE_INFO_ATTITUDE, MAVLINK_MESSAGE_INFO_ATTITUDE_QUATERNION, MAVLINK_MESSAGE_INFO_LOCAL_POSITION_NED, MAVLINK_MESSAGE_INFO_GLOBAL_POSITION_INT, MAVLINK_MESSAGE_INFO_RC_CHANNELS_SCALED, MAVLINK_MESSAGE_INFO_RC_CHANNELS_RAW, MAVLINK_MESSAGE_INFO_SERVO_OUTPUT_RAW, MAVLINK_MESSAGE_INFO_MISSION_REQUEST_PARTIAL_LIST, MAVLINK_MESSAGE_INFO_MISSION_WRITE_PARTIAL_LIST, MAVLINK_MESSAGE_INFO_MISSION_ITEM, MAVLINK_MESSAGE_INFO_MISSION_REQUEST, MAVLINK_MESSAGE_INFO_MISSION_SET_CURRENT, MAVLINK_MESSAGE_INFO_MISSION_CURRENT, MAVLINK_MESSAGE_INFO_MISSION_REQUEST_LIST, MAVLINK_MESSAGE_INFO_MISSION_COUNT, MAVLINK_MESSAGE_INFO_MISSION_CLEAR_ALL, MAVLINK_MESSAGE_INFO_MISSION_ITEM_REACHED, MAVLINK_MESSAGE_INFO_MISSION_ACK, MAVLINK_MESSAGE_INFO_SET_GPS_GLOBAL_ORIGIN, MAVLINK_MESSAGE_INFO_GPS_GLOBAL_ORIGIN, MAVLINK_MESSAGE_INFO_PARAM_MAP_RC, MAVLINK_MESSAGE_INFO_MISSION_REQUEST_INT, MAVLINK_MESSAGE_INFO_SAFETY_SET_ALLOWED_AREA, MAVLINK_MESSAGE_INFO_SAFETY_ALLOWED_AREA, MAVLINK_MESSAGE_INFO_ATTITUDE_QUATERNION_COV, MAVLINK_MESSAGE_INFO_NAV_CONTROLLER_OUTPUT, MAVLINK_MESSAGE_INFO_GLOBAL_POSITION_INT_COV, MAVLINK_MESSAGE_INFO_LOCAL_POSITION_NED_COV, MAVLINK_MESSAGE_INFO_RC_CHANNELS, MAVLINK_MESSAGE_INFO_REQUEST_DATA_STREAM, MAVLINK_MESSAGE_INFO_DATA_STREAM, MAVLINK_MESSAGE_INFO_MANUAL_CONTROL, MAVLINK_MESSAGE_INFO_RC_CHANNELS_OVERRIDE, MAVLINK_MESSAGE_INFO_MISSION_ITEM_INT, MAVLINK_MESSAGE_INFO_VFR_HUD, MAVLINK_MESSAGE_INFO_COMMAND_INT, MAVLINK_MESSAGE_INFO_COMMAND_LONG, MAVLINK_MESSAGE_INFO_COMMAND_ACK, MAVLINK_MESSAGE_INFO_MANUAL_SETPOINT, MAVLINK_MESSAGE_INFO_SET_ATTITUDE_TARGET, MAVLINK_MESSAGE_INFO_ATTITUDE_TARGET, MAVLINK_MESSAGE_INFO_SET_POSITION_TARGET_LOCAL_NED, MAVLINK_MESSAGE_INFO_POSITION_TARGET_LOCAL_NED, MAVLINK_MESSAGE_INFO_SET_POSITION_TARGET_GLOBAL_INT, MAVLINK_MESSAGE_INFO_POSITION_TARGET_GLOBAL_INT, MAVLINK_MESSAGE_INFO_LOCAL_POSITION_NED_SYSTEM_GLOBAL_OFFSET, MAVLINK_MESSAGE_INFO_HIL_STATE, MAVLINK_MESSAGE_INFO_HIL_CONTROLS, MAVLINK_MESSAGE_INFO_HIL_RC_INPUTS_RAW, MAVLINK_MESSAGE_INFO_HIL_ACTUATOR_CONTROLS, MAVLINK_MESSAGE_INFO_OPTICAL_FLOW, MAVLINK_MESSAGE_INFO_GLOBAL_VISION_POSITION_ESTIMATE, MAVLINK_MESSAGE_INFO_VISION_POSITION_ESTIMATE, MAVLINK_MESSAGE_INFO_VISION_SPEED_ESTIMATE, MAVLINK_MESSAGE_INFO_VICON_POSITION_ESTIMATE, MAVLINK_MESSAGE_INFO_HIGHRES_IMU, MAVLINK_MESSAGE_INFO_OPTICAL_FLOW_RAD, MAVLINK_MESSAGE_INFO_HIL_SENSOR, MAVLINK_MESSAGE_INFO_SIM_STATE, MAVLINK_MESSAGE_INFO_RADIO_STATUS, MAVLINK_MESSAGE_INFO_FILE_TRANSFER_PROTOCOL, MAVLINK_MESSAGE_INFO_TIMESYNC, MAVLINK_MESSAGE_INFO_CAMERA_TRIGGER, MAVLINK_MESSAGE_INFO_HIL_GPS, MAVLINK_MESSAGE_INFO_HIL_OPTICAL_FLOW, MAVLINK_MESSAGE_INFO_HIL_STATE_QUATERNION, MAVLINK_MESSAGE_INFO_SCALED_IMU2, MAVLINK_MESSAGE_INFO_LOG_REQUEST_LIST, MAVLINK_MESSAGE_INFO_LOG_ENTRY, MAVLINK_MESSAGE_INFO_LOG_REQUEST_DATA, MAVLINK_MESSAGE_INFO_LOG_DATA, MAVLINK_MESSAGE_INFO_LOG_ERASE, MAVLINK_MESSAGE_INFO_LOG_REQUEST_END, MAVLINK_MESSAGE_INFO_GPS_INJECT_DATA, MAVLINK_MESSAGE_INFO_GPS2_RAW, MAVLINK_MESSAGE_INFO_POWER_STATUS, MAVLINK_MESSAGE_INFO_SERIAL_CONTROL, MAVLINK_MESSAGE_INFO_GPS_RTK, MAVLINK_MESSAGE_INFO_GPS2_RTK, MAVLINK_MESSAGE_INFO_SCALED_IMU3, MAVLINK_MESSAGE_INFO_DATA_TRANSMISSION_HANDSHAKE, MAVLINK_MESSAGE_INFO_ENCAPSULATED_DATA, MAVLINK_MESSAGE_INFO_DISTANCE_SENSOR, MAVLINK_MESSAGE_INFO_TERRAIN_REQUEST, MAVLINK_MESSAGE_INFO_TERRAIN_DATA, MAVLINK_MESSAGE_INFO_TERRAIN_CHECK, MAVLINK_MESSAGE_INFO_TERRAIN_REPORT, MAVLINK_MESSAGE_INFO_SCALED_PRESSURE2, MAVLINK_MESSAGE_INFO_ATT_POS_MOCAP, MAVLINK_MESSAGE_INFO_SET_ACTUATOR_CONTROL_TARGET, MAVLINK_MESSAGE_INFO_ACTUATOR_CONTROL_TARGET, MAVLINK_MESSAGE_INFO_ALTITUDE, MAVLINK_MESSAGE_INFO_RESOURCE_REQUEST, MAVLINK_MESSAGE_INFO_SCALED_PRESSURE3, MAVLINK_MESSAGE_INFO_FOLLOW_TARGET, MAVLINK_MESSAGE_INFO_CONTROL_SYSTEM_STATE, MAVLINK_MESSAGE_INFO_BATTERY_STATUS, MAVLINK_MESSAGE_INFO_AUTOPILOT_VERSION, MAVLINK_MESSAGE_INFO_LANDING_TARGET, MAVLINK_MESSAGE_INFO_ESTIMATOR_STATUS, MAVLINK_MESSAGE_INFO_WIND_COV, MAVLINK_MESSAGE_INFO_GPS_INPUT, MAVLINK_MESSAGE_INFO_GPS_RTCM_DATA, MAVLINK_MESSAGE_INFO_HIGH_LATENCY, MAVLINK_MESSAGE_INFO_HIGH_LATENCY2, MAVLINK_MESSAGE_INFO_VIBRATION, MAVLINK_MESSAGE_INFO_HOME_POSITION, MAVLINK_MESSAGE_INFO_SET_HOME_POSITION, MAVLINK_MESSAGE_INFO_MESSAGE_INTERVAL, MAVLINK_MESSAGE_INFO_EXTENDED_SYS_STATE, MAVLINK_MESSAGE_INFO_ADSB_VEHICLE, MAVLINK_MESSAGE_INFO_COLLISION, MAVLINK_MESSAGE_INFO_V2_EXTENSION, MAVLINK_MESSAGE_INFO_MEMORY_VECT, MAVLINK_MESSAGE_INFO_DEBUG_VECT, MAVLINK_MESSAGE_INFO_NAMED_VALUE_FLOAT, MAVLINK_MESSAGE_INFO_NAMED_VALUE_INT, MAVLINK_MESSAGE_INFO_STATUSTEXT, MAVLINK_MESSAGE_INFO_DEBUG, MAVLINK_MESSAGE_INFO_SETUP_SIGNING, MAVLINK_MESSAGE_INFO_BUTTON_CHANGE, MAVLINK_MESSAGE_INFO_PLAY_TUNE, MAVLINK_MESSAGE_INFO_CAMERA_INFORMATION, MAVLINK_MESSAGE_INFO_CAMERA_SETTINGS, MAVLINK_MESSAGE_INFO_STORAGE_INFORMATION, MAVLINK_MESSAGE_INFO_CAMERA_CAPTURE_STATUS, MAVLINK_MESSAGE_INFO_CAMERA_IMAGE_CAPTURED, MAVLINK_MESSAGE_INFO_FLIGHT_INFORMATION, MAVLINK_MESSAGE_INFO_MOUNT_ORIENTATION, MAVLINK_MESSAGE_INFO_LOGGING_DATA, MAVLINK_MESSAGE_INFO_LOGGING_DATA_ACKED, MAVLINK_MESSAGE_INFO_LOGGING_ACK, MAVLINK_MESSAGE_INFO_VIDEO_STREAM_INFORMATION, MAVLINK_MESSAGE_INFO_SET_VIDEO_STREAM_SETTINGS, MAVLINK_MESSAGE_INFO_WIFI_CONFIG_AP, MAVLINK_MESSAGE_INFO_PROTOCOL_VERSION, MAVLINK_MESSAGE_INFO_UAVCAN_NODE_STATUS, MAVLINK_MESSAGE_INFO_UAVCAN_NODE_INFO, MAVLINK_MESSAGE_INFO_PARAM_EXT_REQUEST_READ, MAVLINK_MESSAGE_INFO_PARAM_EXT_REQUEST_LIST, MAVLINK_MESSAGE_INFO_PARAM_EXT_VALUE, MAVLINK_MESSAGE_INFO_PARAM_EXT_SET, MAVLINK_MESSAGE_INFO_PARAM_EXT_ACK, MAVLINK_MESSAGE_INFO_OBSTACLE_DISTANCE}
+# define MAVLINK_MESSAGE_NAMES {{ "ACTUATOR_CONTROL_TARGET", 140 }, { "ADSB_VEHICLE", 246 }, { "ALTITUDE", 141 }, { "ATTITUDE", 30 }, { "ATTITUDE_QUATERNION", 31 }, { "ATTITUDE_QUATERNION_COV", 61 }, { "ATTITUDE_TARGET", 83 }, { "ATT_POS_MOCAP", 138 }, { "AUTH_KEY", 7 }, { "AUTOPILOT_VERSION", 148 }, { "BATTERY_STATUS", 147 }, { "BUTTON_CHANGE", 257 }, { "CAMERA_CAPTURE_STATUS", 262 }, { "CAMERA_IMAGE_CAPTURED", 263 }, { "CAMERA_INFORMATION", 259 }, { "CAMERA_SETTINGS", 260 }, { "CAMERA_TRIGGER", 112 }, { "CHANGE_OPERATOR_CONTROL", 5 }, { "CHANGE_OPERATOR_CONTROL_ACK", 6 }, { "COLLISION", 247 }, { "COMMAND_ACK", 77 }, { "COMMAND_INT", 75 }, { "COMMAND_LONG", 76 }, { "CONTROL_SYSTEM_STATE", 146 }, { "DATA_STREAM", 67 }, { "DATA_TRANSMISSION_HANDSHAKE", 130 }, { "DEBUG", 254 }, { "DEBUG_VECT", 250 }, { "DISTANCE_SENSOR", 132 }, { "ENCAPSULATED_DATA", 131 }, { "ESTIMATOR_STATUS", 230 }, { "EXTENDED_SYS_STATE", 245 }, { "FILE_TRANSFER_PROTOCOL", 110 }, { "FLIGHT_INFORMATION", 264 }, { "FOLLOW_TARGET", 144 }, { "GLOBAL_POSITION_INT", 33 }, { "GLOBAL_POSITION_INT_COV", 63 }, { "GLOBAL_VISION_POSITION_ESTIMATE", 101 }, { "GPS2_RAW", 124 }, { "GPS2_RTK", 128 }, { "GPS_GLOBAL_ORIGIN", 49 }, { "GPS_INJECT_DATA", 123 }, { "GPS_INPUT", 232 }, { "GPS_RAW_INT", 24 }, { "GPS_RTCM_DATA", 233 }, { "GPS_RTK", 127 }, { "GPS_STATUS", 25 }, { "HEARTBEAT", 0 }, { "HIGHRES_IMU", 105 }, { "HIGH_LATENCY", 234 }, { "HIGH_LATENCY2", 235 }, { "HIL_ACTUATOR_CONTROLS", 93 }, { "HIL_CONTROLS", 91 }, { "HIL_GPS", 113 }, { "HIL_OPTICAL_FLOW", 114 }, { "HIL_RC_INPUTS_RAW", 92 }, { "HIL_SENSOR", 107 }, { "HIL_STATE", 90 }, { "HIL_STATE_QUATERNION", 115 }, { "HOME_POSITION", 242 }, { "LANDING_TARGET", 149 }, { "LOCAL_POSITION_NED", 32 }, { "LOCAL_POSITION_NED_COV", 64 }, { "LOCAL_POSITION_NED_SYSTEM_GLOBAL_OFFSET", 89 }, { "LOGGING_ACK", 268 }, { "LOGGING_DATA", 266 }, { "LOGGING_DATA_ACKED", 267 }, { "LOG_DATA", 120 }, { "LOG_ENTRY", 118 }, { "LOG_ERASE", 121 }, { "LOG_REQUEST_DATA", 119 }, { "LOG_REQUEST_END", 122 }, { "LOG_REQUEST_LIST", 117 }, { "MANUAL_CONTROL", 69 }, { "MANUAL_SETPOINT", 81 }, { "MEMORY_VECT", 249 }, { "MESSAGE_INTERVAL", 244 }, { "MISSION_ACK", 47 }, { "MISSION_CLEAR_ALL", 45 }, { "MISSION_COUNT", 44 }, { "MISSION_CURRENT", 42 }, { "MISSION_ITEM", 39 }, { "MISSION_ITEM_INT", 73 }, { "MISSION_ITEM_REACHED", 46 }, { "MISSION_REQUEST", 40 }, { "MISSION_REQUEST_INT", 51 }, { "MISSION_REQUEST_LIST", 43 }, { "MISSION_REQUEST_PARTIAL_LIST", 37 }, { "MISSION_SET_CURRENT", 41 }, { "MISSION_WRITE_PARTIAL_LIST", 38 }, { "MOUNT_ORIENTATION", 265 }, { "NAMED_VALUE_FLOAT", 251 }, { "NAMED_VALUE_INT", 252 }, { "NAV_CONTROLLER_OUTPUT", 62 }, { "OBSTACLE_DISTANCE", 330 }, { "OPTICAL_FLOW", 100 }, { "OPTICAL_FLOW_RAD", 106 }, { "PARAM_EXT_ACK", 324 }, { "PARAM_EXT_REQUEST_LIST", 321 }, { "PARAM_EXT_REQUEST_READ", 320 }, { "PARAM_EXT_SET", 323 }, { "PARAM_EXT_VALUE", 322 }, { "PARAM_MAP_RC", 50 }, { "PARAM_REQUEST_LIST", 21 }, { "PARAM_REQUEST_READ", 20 }, { "PARAM_SET", 23 }, { "PARAM_VALUE", 22 }, { "PING", 4 }, { "PLAY_TUNE", 258 }, { "POSITION_TARGET_GLOBAL_INT", 87 }, { "POSITION_TARGET_LOCAL_NED", 85 }, { "POWER_STATUS", 125 }, { "PROTOCOL_VERSION", 300 }, { "RADIO_STATUS", 109 }, { "RAW_IMU", 27 }, { "RAW_PRESSURE", 28 }, { "RC_CHANNELS", 65 }, { "RC_CHANNELS_OVERRIDE", 70 }, { "RC_CHANNELS_RAW", 35 }, { "RC_CHANNELS_SCALED", 34 }, { "REQUEST_DATA_STREAM", 66 }, { "RESOURCE_REQUEST", 142 }, { "SAFETY_ALLOWED_AREA", 55 }, { "SAFETY_SET_ALLOWED_AREA", 54 }, { "SCALED_IMU", 26 }, { "SCALED_IMU2", 116 }, { "SCALED_IMU3", 129 }, { "SCALED_PRESSURE", 29 }, { "SCALED_PRESSURE2", 137 }, { "SCALED_PRESSURE3", 143 }, { "SERIAL_CONTROL", 126 }, { "SERVO_OUTPUT_RAW", 36 }, { "SETUP_SIGNING", 256 }, { "SET_ACTUATOR_CONTROL_TARGET", 139 }, { "SET_ATTITUDE_TARGET", 82 }, { "SET_GPS_GLOBAL_ORIGIN", 48 }, { "SET_HOME_POSITION", 243 }, { "SET_MODE", 11 }, { "SET_POSITION_TARGET_GLOBAL_INT", 86 }, { "SET_POSITION_TARGET_LOCAL_NED", 84 }, { "SET_VIDEO_STREAM_SETTINGS", 270 }, { "SIM_STATE", 108 }, { "STATUSTEXT", 253 }, { "STORAGE_INFORMATION", 261 }, { "SYSTEM_TIME", 2 }, { "SYS_STATUS", 1 }, { "TERRAIN_CHECK", 135 }, { "TERRAIN_DATA", 134 }, { "TERRAIN_REPORT", 136 }, { "TERRAIN_REQUEST", 133 }, { "TIMESYNC", 111 }, { "UAVCAN_NODE_INFO", 311 }, { "UAVCAN_NODE_STATUS", 310 }, { "V2_EXTENSION", 248 }, { "VFR_HUD", 74 }, { "VIBRATION", 241 }, { "VICON_POSITION_ESTIMATE", 104 }, { "VIDEO_STREAM_INFORMATION", 269 }, { "VISION_POSITION_ESTIMATE", 102 }, { "VISION_SPEED_ESTIMATE", 103 }, { "WIFI_CONFIG_AP", 299 }, { "WIND_COV", 231 }}
+# if MAVLINK_COMMAND_24BIT
+#  include "../mavlink_get_info.h"
+# endif
+#endif
+
+#ifdef __cplusplus
+}
+#endif // __cplusplus
+#endif // MAVLINK_COMMON_H

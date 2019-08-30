@@ -114,4 +114,29 @@ static inline uint16_t mavlink_msg_actuator_control_target_pack_chan(uint8_t sys
  * @param msg The MAVLink message to compress the data into
  * @param actuator_control_target C-struct to read the message contents from
  */
-static inline uint16_t mavlink_msg_actuator_control_target_encode(uint8_t sy
+static inline uint16_t mavlink_msg_actuator_control_target_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_actuator_control_target_t* actuator_control_target)
+{
+    return mavlink_msg_actuator_control_target_pack(system_id, component_id, msg, actuator_control_target->time_usec, actuator_control_target->group_mlx, actuator_control_target->controls);
+}
+
+/**
+ * @brief Encode a actuator_control_target struct on a channel
+ *
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param chan The MAVLink channel this message will be sent over
+ * @param msg The MAVLink message to compress the data into
+ * @param actuator_control_target C-struct to read the message contents from
+ */
+static inline uint16_t mavlink_msg_actuator_control_target_encode_chan(uint8_t system_id, uint8_t component_id, uint8_t chan, mavlink_message_t* msg, const mavlink_actuator_control_target_t* actuator_control_target)
+{
+    return mavlink_msg_actuator_control_target_pack_chan(system_id, component_id, chan, msg, actuator_control_target->time_usec, actuator_control_target->group_mlx, actuator_control_target->controls);
+}
+
+/**
+ * @brief Send a actuator_control_target message
+ * @param chan MAVLink channel to send the message
+ *
+ * @param time_usec Timestamp (micros since boot or Unix epoch)
+ * @param group_mlx Actuator group. The "_mlx" indicates this is a multi-instance message and a MAVLink parser should use this field to difference between instances.
+ * @param controls Actuator controls. Normed to -1..+1 where 0 is neutral position. Throttle for single ro

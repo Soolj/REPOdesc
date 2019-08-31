@@ -139,4 +139,30 @@ static inline uint16_t mavlink_msg_actuator_control_target_encode_chan(uint8_t s
  *
  * @param time_usec Timestamp (micros since boot or Unix epoch)
  * @param group_mlx Actuator group. The "_mlx" indicates this is a multi-instance message and a MAVLink parser should use this field to difference between instances.
- * @param controls Actuator controls. Normed to -1..+1 where 0 is neutral position. Throttle for single ro
+ * @param controls Actuator controls. Normed to -1..+1 where 0 is neutral position. Throttle for single rotation direction motors is 0..1, negative range for reverse direction. Standard mapping for attitude controls (group 0): (index 0-7): roll, pitch, yaw, throttle, flaps, spoilers, airbrakes, landing gear. Load a pass-through mixer to repurpose them as generic outputs.
+ */
+#ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
+
+static inline void mavlink_msg_actuator_control_target_send(mavlink_channel_t chan, uint64_t time_usec, uint8_t group_mlx, const float *controls)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    char buf[MAVLINK_MSG_ID_ACTUATOR_CONTROL_TARGET_LEN];
+    _mav_put_uint64_t(buf, 0, time_usec);
+    _mav_put_uint8_t(buf, 40, group_mlx);
+    _mav_put_float_array(buf, 8, controls, 8);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_ACTUATOR_CONTROL_TARGET, buf, MAVLINK_MSG_ID_ACTUATOR_CONTROL_TARGET_MIN_LEN, MAVLINK_MSG_ID_ACTUATOR_CONTROL_TARGET_LEN, MAVLINK_MSG_ID_ACTUATOR_CONTROL_TARGET_CRC);
+#else
+    mavlink_actuator_control_target_t packet;
+    packet.time_usec = time_usec;
+    packet.group_mlx = group_mlx;
+    mav_array_memcpy(packet.controls, controls, sizeof(float)*8);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_ACTUATOR_CONTROL_TARGET, (const char *)&packet, MAVLINK_MSG_ID_ACTUATOR_CONTROL_TARGET_MIN_LEN, MAVLINK_MSG_ID_ACTUATOR_CONTROL_TARGET_LEN, MAVLINK_MSG_ID_ACTUATOR_CONTROL_TARGET_CRC);
+#endif
+}
+
+/**
+ * @brief Send a actuator_control_target message
+ * @param chan MAVLink channel to send the message
+ * @param struct The MAVLink struct to serialize
+ */
+static inline void mavlink_msg_actuator_control_target_send_struct(mavlink_channel_t chan, 

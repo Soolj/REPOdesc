@@ -228,4 +228,28 @@ static inline uint8_t mavlink_msg_actuator_control_target_get_group_mlx(const ma
 /**
  * @brief Get field controls from actuator_control_target message
  *
- * @return Actuator controls. Normed to -1..+1 where 0 is neutral position. Throttle for single rotation direction motors is 0..1, negative range for reverse direction. Standard mapping for attitude controls (group 0): (index 0-7): roll, pitch, yaw, throttle, flaps, spoilers, airbrakes, landing gear. Load a pas
+ * @return Actuator controls. Normed to -1..+1 where 0 is neutral position. Throttle for single rotation direction motors is 0..1, negative range for reverse direction. Standard mapping for attitude controls (group 0): (index 0-7): roll, pitch, yaw, throttle, flaps, spoilers, airbrakes, landing gear. Load a pass-through mixer to repurpose them as generic outputs.
+ */
+static inline uint16_t mavlink_msg_actuator_control_target_get_controls(const mavlink_message_t* msg, float *controls)
+{
+    return _MAV_RETURN_float_array(msg, controls, 8,  8);
+}
+
+/**
+ * @brief Decode a actuator_control_target message into a struct
+ *
+ * @param msg The message to decode
+ * @param actuator_control_target C-struct to decode the message contents into
+ */
+static inline void mavlink_msg_actuator_control_target_decode(const mavlink_message_t* msg, mavlink_actuator_control_target_t* actuator_control_target)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    actuator_control_target->time_usec = mavlink_msg_actuator_control_target_get_time_usec(msg);
+    mavlink_msg_actuator_control_target_get_controls(msg, actuator_control_target->controls);
+    actuator_control_target->group_mlx = mavlink_msg_actuator_control_target_get_group_mlx(msg);
+#else
+        uint8_t len = msg->len < MAVLINK_MSG_ID_ACTUATOR_CONTROL_TARGET_LEN? msg->len : MAVLINK_MSG_ID_ACTUATOR_CONTROL_TARGET_LEN;
+        memset(actuator_control_target, 0, MAVLINK_MSG_ID_ACTUATOR_CONTROL_TARGET_LEN);
+    memcpy(actuator_control_target, _MAV_PAYLOAD(msg), len);
+#endif
+}

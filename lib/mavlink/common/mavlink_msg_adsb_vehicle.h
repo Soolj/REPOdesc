@@ -421,3 +421,86 @@ static inline uint16_t mavlink_msg_adsb_vehicle_get_hor_velocity(const mavlink_m
  *
  * @return The vertical velocity in centimeters/second, positive is up
  */
+static inline int16_t mavlink_msg_adsb_vehicle_get_ver_velocity(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int16_t(msg,  20);
+}
+
+/**
+ * @brief Get field callsign from adsb_vehicle message
+ *
+ * @return The callsign, 8+null
+ */
+static inline uint16_t mavlink_msg_adsb_vehicle_get_callsign(const mavlink_message_t* msg, char *callsign)
+{
+    return _MAV_RETURN_char_array(msg, callsign, 9,  27);
+}
+
+/**
+ * @brief Get field emitter_type from adsb_vehicle message
+ *
+ * @return Type from ADSB_EMITTER_TYPE enum
+ */
+static inline uint8_t mavlink_msg_adsb_vehicle_get_emitter_type(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  36);
+}
+
+/**
+ * @brief Get field tslc from adsb_vehicle message
+ *
+ * @return Time since last communication in seconds
+ */
+static inline uint8_t mavlink_msg_adsb_vehicle_get_tslc(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  37);
+}
+
+/**
+ * @brief Get field flags from adsb_vehicle message
+ *
+ * @return Flags to indicate various statuses including valid data fields
+ */
+static inline uint16_t mavlink_msg_adsb_vehicle_get_flags(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint16_t(msg,  22);
+}
+
+/**
+ * @brief Get field squawk from adsb_vehicle message
+ *
+ * @return Squawk code
+ */
+static inline uint16_t mavlink_msg_adsb_vehicle_get_squawk(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint16_t(msg,  24);
+}
+
+/**
+ * @brief Decode a adsb_vehicle message into a struct
+ *
+ * @param msg The message to decode
+ * @param adsb_vehicle C-struct to decode the message contents into
+ */
+static inline void mavlink_msg_adsb_vehicle_decode(const mavlink_message_t* msg, mavlink_adsb_vehicle_t* adsb_vehicle)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    adsb_vehicle->ICAO_address = mavlink_msg_adsb_vehicle_get_ICAO_address(msg);
+    adsb_vehicle->lat = mavlink_msg_adsb_vehicle_get_lat(msg);
+    adsb_vehicle->lon = mavlink_msg_adsb_vehicle_get_lon(msg);
+    adsb_vehicle->altitude = mavlink_msg_adsb_vehicle_get_altitude(msg);
+    adsb_vehicle->heading = mavlink_msg_adsb_vehicle_get_heading(msg);
+    adsb_vehicle->hor_velocity = mavlink_msg_adsb_vehicle_get_hor_velocity(msg);
+    adsb_vehicle->ver_velocity = mavlink_msg_adsb_vehicle_get_ver_velocity(msg);
+    adsb_vehicle->flags = mavlink_msg_adsb_vehicle_get_flags(msg);
+    adsb_vehicle->squawk = mavlink_msg_adsb_vehicle_get_squawk(msg);
+    adsb_vehicle->altitude_type = mavlink_msg_adsb_vehicle_get_altitude_type(msg);
+    mavlink_msg_adsb_vehicle_get_callsign(msg, adsb_vehicle->callsign);
+    adsb_vehicle->emitter_type = mavlink_msg_adsb_vehicle_get_emitter_type(msg);
+    adsb_vehicle->tslc = mavlink_msg_adsb_vehicle_get_tslc(msg);
+#else
+        uint8_t len = msg->len < MAVLINK_MSG_ID_ADSB_VEHICLE_LEN? msg->len : MAVLINK_MSG_ID_ADSB_VEHICLE_LEN;
+        memset(adsb_vehicle, 0, MAVLINK_MSG_ID_ADSB_VEHICLE_LEN);
+    memcpy(adsb_vehicle, _MAV_PAYLOAD(msg), len);
+#endif
+}

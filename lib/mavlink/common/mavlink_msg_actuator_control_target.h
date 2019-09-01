@@ -191,4 +191,41 @@ static inline void mavlink_msg_actuator_control_target_send_buf(mavlink_message_
     _mav_put_float_array(buf, 8, controls, 8);
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_ACTUATOR_CONTROL_TARGET, buf, MAVLINK_MSG_ID_ACTUATOR_CONTROL_TARGET_MIN_LEN, MAVLINK_MSG_ID_ACTUATOR_CONTROL_TARGET_LEN, MAVLINK_MSG_ID_ACTUATOR_CONTROL_TARGET_CRC);
 #else
-    mavlink_actuator_control_target_t *packet = (mavlink_actuator_control_
+    mavlink_actuator_control_target_t *packet = (mavlink_actuator_control_target_t *)msgbuf;
+    packet->time_usec = time_usec;
+    packet->group_mlx = group_mlx;
+    mav_array_memcpy(packet->controls, controls, sizeof(float)*8);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_ACTUATOR_CONTROL_TARGET, (const char *)packet, MAVLINK_MSG_ID_ACTUATOR_CONTROL_TARGET_MIN_LEN, MAVLINK_MSG_ID_ACTUATOR_CONTROL_TARGET_LEN, MAVLINK_MSG_ID_ACTUATOR_CONTROL_TARGET_CRC);
+#endif
+}
+#endif
+
+#endif
+
+// MESSAGE ACTUATOR_CONTROL_TARGET UNPACKING
+
+
+/**
+ * @brief Get field time_usec from actuator_control_target message
+ *
+ * @return Timestamp (micros since boot or Unix epoch)
+ */
+static inline uint64_t mavlink_msg_actuator_control_target_get_time_usec(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint64_t(msg,  0);
+}
+
+/**
+ * @brief Get field group_mlx from actuator_control_target message
+ *
+ * @return Actuator group. The "_mlx" indicates this is a multi-instance message and a MAVLink parser should use this field to difference between instances.
+ */
+static inline uint8_t mavlink_msg_actuator_control_target_get_group_mlx(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  40);
+}
+
+/**
+ * @brief Get field controls from actuator_control_target message
+ *
+ * @return Actuator controls. Normed to -1..+1 where 0 is neutral position. Throttle for single rotation direction motors is 0..1, negative range for reverse direction. Standard mapping for attitude controls (group 0): (index 0-7): roll, pitch, yaw, throttle, flaps, spoilers, airbrakes, landing gear. Load a pas

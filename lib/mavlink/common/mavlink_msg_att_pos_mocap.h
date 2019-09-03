@@ -134,4 +134,41 @@ static inline uint16_t mavlink_msg_att_pos_mocap_pack_chan(uint8_t system_id, ui
  */
 static inline uint16_t mavlink_msg_att_pos_mocap_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_att_pos_mocap_t* att_pos_mocap)
 {
-    return mavlink_msg_att_pos_mocap_pack(system_id, component_id, msg, att_pos_mocap->time_usec, att_pos_mocap->
+    return mavlink_msg_att_pos_mocap_pack(system_id, component_id, msg, att_pos_mocap->time_usec, att_pos_mocap->q, att_pos_mocap->x, att_pos_mocap->y, att_pos_mocap->z);
+}
+
+/**
+ * @brief Encode a att_pos_mocap struct on a channel
+ *
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param chan The MAVLink channel this message will be sent over
+ * @param msg The MAVLink message to compress the data into
+ * @param att_pos_mocap C-struct to read the message contents from
+ */
+static inline uint16_t mavlink_msg_att_pos_mocap_encode_chan(uint8_t system_id, uint8_t component_id, uint8_t chan, mavlink_message_t* msg, const mavlink_att_pos_mocap_t* att_pos_mocap)
+{
+    return mavlink_msg_att_pos_mocap_pack_chan(system_id, component_id, chan, msg, att_pos_mocap->time_usec, att_pos_mocap->q, att_pos_mocap->x, att_pos_mocap->y, att_pos_mocap->z);
+}
+
+/**
+ * @brief Send a att_pos_mocap message
+ * @param chan MAVLink channel to send the message
+ *
+ * @param time_usec Timestamp (micros since boot or Unix epoch)
+ * @param q Attitude quaternion (w, x, y, z order, zero-rotation is 1, 0, 0, 0)
+ * @param x X position in meters (NED)
+ * @param y Y position in meters (NED)
+ * @param z Z position in meters (NED)
+ */
+#ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
+
+static inline void mavlink_msg_att_pos_mocap_send(mavlink_channel_t chan, uint64_t time_usec, const float *q, float x, float y, float z)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    char buf[MAVLINK_MSG_ID_ATT_POS_MOCAP_LEN];
+    _mav_put_uint64_t(buf, 0, time_usec);
+    _mav_put_float(buf, 24, x);
+    _mav_put_float(buf, 28, y);
+    _mav_put_float(buf, 32, z);
+    _mav_p

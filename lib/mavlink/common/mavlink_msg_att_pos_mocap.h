@@ -98,4 +98,40 @@ static inline uint16_t mavlink_msg_att_pos_mocap_pack(uint8_t system_id, uint8_t
  * @param z Z position in meters (NED)
  * @return length of the message in bytes (excluding serial stream start sign)
  */
-static inline uint16_t mavlink_msg_att_pos_mocap_pack_chan(uint8_t sy
+static inline uint16_t mavlink_msg_att_pos_mocap_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
+                               mavlink_message_t* msg,
+                                   uint64_t time_usec,const float *q,float x,float y,float z)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    char buf[MAVLINK_MSG_ID_ATT_POS_MOCAP_LEN];
+    _mav_put_uint64_t(buf, 0, time_usec);
+    _mav_put_float(buf, 24, x);
+    _mav_put_float(buf, 28, y);
+    _mav_put_float(buf, 32, z);
+    _mav_put_float_array(buf, 8, q, 4);
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_ATT_POS_MOCAP_LEN);
+#else
+    mavlink_att_pos_mocap_t packet;
+    packet.time_usec = time_usec;
+    packet.x = x;
+    packet.y = y;
+    packet.z = z;
+    mav_array_memcpy(packet.q, q, sizeof(float)*4);
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_ATT_POS_MOCAP_LEN);
+#endif
+
+    msg->msgid = MAVLINK_MSG_ID_ATT_POS_MOCAP;
+    return mavlink_finalize_message_chan(msg, system_id, component_id, chan, MAVLINK_MSG_ID_ATT_POS_MOCAP_MIN_LEN, MAVLINK_MSG_ID_ATT_POS_MOCAP_LEN, MAVLINK_MSG_ID_ATT_POS_MOCAP_CRC);
+}
+
+/**
+ * @brief Encode a att_pos_mocap struct
+ *
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param msg The MAVLink message to compress the data into
+ * @param att_pos_mocap C-struct to read the message contents from
+ */
+static inline uint16_t mavlink_msg_att_pos_mocap_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_att_pos_mocap_t* att_pos_mocap)
+{
+    return mavlink_msg_att_pos_mocap_pack(system_id, component_id, msg, att_pos_mocap->time_usec, att_pos_mocap->

@@ -248,4 +248,54 @@ static inline uint64_t mavlink_msg_att_pos_mocap_get_time_usec(const mavlink_mes
  *
  * @return Attitude quaternion (w, x, y, z order, zero-rotation is 1, 0, 0, 0)
  */
-static
+static inline uint16_t mavlink_msg_att_pos_mocap_get_q(const mavlink_message_t* msg, float *q)
+{
+    return _MAV_RETURN_float_array(msg, q, 4,  8);
+}
+
+/**
+ * @brief Get field x from att_pos_mocap message
+ *
+ * @return X position in meters (NED)
+ */
+static inline float mavlink_msg_att_pos_mocap_get_x(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  24);
+}
+
+/**
+ * @brief Get field y from att_pos_mocap message
+ *
+ * @return Y position in meters (NED)
+ */
+static inline float mavlink_msg_att_pos_mocap_get_y(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  28);
+}
+
+/**
+ * @brief Get field z from att_pos_mocap message
+ *
+ * @return Z position in meters (NED)
+ */
+static inline float mavlink_msg_att_pos_mocap_get_z(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  32);
+}
+
+/**
+ * @brief Decode a att_pos_mocap message into a struct
+ *
+ * @param msg The message to decode
+ * @param att_pos_mocap C-struct to decode the message contents into
+ */
+static inline void mavlink_msg_att_pos_mocap_decode(const mavlink_message_t* msg, mavlink_att_pos_mocap_t* att_pos_mocap)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    att_pos_mocap->time_usec = mavlink_msg_att_pos_mocap_get_time_usec(msg);
+    mavlink_msg_att_pos_mocap_get_q(msg, att_pos_mocap->q);
+    att_pos_mocap->x = mavlink_msg_att_pos_mocap_get_x(msg);
+    att_pos_mocap->y = mavlink_msg_att_pos_mocap_get_y(msg);
+    att_pos_mocap->z = mavlink_msg_att_pos_mocap_get_z(msg);
+#else
+        uint8_t len = msg->len < MAVLINK_MSG_ID_ATT_POS_MOCAP_LEN? msg->len : MA

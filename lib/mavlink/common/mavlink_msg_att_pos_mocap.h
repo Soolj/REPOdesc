@@ -171,4 +171,37 @@ static inline void mavlink_msg_att_pos_mocap_send(mavlink_channel_t chan, uint64
     _mav_put_float(buf, 24, x);
     _mav_put_float(buf, 28, y);
     _mav_put_float(buf, 32, z);
-    _mav_p
+    _mav_put_float_array(buf, 8, q, 4);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_ATT_POS_MOCAP, buf, MAVLINK_MSG_ID_ATT_POS_MOCAP_MIN_LEN, MAVLINK_MSG_ID_ATT_POS_MOCAP_LEN, MAVLINK_MSG_ID_ATT_POS_MOCAP_CRC);
+#else
+    mavlink_att_pos_mocap_t packet;
+    packet.time_usec = time_usec;
+    packet.x = x;
+    packet.y = y;
+    packet.z = z;
+    mav_array_memcpy(packet.q, q, sizeof(float)*4);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_ATT_POS_MOCAP, (const char *)&packet, MAVLINK_MSG_ID_ATT_POS_MOCAP_MIN_LEN, MAVLINK_MSG_ID_ATT_POS_MOCAP_LEN, MAVLINK_MSG_ID_ATT_POS_MOCAP_CRC);
+#endif
+}
+
+/**
+ * @brief Send a att_pos_mocap message
+ * @param chan MAVLink channel to send the message
+ * @param struct The MAVLink struct to serialize
+ */
+static inline void mavlink_msg_att_pos_mocap_send_struct(mavlink_channel_t chan, const mavlink_att_pos_mocap_t* att_pos_mocap)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    mavlink_msg_att_pos_mocap_send(chan, att_pos_mocap->time_usec, att_pos_mocap->q, att_pos_mocap->x, att_pos_mocap->y, att_pos_mocap->z);
+#else
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_ATT_POS_MOCAP, (const char *)att_pos_mocap, MAVLINK_MSG_ID_ATT_POS_MOCAP_MIN_LEN, MAVLINK_MSG_ID_ATT_POS_MOCAP_LEN, MAVLINK_MSG_ID_ATT_POS_MOCAP_CRC);
+#endif
+}
+
+#if MAVLINK_MSG_ID_ATT_POS_MOCAP_LEN <= MAVLINK_MAX_PAYLOAD_LEN
+/*
+  This varient of _send() can be used to save stack space by re-using
+  memory from the receive buffer.  The caller provides a
+  mavlink_message_t which is the size of a full mavlink message. This
+  is usually the receive buffer for the channel, and allows a reply to an
+  incoming messag

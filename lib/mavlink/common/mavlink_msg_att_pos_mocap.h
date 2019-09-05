@@ -204,4 +204,48 @@ static inline void mavlink_msg_att_pos_mocap_send_struct(mavlink_channel_t chan,
   memory from the receive buffer.  The caller provides a
   mavlink_message_t which is the size of a full mavlink message. This
   is usually the receive buffer for the channel, and allows a reply to an
-  incoming messag
+  incoming message with minimum stack space usage.
+ */
+static inline void mavlink_msg_att_pos_mocap_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  uint64_t time_usec, const float *q, float x, float y, float z)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    char *buf = (char *)msgbuf;
+    _mav_put_uint64_t(buf, 0, time_usec);
+    _mav_put_float(buf, 24, x);
+    _mav_put_float(buf, 28, y);
+    _mav_put_float(buf, 32, z);
+    _mav_put_float_array(buf, 8, q, 4);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_ATT_POS_MOCAP, buf, MAVLINK_MSG_ID_ATT_POS_MOCAP_MIN_LEN, MAVLINK_MSG_ID_ATT_POS_MOCAP_LEN, MAVLINK_MSG_ID_ATT_POS_MOCAP_CRC);
+#else
+    mavlink_att_pos_mocap_t *packet = (mavlink_att_pos_mocap_t *)msgbuf;
+    packet->time_usec = time_usec;
+    packet->x = x;
+    packet->y = y;
+    packet->z = z;
+    mav_array_memcpy(packet->q, q, sizeof(float)*4);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_ATT_POS_MOCAP, (const char *)packet, MAVLINK_MSG_ID_ATT_POS_MOCAP_MIN_LEN, MAVLINK_MSG_ID_ATT_POS_MOCAP_LEN, MAVLINK_MSG_ID_ATT_POS_MOCAP_CRC);
+#endif
+}
+#endif
+
+#endif
+
+// MESSAGE ATT_POS_MOCAP UNPACKING
+
+
+/**
+ * @brief Get field time_usec from att_pos_mocap message
+ *
+ * @return Timestamp (micros since boot or Unix epoch)
+ */
+static inline uint64_t mavlink_msg_att_pos_mocap_get_time_usec(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint64_t(msg,  0);
+}
+
+/**
+ * @brief Get field q from att_pos_mocap message
+ *
+ * @return Attitude quaternion (w, x, y, z order, zero-rotation is 1, 0, 0, 0)
+ */
+static

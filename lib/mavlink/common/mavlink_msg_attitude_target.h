@@ -150,4 +150,28 @@ static inline uint16_t mavlink_msg_attitude_target_pack_chan(uint8_t system_id, 
  * @param msg The MAVLink message to compress the data into
  * @param attitude_target C-struct to read the message contents from
  */
-static inline uint16_t mavlink_msg
+static inline uint16_t mavlink_msg_attitude_target_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_attitude_target_t* attitude_target)
+{
+    return mavlink_msg_attitude_target_pack(system_id, component_id, msg, attitude_target->time_boot_ms, attitude_target->type_mask, attitude_target->q, attitude_target->body_roll_rate, attitude_target->body_pitch_rate, attitude_target->body_yaw_rate, attitude_target->thrust);
+}
+
+/**
+ * @brief Encode a attitude_target struct on a channel
+ *
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param chan The MAVLink channel this message will be sent over
+ * @param msg The MAVLink message to compress the data into
+ * @param attitude_target C-struct to read the message contents from
+ */
+static inline uint16_t mavlink_msg_attitude_target_encode_chan(uint8_t system_id, uint8_t component_id, uint8_t chan, mavlink_message_t* msg, const mavlink_attitude_target_t* attitude_target)
+{
+    return mavlink_msg_attitude_target_pack_chan(system_id, component_id, chan, msg, attitude_target->time_boot_ms, attitude_target->type_mask, attitude_target->q, attitude_target->body_roll_rate, attitude_target->body_pitch_rate, attitude_target->body_yaw_rate, attitude_target->thrust);
+}
+
+/**
+ * @brief Send a attitude_target message
+ * @param chan MAVLink channel to send the message
+ *
+ * @param time_boot_ms Timestamp in milliseconds since system boot
+ * @param type_mask Mappings: If any of these bits are set, the corresponding input should be ignored: bit 1: body roll 

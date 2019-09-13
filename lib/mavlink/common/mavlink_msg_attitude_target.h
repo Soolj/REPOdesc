@@ -114,4 +114,40 @@ static inline uint16_t mavlink_msg_attitude_target_pack(uint8_t system_id, uint8
  */
 static inline uint16_t mavlink_msg_attitude_target_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
                                mavlink_message_t* msg,
-                                   uint32_t time_boot_ms,uint8_t type_mask,const floa
+                                   uint32_t time_boot_ms,uint8_t type_mask,const float *q,float body_roll_rate,float body_pitch_rate,float body_yaw_rate,float thrust)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    char buf[MAVLINK_MSG_ID_ATTITUDE_TARGET_LEN];
+    _mav_put_uint32_t(buf, 0, time_boot_ms);
+    _mav_put_float(buf, 20, body_roll_rate);
+    _mav_put_float(buf, 24, body_pitch_rate);
+    _mav_put_float(buf, 28, body_yaw_rate);
+    _mav_put_float(buf, 32, thrust);
+    _mav_put_uint8_t(buf, 36, type_mask);
+    _mav_put_float_array(buf, 4, q, 4);
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_ATTITUDE_TARGET_LEN);
+#else
+    mavlink_attitude_target_t packet;
+    packet.time_boot_ms = time_boot_ms;
+    packet.body_roll_rate = body_roll_rate;
+    packet.body_pitch_rate = body_pitch_rate;
+    packet.body_yaw_rate = body_yaw_rate;
+    packet.thrust = thrust;
+    packet.type_mask = type_mask;
+    mav_array_memcpy(packet.q, q, sizeof(float)*4);
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_ATTITUDE_TARGET_LEN);
+#endif
+
+    msg->msgid = MAVLINK_MSG_ID_ATTITUDE_TARGET;
+    return mavlink_finalize_message_chan(msg, system_id, component_id, chan, MAVLINK_MSG_ID_ATTITUDE_TARGET_MIN_LEN, MAVLINK_MSG_ID_ATTITUDE_TARGET_LEN, MAVLINK_MSG_ID_ATTITUDE_TARGET_CRC);
+}
+
+/**
+ * @brief Encode a attitude_target struct
+ *
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param msg The MAVLink message to compress the data into
+ * @param attitude_target C-struct to read the message contents from
+ */
+static inline uint16_t mavlink_msg

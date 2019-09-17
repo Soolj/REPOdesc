@@ -174,4 +174,33 @@ static inline uint16_t mavlink_msg_attitude_target_encode_chan(uint8_t system_id
  * @param chan MAVLink channel to send the message
  *
  * @param time_boot_ms Timestamp in milliseconds since system boot
- * @param type_mask Mappings: If any of these bits are set, the corresponding input should be ignored: bit 1: body roll 
+ * @param type_mask Mappings: If any of these bits are set, the corresponding input should be ignored: bit 1: body roll rate, bit 2: body pitch rate, bit 3: body yaw rate. bit 4-bit 7: reserved, bit 8: attitude
+ * @param q Attitude quaternion (w, x, y, z order, zero-rotation is 1, 0, 0, 0)
+ * @param body_roll_rate Body roll rate in radians per second
+ * @param body_pitch_rate Body pitch rate in radians per second
+ * @param body_yaw_rate Body yaw rate in radians per second
+ * @param thrust Collective thrust, normalized to 0 .. 1 (-1 .. 1 for vehicles capable of reverse trust)
+ */
+#ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
+
+static inline void mavlink_msg_attitude_target_send(mavlink_channel_t chan, uint32_t time_boot_ms, uint8_t type_mask, const float *q, float body_roll_rate, float body_pitch_rate, float body_yaw_rate, float thrust)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    char buf[MAVLINK_MSG_ID_ATTITUDE_TARGET_LEN];
+    _mav_put_uint32_t(buf, 0, time_boot_ms);
+    _mav_put_float(buf, 20, body_roll_rate);
+    _mav_put_float(buf, 24, body_pitch_rate);
+    _mav_put_float(buf, 28, body_yaw_rate);
+    _mav_put_float(buf, 32, thrust);
+    _mav_put_uint8_t(buf, 36, type_mask);
+    _mav_put_float_array(buf, 4, q, 4);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_ATTITUDE_TARGET, buf, MAVLINK_MSG_ID_ATTITUDE_TARGET_MIN_LEN, MAVLINK_MSG_ID_ATTITUDE_TARGET_LEN, MAVLINK_MSG_ID_ATTITUDE_TARGET_CRC);
+#else
+    mavlink_attitude_target_t packet;
+    packet.time_boot_ms = time_boot_ms;
+    packet.body_roll_rate = body_roll_rate;
+    packet.body_pitch_rate = body_pitch_rate;
+    packet.body_yaw_rate = body_yaw_rate;
+    packet.thrust = thrust;
+    packet.type_mask = type_mask;
+    mav_array_m

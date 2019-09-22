@@ -1,0 +1,6 @@
+#pragma once
+// MESSAGE AUTH_KEY PACKING
+
+#define MAVLINK_MSG_ID_AUTH_KEY 7
+
+M

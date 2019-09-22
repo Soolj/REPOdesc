@@ -318,4 +318,38 @@ static inline float mavlink_msg_attitude_target_get_body_pitch_rate(const mavlin
  */
 static inline float mavlink_msg_attitude_target_get_body_yaw_rate(const mavlink_message_t* msg)
 {
-    return _MAV_R
+    return _MAV_RETURN_float(msg,  28);
+}
+
+/**
+ * @brief Get field thrust from attitude_target message
+ *
+ * @return Collective thrust, normalized to 0 .. 1 (-1 .. 1 for vehicles capable of reverse trust)
+ */
+static inline float mavlink_msg_attitude_target_get_thrust(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  32);
+}
+
+/**
+ * @brief Decode a attitude_target message into a struct
+ *
+ * @param msg The message to decode
+ * @param attitude_target C-struct to decode the message contents into
+ */
+static inline void mavlink_msg_attitude_target_decode(const mavlink_message_t* msg, mavlink_attitude_target_t* attitude_target)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    attitude_target->time_boot_ms = mavlink_msg_attitude_target_get_time_boot_ms(msg);
+    mavlink_msg_attitude_target_get_q(msg, attitude_target->q);
+    attitude_target->body_roll_rate = mavlink_msg_attitude_target_get_body_roll_rate(msg);
+    attitude_target->body_pitch_rate = mavlink_msg_attitude_target_get_body_pitch_rate(msg);
+    attitude_target->body_yaw_rate = mavlink_msg_attitude_target_get_body_yaw_rate(msg);
+    attitude_target->thrust = mavlink_msg_attitude_target_get_thrust(msg);
+    attitude_target->type_mask = mavlink_msg_attitude_target_get_type_mask(msg);
+#else
+        uint8_t len = msg->len < MAVLINK_MSG_ID_ATTITUDE_TARGET_LEN? msg->len : MAVLINK_MSG_ID_ATTITUDE_TARGET_LEN;
+        memset(attitude_target, 0, MAVLINK_MSG_ID_ATTITUDE_TARGET_LEN);
+    memcpy(attitude_target, _MAV_PAYLOAD(msg), len);
+#endif
+}

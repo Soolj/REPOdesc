@@ -266,4 +266,56 @@ static inline void mavlink_msg_attitude_target_send_buf(mavlink_message_t *msgbu
  *
  * @return Timestamp in milliseconds since system boot
  */
-static inline uint32_t mavlink_msg_attitude_target_get_time_b
+static inline uint32_t mavlink_msg_attitude_target_get_time_boot_ms(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint32_t(msg,  0);
+}
+
+/**
+ * @brief Get field type_mask from attitude_target message
+ *
+ * @return Mappings: If any of these bits are set, the corresponding input should be ignored: bit 1: body roll rate, bit 2: body pitch rate, bit 3: body yaw rate. bit 4-bit 7: reserved, bit 8: attitude
+ */
+static inline uint8_t mavlink_msg_attitude_target_get_type_mask(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  36);
+}
+
+/**
+ * @brief Get field q from attitude_target message
+ *
+ * @return Attitude quaternion (w, x, y, z order, zero-rotation is 1, 0, 0, 0)
+ */
+static inline uint16_t mavlink_msg_attitude_target_get_q(const mavlink_message_t* msg, float *q)
+{
+    return _MAV_RETURN_float_array(msg, q, 4,  4);
+}
+
+/**
+ * @brief Get field body_roll_rate from attitude_target message
+ *
+ * @return Body roll rate in radians per second
+ */
+static inline float mavlink_msg_attitude_target_get_body_roll_rate(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  20);
+}
+
+/**
+ * @brief Get field body_pitch_rate from attitude_target message
+ *
+ * @return Body pitch rate in radians per second
+ */
+static inline float mavlink_msg_attitude_target_get_body_pitch_rate(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  24);
+}
+
+/**
+ * @brief Get field body_yaw_rate from attitude_target message
+ *
+ * @return Body yaw rate in radians per second
+ */
+static inline float mavlink_msg_attitude_target_get_body_yaw_rate(const mavlink_message_t* msg)
+{
+    return _MAV_R

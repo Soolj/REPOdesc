@@ -170,4 +170,44 @@ static inline void mavlink_msg_auth_key_send_buf(mavlink_message_t *msgbuf, mavl
     char *buf = (char *)msgbuf;
 
     _mav_put_char_array(buf, 0, key, 32);
-    _mav_finalize_message_chan_send(chan, MAVLINK
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_AUTH_KEY, buf, MAVLINK_MSG_ID_AUTH_KEY_MIN_LEN, MAVLINK_MSG_ID_AUTH_KEY_LEN, MAVLINK_MSG_ID_AUTH_KEY_CRC);
+#else
+    mavlink_auth_key_t *packet = (mavlink_auth_key_t *)msgbuf;
+
+    mav_array_memcpy(packet->key, key, sizeof(char)*32);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_AUTH_KEY, (const char *)packet, MAVLINK_MSG_ID_AUTH_KEY_MIN_LEN, MAVLINK_MSG_ID_AUTH_KEY_LEN, MAVLINK_MSG_ID_AUTH_KEY_CRC);
+#endif
+}
+#endif
+
+#endif
+
+// MESSAGE AUTH_KEY UNPACKING
+
+
+/**
+ * @brief Get field key from auth_key message
+ *
+ * @return key
+ */
+static inline uint16_t mavlink_msg_auth_key_get_key(const mavlink_message_t* msg, char *key)
+{
+    return _MAV_RETURN_char_array(msg, key, 32,  0);
+}
+
+/**
+ * @brief Decode a auth_key message into a struct
+ *
+ * @param msg The message to decode
+ * @param auth_key C-struct to decode the message contents into
+ */
+static inline void mavlink_msg_auth_key_decode(const mavlink_message_t* msg, mavlink_auth_key_t* auth_key)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    mavlink_msg_auth_key_get_key(msg, auth_key->key);
+#else
+        uint8_t len = msg->len < MAVLINK_MSG_ID_AUTH_KEY_LEN? msg->len : MAVLINK_MSG_ID_AUTH_KEY_LEN;
+        memset(auth_key, 0, MAVLINK_MSG_ID_AUTH_KEY_LEN);
+    memcpy(auth_key, _MAV_PAYLOAD(msg), len);
+#endif
+}

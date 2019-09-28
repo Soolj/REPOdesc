@@ -19,4 +19,32 @@ typedef struct __mavlink_battery_status_t {
 #define MAVLINK_MSG_ID_BATTERY_STATUS_LEN 36
 #define MAVLINK_MSG_ID_BATTERY_STATUS_MIN_LEN 36
 #define MAVLINK_MSG_ID_147_LEN 36
-#define 
+#define MAVLINK_MSG_ID_147_MIN_LEN 36
+
+#define MAVLINK_MSG_ID_BATTERY_STATUS_CRC 154
+#define MAVLINK_MSG_ID_147_CRC 154
+
+#define MAVLINK_MSG_BATTERY_STATUS_FIELD_VOLTAGES_LEN 10
+
+#if MAVLINK_COMMAND_24BIT
+#define MAVLINK_MESSAGE_INFO_BATTERY_STATUS { \
+    147, \
+    "BATTERY_STATUS", \
+    9, \
+    {  { "id", NULL, MAVLINK_TYPE_UINT8_T, 0, 32, offsetof(mavlink_battery_status_t, id) }, \
+         { "battery_function", NULL, MAVLINK_TYPE_UINT8_T, 0, 33, offsetof(mavlink_battery_status_t, battery_function) }, \
+         { "type", NULL, MAVLINK_TYPE_UINT8_T, 0, 34, offsetof(mavlink_battery_status_t, type) }, \
+         { "temperature", NULL, MAVLINK_TYPE_INT16_T, 0, 8, offsetof(mavlink_battery_status_t, temperature) }, \
+         { "voltages", NULL, MAVLINK_TYPE_UINT16_T, 10, 10, offsetof(mavlink_battery_status_t, voltages) }, \
+         { "current_battery", NULL, MAVLINK_TYPE_INT16_T, 0, 30, offsetof(mavlink_battery_status_t, current_battery) }, \
+         { "current_consumed", NULL, MAVLINK_TYPE_INT32_T, 0, 0, offsetof(mavlink_battery_status_t, current_consumed) }, \
+         { "energy_consumed", NULL, MAVLINK_TYPE_INT32_T, 0, 4, offsetof(mavlink_battery_status_t, energy_consumed) }, \
+         { "battery_remaining", NULL, MAVLINK_TYPE_INT8_T, 0, 35, offsetof(mavlink_battery_status_t, battery_remaining) }, \
+         } \
+}
+#else
+#define MAVLINK_MESSAGE_INFO_BATTERY_STATUS { \
+    "BATTERY_STATUS", \
+    9, \
+    {  { "id", NULL, MAVLINK_TYPE_UINT8_T, 0, 32, offsetof(mavlink_battery_status_t, id) }, \
+         { "battery_function", NUL

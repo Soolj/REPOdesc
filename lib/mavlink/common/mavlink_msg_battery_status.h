@@ -93,4 +93,32 @@ static inline uint16_t mavlink_msg_battery_status_pack(uint8_t system_id, uint8_
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_BATTERY_STATUS_LEN);
 #else
     mavlink_battery_status_t packet;
-    packet.current_consumed = current_con
+    packet.current_consumed = current_consumed;
+    packet.energy_consumed = energy_consumed;
+    packet.temperature = temperature;
+    packet.current_battery = current_battery;
+    packet.id = id;
+    packet.battery_function = battery_function;
+    packet.type = type;
+    packet.battery_remaining = battery_remaining;
+    mav_array_memcpy(packet.voltages, voltages, sizeof(uint16_t)*10);
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_BATTERY_STATUS_LEN);
+#endif
+
+    msg->msgid = MAVLINK_MSG_ID_BATTERY_STATUS;
+    return mavlink_finalize_message(msg, system_id, component_id, MAVLINK_MSG_ID_BATTERY_STATUS_MIN_LEN, MAVLINK_MSG_ID_BATTERY_STATUS_LEN, MAVLINK_MSG_ID_BATTERY_STATUS_CRC);
+}
+
+/**
+ * @brief Pack a battery_status message on a channel
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param chan The MAVLink channel this message will be sent over
+ * @param msg The MAVLink message to compress the data into
+ * @param id Battery ID
+ * @param battery_function Function of the battery
+ * @param type Type (chemistry) of the battery
+ * @param temperature Temperature of the battery in centi-degrees celsius. INT16_MAX for unknown temperature.
+ * @param voltages Battery voltage of cells, in millivolts (1 = 1 millivolt). Cells above the valid cell count for this battery should have the UINT16_MAX value.
+ * @param current_battery Battery current, in 10*milliamperes (1 = 10 milliampere), -1: autopilot does not measure the current
+ * @param current_consumed Consumed charge, in m

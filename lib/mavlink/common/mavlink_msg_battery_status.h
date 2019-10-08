@@ -178,4 +178,24 @@ static inline uint16_t mavlink_msg_battery_status_encode(uint8_t system_id, uint
  *
  * @param system_id ID of this system
  * @param component_id ID of this component (e.g. 200 for IMU)
- * @
+ * @param chan The MAVLink channel this message will be sent over
+ * @param msg The MAVLink message to compress the data into
+ * @param battery_status C-struct to read the message contents from
+ */
+static inline uint16_t mavlink_msg_battery_status_encode_chan(uint8_t system_id, uint8_t component_id, uint8_t chan, mavlink_message_t* msg, const mavlink_battery_status_t* battery_status)
+{
+    return mavlink_msg_battery_status_pack_chan(system_id, component_id, chan, msg, battery_status->id, battery_status->battery_function, battery_status->type, battery_status->temperature, battery_status->voltages, battery_status->current_battery, battery_status->current_consumed, battery_status->energy_consumed, battery_status->battery_remaining);
+}
+
+/**
+ * @brief Send a battery_status message
+ * @param chan MAVLink channel to send the message
+ *
+ * @param id Battery ID
+ * @param battery_function Function of the battery
+ * @param type Type (chemistry) of the battery
+ * @param temperature Temperature of the battery in centi-degrees celsius. INT16_MAX for unknown temperature.
+ * @param voltages Battery voltage of cells, in millivolts (1 = 1 millivolt). Cells above the valid cell count for this battery should have the UINT16_MAX value.
+ * @param current_battery Battery current, in 10*milliamperes (1 = 10 milliampere), -1: autopilot does not measure the current
+ * @param current_consumed Consumed charge, in milliampere hours (1 = 1 mAh), -1: autopilot does not provide mAh consumption estimate
+ * @param energy_consumed Consumed energy, in HectoJoules (intergrated U*I*dt)  (1 = 100 Jou

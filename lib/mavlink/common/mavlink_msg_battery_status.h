@@ -145,4 +145,37 @@ static inline uint16_t mavlink_msg_battery_status_pack_chan(uint8_t system_id, u
 #else
     mavlink_battery_status_t packet;
     packet.current_consumed = current_consumed;
-    packet.energy_consumed = energy_co
+    packet.energy_consumed = energy_consumed;
+    packet.temperature = temperature;
+    packet.current_battery = current_battery;
+    packet.id = id;
+    packet.battery_function = battery_function;
+    packet.type = type;
+    packet.battery_remaining = battery_remaining;
+    mav_array_memcpy(packet.voltages, voltages, sizeof(uint16_t)*10);
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_BATTERY_STATUS_LEN);
+#endif
+
+    msg->msgid = MAVLINK_MSG_ID_BATTERY_STATUS;
+    return mavlink_finalize_message_chan(msg, system_id, component_id, chan, MAVLINK_MSG_ID_BATTERY_STATUS_MIN_LEN, MAVLINK_MSG_ID_BATTERY_STATUS_LEN, MAVLINK_MSG_ID_BATTERY_STATUS_CRC);
+}
+
+/**
+ * @brief Encode a battery_status struct
+ *
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param msg The MAVLink message to compress the data into
+ * @param battery_status C-struct to read the message contents from
+ */
+static inline uint16_t mavlink_msg_battery_status_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_battery_status_t* battery_status)
+{
+    return mavlink_msg_battery_status_pack(system_id, component_id, msg, battery_status->id, battery_status->battery_function, battery_status->type, battery_status->temperature, battery_status->voltages, battery_status->current_battery, battery_status->current_consumed, battery_status->energy_consumed, battery_status->battery_remaining);
+}
+
+/**
+ * @brief Encode a battery_status struct on a channel
+ *
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @

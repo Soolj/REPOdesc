@@ -198,4 +198,32 @@ static inline uint16_t mavlink_msg_battery_status_encode_chan(uint8_t system_id,
  * @param voltages Battery voltage of cells, in millivolts (1 = 1 millivolt). Cells above the valid cell count for this battery should have the UINT16_MAX value.
  * @param current_battery Battery current, in 10*milliamperes (1 = 10 milliampere), -1: autopilot does not measure the current
  * @param current_consumed Consumed charge, in milliampere hours (1 = 1 mAh), -1: autopilot does not provide mAh consumption estimate
- * @param energy_consumed Consumed energy, in HectoJoules (intergrated U*I*dt)  (1 = 100 Jou
+ * @param energy_consumed Consumed energy, in HectoJoules (intergrated U*I*dt)  (1 = 100 Joule), -1: autopilot does not provide energy consumption estimate
+ * @param battery_remaining Remaining battery energy: (0%: 0, 100%: 100), -1: autopilot does not estimate the remaining battery
+ */
+#ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
+
+static inline void mavlink_msg_battery_status_send(mavlink_channel_t chan, uint8_t id, uint8_t battery_function, uint8_t type, int16_t temperature, const uint16_t *voltages, int16_t current_battery, int32_t current_consumed, int32_t energy_consumed, int8_t battery_remaining)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    char buf[MAVLINK_MSG_ID_BATTERY_STATUS_LEN];
+    _mav_put_int32_t(buf, 0, current_consumed);
+    _mav_put_int32_t(buf, 4, energy_consumed);
+    _mav_put_int16_t(buf, 8, temperature);
+    _mav_put_int16_t(buf, 30, current_battery);
+    _mav_put_uint8_t(buf, 32, id);
+    _mav_put_uint8_t(buf, 33, battery_function);
+    _mav_put_uint8_t(buf, 34, type);
+    _mav_put_int8_t(buf, 35, battery_remaining);
+    _mav_put_uint16_t_array(buf, 10, voltages, 10);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_BATTERY_STATUS, buf, MAVLINK_MSG_ID_BATTERY_STATUS_MIN_LEN, MAVLINK_MSG_ID_BATTERY_STATUS_LEN, MAVLINK_MSG_ID_BATTERY_STATUS_CRC);
+#else
+    mavlink_battery_status_t packet;
+    packet.current_consumed = current_consumed;
+    packet.energy_consumed = energy_consumed;
+    packet.temperature = temperature;
+    packet.current_battery = current_battery;
+    packet.id = id;
+    packet.battery_function = battery_function;
+    packet.type = type;
+    packet.battery_remainin

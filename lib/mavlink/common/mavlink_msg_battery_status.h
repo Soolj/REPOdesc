@@ -340,4 +340,49 @@ static inline uint16_t mavlink_msg_battery_status_get_voltages(const mavlink_mes
 }
 
 /**
- * @brief
+ * @brief Get field current_battery from battery_status message
+ *
+ * @return Battery current, in 10*milliamperes (1 = 10 milliampere), -1: autopilot does not measure the current
+ */
+static inline int16_t mavlink_msg_battery_status_get_current_battery(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int16_t(msg,  30);
+}
+
+/**
+ * @brief Get field current_consumed from battery_status message
+ *
+ * @return Consumed charge, in milliampere hours (1 = 1 mAh), -1: autopilot does not provide mAh consumption estimate
+ */
+static inline int32_t mavlink_msg_battery_status_get_current_consumed(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int32_t(msg,  0);
+}
+
+/**
+ * @brief Get field energy_consumed from battery_status message
+ *
+ * @return Consumed energy, in HectoJoules (intergrated U*I*dt)  (1 = 100 Joule), -1: autopilot does not provide energy consumption estimate
+ */
+static inline int32_t mavlink_msg_battery_status_get_energy_consumed(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int32_t(msg,  4);
+}
+
+/**
+ * @brief Get field battery_remaining from battery_status message
+ *
+ * @return Remaining battery energy: (0%: 0, 100%: 100), -1: autopilot does not estimate the remaining battery
+ */
+static inline int8_t mavlink_msg_battery_status_get_battery_remaining(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int8_t(msg,  35);
+}
+
+/**
+ * @brief Decode a battery_status message into a struct
+ *
+ * @param msg The message to decode
+ * @param battery_status C-struct to decode the message contents into
+ */
+static inline void mavlink_msg_battery_status_decode(const mavlink_message_t* msg, mavlink_batt

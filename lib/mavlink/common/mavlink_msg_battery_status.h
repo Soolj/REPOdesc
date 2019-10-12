@@ -279,4 +279,65 @@ static inline void mavlink_msg_battery_status_send_buf(mavlink_message_t *msgbuf
     packet->type = type;
     packet->battery_remaining = battery_remaining;
     mav_array_memcpy(packet->voltages, voltages, sizeof(uint16_t)*10);
-    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_BATTERY_STATUS, (const char *)packet, MAVLINK_MSG_ID
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_BATTERY_STATUS, (const char *)packet, MAVLINK_MSG_ID_BATTERY_STATUS_MIN_LEN, MAVLINK_MSG_ID_BATTERY_STATUS_LEN, MAVLINK_MSG_ID_BATTERY_STATUS_CRC);
+#endif
+}
+#endif
+
+#endif
+
+// MESSAGE BATTERY_STATUS UNPACKING
+
+
+/**
+ * @brief Get field id from battery_status message
+ *
+ * @return Battery ID
+ */
+static inline uint8_t mavlink_msg_battery_status_get_id(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  32);
+}
+
+/**
+ * @brief Get field battery_function from battery_status message
+ *
+ * @return Function of the battery
+ */
+static inline uint8_t mavlink_msg_battery_status_get_battery_function(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  33);
+}
+
+/**
+ * @brief Get field type from battery_status message
+ *
+ * @return Type (chemistry) of the battery
+ */
+static inline uint8_t mavlink_msg_battery_status_get_type(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  34);
+}
+
+/**
+ * @brief Get field temperature from battery_status message
+ *
+ * @return Temperature of the battery in centi-degrees celsius. INT16_MAX for unknown temperature.
+ */
+static inline int16_t mavlink_msg_battery_status_get_temperature(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int16_t(msg,  8);
+}
+
+/**
+ * @brief Get field voltages from battery_status message
+ *
+ * @return Battery voltage of cells, in millivolts (1 = 1 millivolt). Cells above the valid cell count for this battery should have the UINT16_MAX value.
+ */
+static inline uint16_t mavlink_msg_battery_status_get_voltages(const mavlink_message_t* msg, uint16_t *voltages)
+{
+    return _MAV_RETURN_uint16_t_array(msg, voltages, 10,  10);
+}
+
+/**
+ * @brief

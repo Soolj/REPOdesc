@@ -385,4 +385,21 @@ static inline int8_t mavlink_msg_battery_status_get_battery_remaining(const mavl
  * @param msg The message to decode
  * @param battery_status C-struct to decode the message contents into
  */
-static inline void mavlink_msg_battery_status_decode(const mavlink_message_t* msg, mavlink_batt
+static inline void mavlink_msg_battery_status_decode(const mavlink_message_t* msg, mavlink_battery_status_t* battery_status)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    battery_status->current_consumed = mavlink_msg_battery_status_get_current_consumed(msg);
+    battery_status->energy_consumed = mavlink_msg_battery_status_get_energy_consumed(msg);
+    battery_status->temperature = mavlink_msg_battery_status_get_temperature(msg);
+    mavlink_msg_battery_status_get_voltages(msg, battery_status->voltages);
+    battery_status->current_battery = mavlink_msg_battery_status_get_current_battery(msg);
+    battery_status->id = mavlink_msg_battery_status_get_id(msg);
+    battery_status->battery_function = mavlink_msg_battery_status_get_battery_function(msg);
+    battery_status->type = mavlink_msg_battery_status_get_type(msg);
+    battery_status->battery_remaining = mavlink_msg_battery_status_get_battery_remaining(msg);
+#else
+        uint8_t len = msg->len < MAVLINK_MSG_ID_BATTERY_STATUS_LEN? msg->len : MAVLINK_MSG_ID_BATTERY_STATUS_LEN;
+        memset(battery_status, 0, MAVLINK_MSG_ID_BATTERY_STATUS_LEN);
+    memcpy(battery_status, _MAV_PAYLOAD(msg), len);
+#endif
+}

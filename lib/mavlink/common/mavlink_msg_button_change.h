@@ -52,4 +52,38 @@ typedef struct __mavlink_button_change_t {
  * @param state Bitmap state of buttons
  * @return length of the message in bytes (excluding serial stream start sign)
  */
-static inline uint16_t mavlink_msg_button_cha
+static inline uint16_t mavlink_msg_button_change_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
+                               uint32_t time_boot_ms, uint32_t last_change_ms, uint8_t state)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    char buf[MAVLINK_MSG_ID_BUTTON_CHANGE_LEN];
+    _mav_put_uint32_t(buf, 0, time_boot_ms);
+    _mav_put_uint32_t(buf, 4, last_change_ms);
+    _mav_put_uint8_t(buf, 8, state);
+
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_BUTTON_CHANGE_LEN);
+#else
+    mavlink_button_change_t packet;
+    packet.time_boot_ms = time_boot_ms;
+    packet.last_change_ms = last_change_ms;
+    packet.state = state;
+
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_BUTTON_CHANGE_LEN);
+#endif
+
+    msg->msgid = MAVLINK_MSG_ID_BUTTON_CHANGE;
+    return mavlink_finalize_message(msg, system_id, component_id, MAVLINK_MSG_ID_BUTTON_CHANGE_MIN_LEN, MAVLINK_MSG_ID_BUTTON_CHANGE_LEN, MAVLINK_MSG_ID_BUTTON_CHANGE_CRC);
+}
+
+/**
+ * @brief Pack a button_change message on a channel
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param chan The MAVLink channel this message will be sent over
+ * @param msg The MAVLink message to compress the data into
+ * @param time_boot_ms Timestamp (milliseconds since system boot)
+ * @param last_change_ms Time of last change of button state
+ * @param state Bitmap state of buttons
+ * @return length of the message in bytes (excluding serial stream start sign)
+ */
+static inline uint16_t mavlink_msg_button_change_pack_chan(uint8_t system_id, uint8_t

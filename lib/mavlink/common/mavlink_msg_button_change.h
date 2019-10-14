@@ -155,4 +155,37 @@ static inline void mavlink_msg_button_change_send(mavlink_channel_t chan, uint32
     _mav_put_uint32_t(buf, 4, last_change_ms);
     _mav_put_uint8_t(buf, 8, state);
 
-    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_BUTTON_CHANGE, buf, MAVLINK_MSG_ID_BUTTON_CHANGE_MIN_LEN, MAVLI
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_BUTTON_CHANGE, buf, MAVLINK_MSG_ID_BUTTON_CHANGE_MIN_LEN, MAVLINK_MSG_ID_BUTTON_CHANGE_LEN, MAVLINK_MSG_ID_BUTTON_CHANGE_CRC);
+#else
+    mavlink_button_change_t packet;
+    packet.time_boot_ms = time_boot_ms;
+    packet.last_change_ms = last_change_ms;
+    packet.state = state;
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_BUTTON_CHANGE, (const char *)&packet, MAVLINK_MSG_ID_BUTTON_CHANGE_MIN_LEN, MAVLINK_MSG_ID_BUTTON_CHANGE_LEN, MAVLINK_MSG_ID_BUTTON_CHANGE_CRC);
+#endif
+}
+
+/**
+ * @brief Send a button_change message
+ * @param chan MAVLink channel to send the message
+ * @param struct The MAVLink struct to serialize
+ */
+static inline void mavlink_msg_button_change_send_struct(mavlink_channel_t chan, const mavlink_button_change_t* button_change)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    mavlink_msg_button_change_send(chan, button_change->time_boot_ms, button_change->last_change_ms, button_change->state);
+#else
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_BUTTON_CHANGE, (const char *)button_change, MAVLINK_MSG_ID_BUTTON_CHANGE_MIN_LEN, MAVLINK_MSG_ID_BUTTON_CHANGE_LEN, MAVLINK_MSG_ID_BUTTON_CHANGE_CRC);
+#endif
+}
+
+#if MAVLINK_MSG_ID_BUTTON_CHANGE_LEN <= MAVLINK_MAX_PAYLOAD_LEN
+/*
+  This varient of _send() can be used to save stack space by re-using
+  memory from the receive buffer.  The caller provides a
+  mavlink_message_t which is the size of a full mavlink message. This
+  is usually the receive buffer for the channel, and allows a reply to an
+  incoming message with minimum stack space usage.
+ */
+static inline void mavlink_msg_button_change_send_buf(mavlink_message_t *msgbuf, ma

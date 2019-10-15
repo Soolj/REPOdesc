@@ -188,4 +188,54 @@ static inline void mavlink_msg_button_change_send_struct(mavlink_channel_t chan,
   is usually the receive buffer for the channel, and allows a reply to an
   incoming message with minimum stack space usage.
  */
-static inline void mavlink_msg_button_change_send_buf(mavlink_message_t *msgbuf, ma
+static inline void mavlink_msg_button_change_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  uint32_t time_boot_ms, uint32_t last_change_ms, uint8_t state)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    char *buf = (char *)msgbuf;
+    _mav_put_uint32_t(buf, 0, time_boot_ms);
+    _mav_put_uint32_t(buf, 4, last_change_ms);
+    _mav_put_uint8_t(buf, 8, state);
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_BUTTON_CHANGE, buf, MAVLINK_MSG_ID_BUTTON_CHANGE_MIN_LEN, MAVLINK_MSG_ID_BUTTON_CHANGE_LEN, MAVLINK_MSG_ID_BUTTON_CHANGE_CRC);
+#else
+    mavlink_button_change_t *packet = (mavlink_button_change_t *)msgbuf;
+    packet->time_boot_ms = time_boot_ms;
+    packet->last_change_ms = last_change_ms;
+    packet->state = state;
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_BUTTON_CHANGE, (const char *)packet, MAVLINK_MSG_ID_BUTTON_CHANGE_MIN_LEN, MAVLINK_MSG_ID_BUTTON_CHANGE_LEN, MAVLINK_MSG_ID_BUTTON_CHANGE_CRC);
+#endif
+}
+#endif
+
+#endif
+
+// MESSAGE BUTTON_CHANGE UNPACKING
+
+
+/**
+ * @brief Get field time_boot_ms from button_change message
+ *
+ * @return Timestamp (milliseconds since system boot)
+ */
+static inline uint32_t mavlink_msg_button_change_get_time_boot_ms(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint32_t(msg,  0);
+}
+
+/**
+ * @brief Get field last_change_ms from button_change message
+ *
+ * @return Time of last change of button state
+ */
+static inline uint32_t mavlink_msg_button_change_get_last_change_ms(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint32_t(msg,  4);
+}
+
+/**
+ * @brief Get field state from button_change message
+ *
+ * @return Bitmap state of buttons
+ */
+static inline uint8_t mavlink_msg

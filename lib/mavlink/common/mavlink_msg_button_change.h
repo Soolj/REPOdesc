@@ -238,4 +238,26 @@ static inline uint32_t mavlink_msg_button_change_get_last_change_ms(const mavlin
  *
  * @return Bitmap state of buttons
  */
-static inline uint8_t mavlink_msg
+static inline uint8_t mavlink_msg_button_change_get_state(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  8);
+}
+
+/**
+ * @brief Decode a button_change message into a struct
+ *
+ * @param msg The message to decode
+ * @param button_change C-struct to decode the message contents into
+ */
+static inline void mavlink_msg_button_change_decode(const mavlink_message_t* msg, mavlink_button_change_t* button_change)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    button_change->time_boot_ms = mavlink_msg_button_change_get_time_boot_ms(msg);
+    button_change->last_change_ms = mavlink_msg_button_change_get_last_change_ms(msg);
+    button_change->state = mavlink_msg_button_change_get_state(msg);
+#else
+        uint8_t len = msg->len < MAVLINK_MSG_ID_BUTTON_CHANGE_LEN? msg->len : MAVLINK_MSG_ID_BUTTON_CHANGE_LEN;
+        memset(button_change, 0, MAVLINK_MSG_ID_BUTTON_CHANGE_LEN);
+    memcpy(button_change, _MAV_PAYLOAD(msg), len);
+#endif
+}

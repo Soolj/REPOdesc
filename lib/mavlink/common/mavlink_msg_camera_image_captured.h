@@ -101,4 +101,35 @@ static inline uint16_t mavlink_msg_camera_image_captured_pack(uint8_t system_id,
     _mav_put_int8_t(buf, 49, capture_result);
     _mav_put_float_array(buf, 28, q, 4);
     _mav_put_char_array(buf, 50, file_url, 205);
-        memcpy
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_CAMERA_IMAGE_CAPTURED_LEN);
+#else
+    mavlink_camera_image_captured_t packet;
+    packet.time_utc = time_utc;
+    packet.time_boot_ms = time_boot_ms;
+    packet.lat = lat;
+    packet.lon = lon;
+    packet.alt = alt;
+    packet.relative_alt = relative_alt;
+    packet.image_index = image_index;
+    packet.camera_id = camera_id;
+    packet.capture_result = capture_result;
+    mav_array_memcpy(packet.q, q, sizeof(float)*4);
+    mav_array_memcpy(packet.file_url, file_url, sizeof(char)*205);
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_CAMERA_IMAGE_CAPTURED_LEN);
+#endif
+
+    msg->msgid = MAVLINK_MSG_ID_CAMERA_IMAGE_CAPTURED;
+    return mavlink_finalize_message(msg, system_id, component_id, MAVLINK_MSG_ID_CAMERA_IMAGE_CAPTURED_MIN_LEN, MAVLINK_MSG_ID_CAMERA_IMAGE_CAPTURED_LEN, MAVLINK_MSG_ID_CAMERA_IMAGE_CAPTURED_CRC);
+}
+
+/**
+ * @brief Pack a camera_image_captured message on a channel
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param chan The MAVLink channel this message will be sent over
+ * @param msg The MAVLink message to compress the data into
+ * @param time_boot_ms Timestamp (milliseconds since system boot)
+ * @param time_utc Timestamp (microseconds since UNIX epoch) in UTC. 0 for unknown.
+ * @param camera_id Camera ID (1 for first, 2 for second, etc.)
+ * @param lat Latitude, expressed as degrees * 1E7 where image was taken
+ * @param lon Longitude, expressed as degrees * 1E7 where capture

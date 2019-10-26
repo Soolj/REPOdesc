@@ -132,4 +132,28 @@ static inline uint16_t mavlink_msg_camera_image_captured_pack(uint8_t system_id,
  * @param time_utc Timestamp (microseconds since UNIX epoch) in UTC. 0 for unknown.
  * @param camera_id Camera ID (1 for first, 2 for second, etc.)
  * @param lat Latitude, expressed as degrees * 1E7 where image was taken
- * @param lon Longitude, expressed as degrees * 1E7 where capture
+ * @param lon Longitude, expressed as degrees * 1E7 where capture was taken
+ * @param alt Altitude in meters, expressed as * 1E3 (AMSL, not WGS84) where image was taken
+ * @param relative_alt Altitude above ground in meters, expressed as * 1E3 where image was taken
+ * @param q Quaternion of camera orientation (w, x, y, z order, zero-rotation is 0, 0, 0, 0)
+ * @param image_index Zero based index of this image (image count since armed -1)
+ * @param capture_result Boolean indicating success (1) or failure (0) while capturing this image.
+ * @param file_url URL of image taken. Either local storage or http://foo.jpg if camera provides an HTTP interface.
+ * @return length of the message in bytes (excluding serial stream start sign)
+ */
+static inline uint16_t mavlink_msg_camera_image_captured_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
+                               mavlink_message_t* msg,
+                                   uint32_t time_boot_ms,uint64_t time_utc,uint8_t camera_id,int32_t lat,int32_t lon,int32_t alt,int32_t relative_alt,const float *q,int32_t image_index,int8_t capture_result,const char *file_url)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    char buf[MAVLINK_MSG_ID_CAMERA_IMAGE_CAPTURED_LEN];
+    _mav_put_uint64_t(buf, 0, time_utc);
+    _mav_put_uint32_t(buf, 8, time_boot_ms);
+    _mav_put_int32_t(buf, 12, lat);
+    _mav_put_int32_t(buf, 16, lon);
+    _mav_put_int32_t(buf, 20, alt);
+    _mav_put_int32_t(buf, 24, relative_alt);
+    _mav_put_int32_t(buf, 44, image_index);
+    _mav_put_uint8_t(buf, 48, camera_id);
+    _mav_put_int8_t(buf, 49, capture_result);
+    _mav_

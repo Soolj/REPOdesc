@@ -156,4 +156,37 @@ static inline uint16_t mavlink_msg_camera_image_captured_pack_chan(uint8_t syste
     _mav_put_int32_t(buf, 44, image_index);
     _mav_put_uint8_t(buf, 48, camera_id);
     _mav_put_int8_t(buf, 49, capture_result);
-    _mav_
+    _mav_put_float_array(buf, 28, q, 4);
+    _mav_put_char_array(buf, 50, file_url, 205);
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_CAMERA_IMAGE_CAPTURED_LEN);
+#else
+    mavlink_camera_image_captured_t packet;
+    packet.time_utc = time_utc;
+    packet.time_boot_ms = time_boot_ms;
+    packet.lat = lat;
+    packet.lon = lon;
+    packet.alt = alt;
+    packet.relative_alt = relative_alt;
+    packet.image_index = image_index;
+    packet.camera_id = camera_id;
+    packet.capture_result = capture_result;
+    mav_array_memcpy(packet.q, q, sizeof(float)*4);
+    mav_array_memcpy(packet.file_url, file_url, sizeof(char)*205);
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_CAMERA_IMAGE_CAPTURED_LEN);
+#endif
+
+    msg->msgid = MAVLINK_MSG_ID_CAMERA_IMAGE_CAPTURED;
+    return mavlink_finalize_message_chan(msg, system_id, component_id, chan, MAVLINK_MSG_ID_CAMERA_IMAGE_CAPTURED_MIN_LEN, MAVLINK_MSG_ID_CAMERA_IMAGE_CAPTURED_LEN, MAVLINK_MSG_ID_CAMERA_IMAGE_CAPTURED_CRC);
+}
+
+/**
+ * @brief Encode a camera_image_captured struct
+ *
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param msg The MAVLink message to compress the data into
+ * @param camera_image_captured C-struct to read the message contents from
+ */
+static inline uint16_t mavlink_msg_camera_image_captured_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_camera_image_captured_t* camera_image_captured)
+{
+    return mavlink_msg_camera_image_captured_pack(system_id, component_id, msg, camera_image_captured->time_boot_ms, camera_image_captured->time_utc, c

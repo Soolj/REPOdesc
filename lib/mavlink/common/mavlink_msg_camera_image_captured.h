@@ -234,4 +234,35 @@ static inline void mavlink_msg_camera_image_captured_send(mavlink_channel_t chan
     _mav_put_int32_t(buf, 16, lon);
     _mav_put_int32_t(buf, 20, alt);
     _mav_put_int32_t(buf, 24, relative_alt);
-    _mav_put_int32_t(buf, 
+    _mav_put_int32_t(buf, 44, image_index);
+    _mav_put_uint8_t(buf, 48, camera_id);
+    _mav_put_int8_t(buf, 49, capture_result);
+    _mav_put_float_array(buf, 28, q, 4);
+    _mav_put_char_array(buf, 50, file_url, 205);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_CAMERA_IMAGE_CAPTURED, buf, MAVLINK_MSG_ID_CAMERA_IMAGE_CAPTURED_MIN_LEN, MAVLINK_MSG_ID_CAMERA_IMAGE_CAPTURED_LEN, MAVLINK_MSG_ID_CAMERA_IMAGE_CAPTURED_CRC);
+#else
+    mavlink_camera_image_captured_t packet;
+    packet.time_utc = time_utc;
+    packet.time_boot_ms = time_boot_ms;
+    packet.lat = lat;
+    packet.lon = lon;
+    packet.alt = alt;
+    packet.relative_alt = relative_alt;
+    packet.image_index = image_index;
+    packet.camera_id = camera_id;
+    packet.capture_result = capture_result;
+    mav_array_memcpy(packet.q, q, sizeof(float)*4);
+    mav_array_memcpy(packet.file_url, file_url, sizeof(char)*205);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_CAMERA_IMAGE_CAPTURED, (const char *)&packet, MAVLINK_MSG_ID_CAMERA_IMAGE_CAPTURED_MIN_LEN, MAVLINK_MSG_ID_CAMERA_IMAGE_CAPTURED_LEN, MAVLINK_MSG_ID_CAMERA_IMAGE_CAPTURED_CRC);
+#endif
+}
+
+/**
+ * @brief Send a camera_image_captured message
+ * @param chan MAVLink channel to send the message
+ * @param struct The MAVLink struct to serialize
+ */
+static inline void mavlink_msg_camera_image_captured_send_struct(mavlink_channel_t chan, const mavlink_camera_image_captured_t* camera_image_captured)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    mavlink_msg_camera_image_captured_send(chan, camera_image_captured->time_boot_ms, camera_image_captured->time_utc, c

@@ -325,4 +325,62 @@ static inline void mavlink_msg_camera_image_captured_send_buf(mavlink_message_t 
  */
 static inline uint32_t mavlink_msg_camera_image_captured_get_time_boot_ms(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_uint32_t(msg,  8
+    return _MAV_RETURN_uint32_t(msg,  8);
+}
+
+/**
+ * @brief Get field time_utc from camera_image_captured message
+ *
+ * @return Timestamp (microseconds since UNIX epoch) in UTC. 0 for unknown.
+ */
+static inline uint64_t mavlink_msg_camera_image_captured_get_time_utc(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint64_t(msg,  0);
+}
+
+/**
+ * @brief Get field camera_id from camera_image_captured message
+ *
+ * @return Camera ID (1 for first, 2 for second, etc.)
+ */
+static inline uint8_t mavlink_msg_camera_image_captured_get_camera_id(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  48);
+}
+
+/**
+ * @brief Get field lat from camera_image_captured message
+ *
+ * @return Latitude, expressed as degrees * 1E7 where image was taken
+ */
+static inline int32_t mavlink_msg_camera_image_captured_get_lat(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int32_t(msg,  12);
+}
+
+/**
+ * @brief Get field lon from camera_image_captured message
+ *
+ * @return Longitude, expressed as degrees * 1E7 where capture was taken
+ */
+static inline int32_t mavlink_msg_camera_image_captured_get_lon(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int32_t(msg,  16);
+}
+
+/**
+ * @brief Get field alt from camera_image_captured message
+ *
+ * @return Altitude in meters, expressed as * 1E3 (AMSL, not WGS84) where image was taken
+ */
+static inline int32_t mavlink_msg_camera_image_captured_get_alt(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int32_t(msg,  20);
+}
+
+/**
+ * @brief Get field relative_alt from camera_image_captured message
+ *
+ * @return Altitude above ground in meters, expressed as * 1E3 where image was taken
+ */
+static inli

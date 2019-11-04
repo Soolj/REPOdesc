@@ -288,4 +288,41 @@ static inline void mavlink_msg_camera_image_captured_send_buf(mavlink_message_t 
     _mav_put_int32_t(buf, 12, lat);
     _mav_put_int32_t(buf, 16, lon);
     _mav_put_int32_t(buf, 20, alt);
-    _
+    _mav_put_int32_t(buf, 24, relative_alt);
+    _mav_put_int32_t(buf, 44, image_index);
+    _mav_put_uint8_t(buf, 48, camera_id);
+    _mav_put_int8_t(buf, 49, capture_result);
+    _mav_put_float_array(buf, 28, q, 4);
+    _mav_put_char_array(buf, 50, file_url, 205);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_CAMERA_IMAGE_CAPTURED, buf, MAVLINK_MSG_ID_CAMERA_IMAGE_CAPTURED_MIN_LEN, MAVLINK_MSG_ID_CAMERA_IMAGE_CAPTURED_LEN, MAVLINK_MSG_ID_CAMERA_IMAGE_CAPTURED_CRC);
+#else
+    mavlink_camera_image_captured_t *packet = (mavlink_camera_image_captured_t *)msgbuf;
+    packet->time_utc = time_utc;
+    packet->time_boot_ms = time_boot_ms;
+    packet->lat = lat;
+    packet->lon = lon;
+    packet->alt = alt;
+    packet->relative_alt = relative_alt;
+    packet->image_index = image_index;
+    packet->camera_id = camera_id;
+    packet->capture_result = capture_result;
+    mav_array_memcpy(packet->q, q, sizeof(float)*4);
+    mav_array_memcpy(packet->file_url, file_url, sizeof(char)*205);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_CAMERA_IMAGE_CAPTURED, (const char *)packet, MAVLINK_MSG_ID_CAMERA_IMAGE_CAPTURED_MIN_LEN, MAVLINK_MSG_ID_CAMERA_IMAGE_CAPTURED_LEN, MAVLINK_MSG_ID_CAMERA_IMAGE_CAPTURED_CRC);
+#endif
+}
+#endif
+
+#endif
+
+// MESSAGE CAMERA_IMAGE_CAPTURED UNPACKING
+
+
+/**
+ * @brief Get field time_boot_ms from camera_image_captured message
+ *
+ * @return Timestamp (milliseconds since system boot)
+ */
+static inline uint32_t mavlink_msg_camera_image_captured_get_time_boot_ms(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint32_t(msg,  8

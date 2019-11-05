@@ -383,4 +383,53 @@ static inline int32_t mavlink_msg_camera_image_captured_get_alt(const mavlink_me
  *
  * @return Altitude above ground in meters, expressed as * 1E3 where image was taken
  */
-static inli
+static inline int32_t mavlink_msg_camera_image_captured_get_relative_alt(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int32_t(msg,  24);
+}
+
+/**
+ * @brief Get field q from camera_image_captured message
+ *
+ * @return Quaternion of camera orientation (w, x, y, z order, zero-rotation is 0, 0, 0, 0)
+ */
+static inline uint16_t mavlink_msg_camera_image_captured_get_q(const mavlink_message_t* msg, float *q)
+{
+    return _MAV_RETURN_float_array(msg, q, 4,  28);
+}
+
+/**
+ * @brief Get field image_index from camera_image_captured message
+ *
+ * @return Zero based index of this image (image count since armed -1)
+ */
+static inline int32_t mavlink_msg_camera_image_captured_get_image_index(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int32_t(msg,  44);
+}
+
+/**
+ * @brief Get field capture_result from camera_image_captured message
+ *
+ * @return Boolean indicating success (1) or failure (0) while capturing this image.
+ */
+static inline int8_t mavlink_msg_camera_image_captured_get_capture_result(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int8_t(msg,  49);
+}
+
+/**
+ * @brief Get field file_url from camera_image_captured message
+ *
+ * @return URL of image taken. Either local storage or http://foo.jpg if camera provides an HTTP interface.
+ */
+static inline uint16_t mavlink_msg_camera_image_captured_get_file_url(const mavlink_message_t* msg, char *file_url)
+{
+    return _MAV_RETURN_char_array(msg, file_url, 205,  50);
+}
+
+/**
+ * @brief Decode a camera_image_captured message into a struct
+ *
+ * @param msg The message to decode
+ * @param camera_image_captured C-struct to decode the message 

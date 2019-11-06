@@ -432,4 +432,25 @@ static inline uint16_t mavlink_msg_camera_image_captured_get_file_url(const mavl
  * @brief Decode a camera_image_captured message into a struct
  *
  * @param msg The message to decode
- * @param camera_image_captured C-struct to decode the message 
+ * @param camera_image_captured C-struct to decode the message contents into
+ */
+static inline void mavlink_msg_camera_image_captured_decode(const mavlink_message_t* msg, mavlink_camera_image_captured_t* camera_image_captured)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    camera_image_captured->time_utc = mavlink_msg_camera_image_captured_get_time_utc(msg);
+    camera_image_captured->time_boot_ms = mavlink_msg_camera_image_captured_get_time_boot_ms(msg);
+    camera_image_captured->lat = mavlink_msg_camera_image_captured_get_lat(msg);
+    camera_image_captured->lon = mavlink_msg_camera_image_captured_get_lon(msg);
+    camera_image_captured->alt = mavlink_msg_camera_image_captured_get_alt(msg);
+    camera_image_captured->relative_alt = mavlink_msg_camera_image_captured_get_relative_alt(msg);
+    mavlink_msg_camera_image_captured_get_q(msg, camera_image_captured->q);
+    camera_image_captured->image_index = mavlink_msg_camera_image_captured_get_image_index(msg);
+    camera_image_captured->camera_id = mavlink_msg_camera_image_captured_get_camera_id(msg);
+    camera_image_captured->capture_result = mavlink_msg_camera_image_captured_get_capture_result(msg);
+    mavlink_msg_camera_image_captured_get_file_url(msg, camera_image_captured->file_url);
+#else
+        uint8_t len = msg->len < MAVLINK_MSG_ID_CAMERA_IMAGE_CAPTURED_LEN? msg->len : MAVLINK_MSG_ID_CAMERA_IMAGE_CAPTURED_LEN;
+        memset(camera_image_captured, 0, MAVLINK_MSG_ID_CAMERA_IMAGE_CAPTURED_LEN);
+    memcpy(camera_image_captured, _MAV_PAYLOAD(msg), len);
+#endif
+}

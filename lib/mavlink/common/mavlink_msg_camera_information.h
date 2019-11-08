@@ -67,4 +67,32 @@ typedef struct __mavlink_camera_information_t {
          { "resolution_v", NULL, MAVLINK_TYPE_UINT16_T, 0, 26, offsetof(mavlink_camera_information_t, resolution_v) }, \
          { "lens_id", NULL, MAVLINK_TYPE_UINT8_T, 0, 94, offsetof(mavlink_camera_information_t, lens_id) }, \
          { "flags", NULL, MAVLINK_TYPE_UINT32_T, 0, 20, offsetof(mavlink_camera_information_t, flags) }, \
-         { "cam_definition_version", NULL, MAVLINK_TYPE_UINT16
+         { "cam_definition_version", NULL, MAVLINK_TYPE_UINT16_T, 0, 28, offsetof(mavlink_camera_information_t, cam_definition_version) }, \
+         { "cam_definition_uri", NULL, MAVLINK_TYPE_CHAR, 140, 95, offsetof(mavlink_camera_information_t, cam_definition_uri) }, \
+         } \
+}
+#endif
+
+/**
+ * @brief Pack a camera_information message
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param msg The MAVLink message to compress the data into
+ *
+ * @param time_boot_ms Timestamp (milliseconds since system boot)
+ * @param vendor_name Name of the camera vendor
+ * @param model_name Name of the camera model
+ * @param firmware_version Version of the camera firmware (v << 24 & 0xff = Dev, v << 16 & 0xff = Patch, v << 8 & 0xff = Minor, v & 0xff = Major)
+ * @param focal_length Focal length in mm
+ * @param sensor_size_h Image sensor size horizontal in mm
+ * @param sensor_size_v Image sensor size vertical in mm
+ * @param resolution_h Image resolution in pixels horizontal
+ * @param resolution_v Image resolution in pixels vertical
+ * @param lens_id Reserved for a lens ID
+ * @param flags CAMERA_CAP_FLAGS enum flags (bitmap) describing camera capabilities.
+ * @param cam_definition_version Camera definition version (iteration)
+ * @param cam_definition_uri Camera definition URI (if any, otherwise only basic functions will be available).
+ * @return length of the message in bytes (excluding serial stream start sign)
+ */
+static inline uint16_t mavlink_msg_camera_information_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
+                               uint32_t time_boot_ms, const uint8_t *vendo

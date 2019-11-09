@@ -152,4 +152,29 @@ static inline uint16_t mavlink_msg_camera_information_pack(uint8_t system_id, ui
  * @param resolution_v Image resolution in pixels vertical
  * @param lens_id Reserved for a lens ID
  * @param flags CAMERA_CAP_FLAGS enum flags (bitmap) describing camera capabilities.
- * @param cam_definition_vers
+ * @param cam_definition_version Camera definition version (iteration)
+ * @param cam_definition_uri Camera definition URI (if any, otherwise only basic functions will be available).
+ * @return length of the message in bytes (excluding serial stream start sign)
+ */
+static inline uint16_t mavlink_msg_camera_information_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
+                               mavlink_message_t* msg,
+                                   uint32_t time_boot_ms,const uint8_t *vendor_name,const uint8_t *model_name,uint32_t firmware_version,float focal_length,float sensor_size_h,float sensor_size_v,uint16_t resolution_h,uint16_t resolution_v,uint8_t lens_id,uint32_t flags,uint16_t cam_definition_version,const char *cam_definition_uri)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    char buf[MAVLINK_MSG_ID_CAMERA_INFORMATION_LEN];
+    _mav_put_uint32_t(buf, 0, time_boot_ms);
+    _mav_put_uint32_t(buf, 4, firmware_version);
+    _mav_put_float(buf, 8, focal_length);
+    _mav_put_float(buf, 12, sensor_size_h);
+    _mav_put_float(buf, 16, sensor_size_v);
+    _mav_put_uint32_t(buf, 20, flags);
+    _mav_put_uint16_t(buf, 24, resolution_h);
+    _mav_put_uint16_t(buf, 26, resolution_v);
+    _mav_put_uint16_t(buf, 28, cam_definition_version);
+    _mav_put_uint8_t(buf, 94, lens_id);
+    _mav_put_uint8_t_array(buf, 30, vendor_name, 32);
+    _mav_put_uint8_t_array(buf, 62, model_name, 32);
+    _mav_put_char_array(buf, 95, cam_definition_uri, 140);
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_CAMERA_INFORMATION_LEN);
+#else
+    mavlink_camera_information_t pack

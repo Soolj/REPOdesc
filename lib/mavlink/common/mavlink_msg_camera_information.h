@@ -126,4 +126,30 @@ static inline uint16_t mavlink_msg_camera_information_pack(uint8_t system_id, ui
     packet.cam_definition_version = cam_definition_version;
     packet.lens_id = lens_id;
     mav_array_memcpy(packet.vendor_name, vendor_name, sizeof(uint8_t)*32);
-    mav_array_memc
+    mav_array_memcpy(packet.model_name, model_name, sizeof(uint8_t)*32);
+    mav_array_memcpy(packet.cam_definition_uri, cam_definition_uri, sizeof(char)*140);
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_CAMERA_INFORMATION_LEN);
+#endif
+
+    msg->msgid = MAVLINK_MSG_ID_CAMERA_INFORMATION;
+    return mavlink_finalize_message(msg, system_id, component_id, MAVLINK_MSG_ID_CAMERA_INFORMATION_MIN_LEN, MAVLINK_MSG_ID_CAMERA_INFORMATION_LEN, MAVLINK_MSG_ID_CAMERA_INFORMATION_CRC);
+}
+
+/**
+ * @brief Pack a camera_information message on a channel
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param chan The MAVLink channel this message will be sent over
+ * @param msg The MAVLink message to compress the data into
+ * @param time_boot_ms Timestamp (milliseconds since system boot)
+ * @param vendor_name Name of the camera vendor
+ * @param model_name Name of the camera model
+ * @param firmware_version Version of the camera firmware (v << 24 & 0xff = Dev, v << 16 & 0xff = Patch, v << 8 & 0xff = Minor, v & 0xff = Major)
+ * @param focal_length Focal length in mm
+ * @param sensor_size_h Image sensor size horizontal in mm
+ * @param sensor_size_v Image sensor size vertical in mm
+ * @param resolution_h Image resolution in pixels horizontal
+ * @param resolution_v Image resolution in pixels vertical
+ * @param lens_id Reserved for a lens ID
+ * @param flags CAMERA_CAP_FLAGS enum flags (bitmap) describing camera capabilities.
+ * @param cam_definition_vers

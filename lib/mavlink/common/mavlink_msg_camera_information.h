@@ -177,4 +177,35 @@ static inline uint16_t mavlink_msg_camera_information_pack_chan(uint8_t system_i
     _mav_put_char_array(buf, 95, cam_definition_uri, 140);
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_CAMERA_INFORMATION_LEN);
 #else
-    mavlink_camera_information_t pack
+    mavlink_camera_information_t packet;
+    packet.time_boot_ms = time_boot_ms;
+    packet.firmware_version = firmware_version;
+    packet.focal_length = focal_length;
+    packet.sensor_size_h = sensor_size_h;
+    packet.sensor_size_v = sensor_size_v;
+    packet.flags = flags;
+    packet.resolution_h = resolution_h;
+    packet.resolution_v = resolution_v;
+    packet.cam_definition_version = cam_definition_version;
+    packet.lens_id = lens_id;
+    mav_array_memcpy(packet.vendor_name, vendor_name, sizeof(uint8_t)*32);
+    mav_array_memcpy(packet.model_name, model_name, sizeof(uint8_t)*32);
+    mav_array_memcpy(packet.cam_definition_uri, cam_definition_uri, sizeof(char)*140);
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_CAMERA_INFORMATION_LEN);
+#endif
+
+    msg->msgid = MAVLINK_MSG_ID_CAMERA_INFORMATION;
+    return mavlink_finalize_message_chan(msg, system_id, component_id, chan, MAVLINK_MSG_ID_CAMERA_INFORMATION_MIN_LEN, MAVLINK_MSG_ID_CAMERA_INFORMATION_LEN, MAVLINK_MSG_ID_CAMERA_INFORMATION_CRC);
+}
+
+/**
+ * @brief Encode a camera_information struct
+ *
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param msg The MAVLink message to compress the data into
+ * @param camera_information C-struct to read the message contents from
+ */
+static inline uint16_t mavlink_msg_camera_information_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_camera_information_t* camera_information)
+{
+    return mavlink_msg_camera_information_pack(system_id,

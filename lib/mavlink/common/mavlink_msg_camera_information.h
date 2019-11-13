@@ -251,3 +251,31 @@ static inline void mavlink_msg_camera_information_send(mavlink_channel_t chan, u
     char buf[MAVLINK_MSG_ID_CAMERA_INFORMATION_LEN];
     _mav_put_uint32_t(buf, 0, time_boot_ms);
     _mav_put_uint32_t(buf, 4, firmware_version);
+    _mav_put_float(buf, 8, focal_length);
+    _mav_put_float(buf, 12, sensor_size_h);
+    _mav_put_float(buf, 16, sensor_size_v);
+    _mav_put_uint32_t(buf, 20, flags);
+    _mav_put_uint16_t(buf, 24, resolution_h);
+    _mav_put_uint16_t(buf, 26, resolution_v);
+    _mav_put_uint16_t(buf, 28, cam_definition_version);
+    _mav_put_uint8_t(buf, 94, lens_id);
+    _mav_put_uint8_t_array(buf, 30, vendor_name, 32);
+    _mav_put_uint8_t_array(buf, 62, model_name, 32);
+    _mav_put_char_array(buf, 95, cam_definition_uri, 140);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_CAMERA_INFORMATION, buf, MAVLINK_MSG_ID_CAMERA_INFORMATION_MIN_LEN, MAVLINK_MSG_ID_CAMERA_INFORMATION_LEN, MAVLINK_MSG_ID_CAMERA_INFORMATION_CRC);
+#else
+    mavlink_camera_information_t packet;
+    packet.time_boot_ms = time_boot_ms;
+    packet.firmware_version = firmware_version;
+    packet.focal_length = focal_length;
+    packet.sensor_size_h = sensor_size_h;
+    packet.sensor_size_v = sensor_size_v;
+    packet.flags = flags;
+    packet.resolution_h = resolution_h;
+    packet.resolution_v = resolution_v;
+    packet.cam_definition_version = cam_definition_version;
+    packet.lens_id = lens_id;
+    mav_array_memcpy(packet.vendor_name, vendor_name, sizeof(uint8_t)*32);
+    mav_array_memcpy(packet.model_name, model_name, sizeof(uint8_t)*32);
+    mav_array_memcpy(packet.cam_definition_uri, cam_definition_uri, sizeof(char)*140);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_CAMERA_INFORMATION, (const char *)&packet, MAVLINK_MSG_ID_CA

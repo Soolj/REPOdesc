@@ -227,4 +227,27 @@ static inline uint16_t mavlink_msg_camera_information_encode_chan(uint8_t system
 
 /**
  * @brief Send a camera_information message
- * @
+ * @param chan MAVLink channel to send the message
+ *
+ * @param time_boot_ms Timestamp (milliseconds since system boot)
+ * @param vendor_name Name of the camera vendor
+ * @param model_name Name of the camera model
+ * @param firmware_version Version of the camera firmware (v << 24 & 0xff = Dev, v << 16 & 0xff = Patch, v << 8 & 0xff = Minor, v & 0xff = Major)
+ * @param focal_length Focal length in mm
+ * @param sensor_size_h Image sensor size horizontal in mm
+ * @param sensor_size_v Image sensor size vertical in mm
+ * @param resolution_h Image resolution in pixels horizontal
+ * @param resolution_v Image resolution in pixels vertical
+ * @param lens_id Reserved for a lens ID
+ * @param flags CAMERA_CAP_FLAGS enum flags (bitmap) describing camera capabilities.
+ * @param cam_definition_version Camera definition version (iteration)
+ * @param cam_definition_uri Camera definition URI (if any, otherwise only basic functions will be available).
+ */
+#ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
+
+static inline void mavlink_msg_camera_information_send(mavlink_channel_t chan, uint32_t time_boot_ms, const uint8_t *vendor_name, const uint8_t *model_name, uint32_t firmware_version, float focal_length, float sensor_size_h, float sensor_size_v, uint16_t resolution_h, uint16_t resolution_v, uint8_t lens_id, uint32_t flags, uint16_t cam_definition_version, const char *cam_definition_uri)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    char buf[MAVLINK_MSG_ID_CAMERA_INFORMATION_LEN];
+    _mav_put_uint32_t(buf, 0, time_boot_ms);
+    _mav_put_uint32_t(buf, 4, firmware_version);

@@ -328,4 +328,50 @@ static inline void mavlink_msg_camera_information_send_buf(mavlink_message_t *ms
     packet->firmware_version = firmware_version;
     packet->focal_length = focal_length;
     packet->sensor_size_h = sensor_size_h;
-    p
+    packet->sensor_size_v = sensor_size_v;
+    packet->flags = flags;
+    packet->resolution_h = resolution_h;
+    packet->resolution_v = resolution_v;
+    packet->cam_definition_version = cam_definition_version;
+    packet->lens_id = lens_id;
+    mav_array_memcpy(packet->vendor_name, vendor_name, sizeof(uint8_t)*32);
+    mav_array_memcpy(packet->model_name, model_name, sizeof(uint8_t)*32);
+    mav_array_memcpy(packet->cam_definition_uri, cam_definition_uri, sizeof(char)*140);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_CAMERA_INFORMATION, (const char *)packet, MAVLINK_MSG_ID_CAMERA_INFORMATION_MIN_LEN, MAVLINK_MSG_ID_CAMERA_INFORMATION_LEN, MAVLINK_MSG_ID_CAMERA_INFORMATION_CRC);
+#endif
+}
+#endif
+
+#endif
+
+// MESSAGE CAMERA_INFORMATION UNPACKING
+
+
+/**
+ * @brief Get field time_boot_ms from camera_information message
+ *
+ * @return Timestamp (milliseconds since system boot)
+ */
+static inline uint32_t mavlink_msg_camera_information_get_time_boot_ms(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint32_t(msg,  0);
+}
+
+/**
+ * @brief Get field vendor_name from camera_information message
+ *
+ * @return Name of the camera vendor
+ */
+static inline uint16_t mavlink_msg_camera_information_get_vendor_name(const mavlink_message_t* msg, uint8_t *vendor_name)
+{
+    return _MAV_RETURN_uint8_t_array(msg, vendor_name, 32,  30);
+}
+
+/**
+ * @brief Get field model_name from camera_information message
+ *
+ * @return Name of the camera model
+ */
+static inline uint16_t mavlink_msg_camera_information_get_model_name(const mavlink_message_t* msg, uint8_t *model_name)
+{
+    return _MAV_RETURN_uint8_t_a

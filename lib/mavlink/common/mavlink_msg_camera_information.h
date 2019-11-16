@@ -374,4 +374,62 @@ static inline uint16_t mavlink_msg_camera_information_get_vendor_name(const mavl
  */
 static inline uint16_t mavlink_msg_camera_information_get_model_name(const mavlink_message_t* msg, uint8_t *model_name)
 {
-    return _MAV_RETURN_uint8_t_a
+    return _MAV_RETURN_uint8_t_array(msg, model_name, 32,  62);
+}
+
+/**
+ * @brief Get field firmware_version from camera_information message
+ *
+ * @return Version of the camera firmware (v << 24 & 0xff = Dev, v << 16 & 0xff = Patch, v << 8 & 0xff = Minor, v & 0xff = Major)
+ */
+static inline uint32_t mavlink_msg_camera_information_get_firmware_version(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint32_t(msg,  4);
+}
+
+/**
+ * @brief Get field focal_length from camera_information message
+ *
+ * @return Focal length in mm
+ */
+static inline float mavlink_msg_camera_information_get_focal_length(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  8);
+}
+
+/**
+ * @brief Get field sensor_size_h from camera_information message
+ *
+ * @return Image sensor size horizontal in mm
+ */
+static inline float mavlink_msg_camera_information_get_sensor_size_h(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  12);
+}
+
+/**
+ * @brief Get field sensor_size_v from camera_information message
+ *
+ * @return Image sensor size vertical in mm
+ */
+static inline float mavlink_msg_camera_information_get_sensor_size_v(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  16);
+}
+
+/**
+ * @brief Get field resolution_h from camera_information message
+ *
+ * @return Image resolution in pixels horizontal
+ */
+static inline uint16_t mavlink_msg_camera_information_get_resolution_h(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint16_t(msg,  24);
+}
+
+/**
+ * @brief Get field resolution_v from camera_information message
+ *
+ * @return Image resolution in pixels vertical
+ */
+stat

@@ -432,4 +432,53 @@ static inline uint16_t mavlink_msg_camera_information_get_resolution_h(const mav
  *
  * @return Image resolution in pixels vertical
  */
-stat
+static inline uint16_t mavlink_msg_camera_information_get_resolution_v(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint16_t(msg,  26);
+}
+
+/**
+ * @brief Get field lens_id from camera_information message
+ *
+ * @return Reserved for a lens ID
+ */
+static inline uint8_t mavlink_msg_camera_information_get_lens_id(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  94);
+}
+
+/**
+ * @brief Get field flags from camera_information message
+ *
+ * @return CAMERA_CAP_FLAGS enum flags (bitmap) describing camera capabilities.
+ */
+static inline uint32_t mavlink_msg_camera_information_get_flags(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint32_t(msg,  20);
+}
+
+/**
+ * @brief Get field cam_definition_version from camera_information message
+ *
+ * @return Camera definition version (iteration)
+ */
+static inline uint16_t mavlink_msg_camera_information_get_cam_definition_version(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint16_t(msg,  28);
+}
+
+/**
+ * @brief Get field cam_definition_uri from camera_information message
+ *
+ * @return Camera definition URI (if any, otherwise only basic functions will be available).
+ */
+static inline uint16_t mavlink_msg_camera_information_get_cam_definition_uri(const mavlink_message_t* msg, char *cam_definition_uri)
+{
+    return _MAV_RETURN_char_array(msg, cam_definition_uri, 140,  95);
+}
+
+/**
+ * @brief Decode a camera_information message into a struct
+ *
+ * @param msg The message to decode
+ * @param camera_information C-struct to decode the mess

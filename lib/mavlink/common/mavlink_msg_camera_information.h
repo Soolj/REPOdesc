@@ -500,4 +500,8 @@ static inline void mavlink_msg_camera_information_decode(const mavlink_message_t
     camera_information->lens_id = mavlink_msg_camera_information_get_lens_id(msg);
     mavlink_msg_camera_information_get_cam_definition_uri(msg, camera_information->cam_definition_uri);
 #else
-        uint8_t len = msg->len < MAVLINK_MSG_ID_CAMERA_INFORMATION_LEN? msg->len : MAVLINK_MSG_ID_CAMERA_
+        uint8_t len = msg->len < MAVLINK_MSG_ID_CAMERA_INFORMATION_LEN? msg->len : MAVLINK_MSG_ID_CAMERA_INFORMATION_LEN;
+        memset(camera_information, 0, MAVLINK_MSG_ID_CAMERA_INFORMATION_LEN);
+    memcpy(camera_information, _MAV_PAYLOAD(msg), len);
+#endif
+}

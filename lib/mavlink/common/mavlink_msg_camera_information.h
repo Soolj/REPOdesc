@@ -481,4 +481,23 @@ static inline uint16_t mavlink_msg_camera_information_get_cam_definition_uri(con
  * @brief Decode a camera_information message into a struct
  *
  * @param msg The message to decode
- * @param camera_information C-struct to decode the mess
+ * @param camera_information C-struct to decode the message contents into
+ */
+static inline void mavlink_msg_camera_information_decode(const mavlink_message_t* msg, mavlink_camera_information_t* camera_information)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    camera_information->time_boot_ms = mavlink_msg_camera_information_get_time_boot_ms(msg);
+    camera_information->firmware_version = mavlink_msg_camera_information_get_firmware_version(msg);
+    camera_information->focal_length = mavlink_msg_camera_information_get_focal_length(msg);
+    camera_information->sensor_size_h = mavlink_msg_camera_information_get_sensor_size_h(msg);
+    camera_information->sensor_size_v = mavlink_msg_camera_information_get_sensor_size_v(msg);
+    camera_information->flags = mavlink_msg_camera_information_get_flags(msg);
+    camera_information->resolution_h = mavlink_msg_camera_information_get_resolution_h(msg);
+    camera_information->resolution_v = mavlink_msg_camera_information_get_resolution_v(msg);
+    camera_information->cam_definition_version = mavlink_msg_camera_information_get_cam_definition_version(msg);
+    mavlink_msg_camera_information_get_vendor_name(msg, camera_information->vendor_name);
+    mavlink_msg_camera_information_get_model_name(msg, camera_information->model_name);
+    camera_information->lens_id = mavlink_msg_camera_information_get_lens_id(msg);
+    mavlink_msg_camera_information_get_cam_definition_uri(msg, camera_information->cam_definition_uri);
+#else
+        uint8_t len = msg->len < MAVLINK_MSG_ID_CAMERA_INFORMATION_LEN? msg->len : MAVLINK_MSG_ID_CAMERA_

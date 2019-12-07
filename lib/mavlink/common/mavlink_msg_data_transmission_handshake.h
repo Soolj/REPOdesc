@@ -166,4 +166,28 @@ static inline uint16_t mavlink_msg_data_transmission_handshake_encode(uint8_t sy
  * @param component_id ID of this component (e.g. 200 for IMU)
  * @param chan The MAVLink channel this message will be sent over
  * @param msg The MAVLink message to compress the data into
- * @param data_transmission_handshake C-struct to read the mess
+ * @param data_transmission_handshake C-struct to read the message contents from
+ */
+static inline uint16_t mavlink_msg_data_transmission_handshake_encode_chan(uint8_t system_id, uint8_t component_id, uint8_t chan, mavlink_message_t* msg, const mavlink_data_transmission_handshake_t* data_transmission_handshake)
+{
+    return mavlink_msg_data_transmission_handshake_pack_chan(system_id, component_id, chan, msg, data_transmission_handshake->type, data_transmission_handshake->size, data_transmission_handshake->width, data_transmission_handshake->height, data_transmission_handshake->packets, data_transmission_handshake->payload, data_transmission_handshake->jpg_quality);
+}
+
+/**
+ * @brief Send a data_transmission_handshake message
+ * @param chan MAVLink channel to send the message
+ *
+ * @param type type of requested/acknowledged data (as defined in ENUM DATA_TYPES in mavlink/include/mavlink_types.h)
+ * @param size total data size in bytes (set on ACK only)
+ * @param width Width of a matrix or image
+ * @param height Height of a matrix or image
+ * @param packets number of packets beeing sent (set on ACK only)
+ * @param payload payload size per packet (normally 253 byte, see DATA field size in message ENCAPSULATED_DATA) (set on ACK only)
+ * @param jpg_quality JPEG quality out of [1,100]
+ */
+#ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
+
+static inline void mavlink_msg_data_transmission_handshake_send(mavlink_channel_t chan, uint8_t type, uint32_t size, uint16_t width, uint16_t height, uint16_t packets, uint8_t payload, uint8_t jpg_quality)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    char buf[MAVLINK_MSG_ID_

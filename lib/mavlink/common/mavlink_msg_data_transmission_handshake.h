@@ -190,4 +190,36 @@ static inline uint16_t mavlink_msg_data_transmission_handshake_encode_chan(uint8
 static inline void mavlink_msg_data_transmission_handshake_send(mavlink_channel_t chan, uint8_t type, uint32_t size, uint16_t width, uint16_t height, uint16_t packets, uint8_t payload, uint8_t jpg_quality)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    char buf[MAVLINK_MSG_ID_
+    char buf[MAVLINK_MSG_ID_DATA_TRANSMISSION_HANDSHAKE_LEN];
+    _mav_put_uint32_t(buf, 0, size);
+    _mav_put_uint16_t(buf, 4, width);
+    _mav_put_uint16_t(buf, 6, height);
+    _mav_put_uint16_t(buf, 8, packets);
+    _mav_put_uint8_t(buf, 10, type);
+    _mav_put_uint8_t(buf, 11, payload);
+    _mav_put_uint8_t(buf, 12, jpg_quality);
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_DATA_TRANSMISSION_HANDSHAKE, buf, MAVLINK_MSG_ID_DATA_TRANSMISSION_HANDSHAKE_MIN_LEN, MAVLINK_MSG_ID_DATA_TRANSMISSION_HANDSHAKE_LEN, MAVLINK_MSG_ID_DATA_TRANSMISSION_HANDSHAKE_CRC);
+#else
+    mavlink_data_transmission_handshake_t packet;
+    packet.size = size;
+    packet.width = width;
+    packet.height = height;
+    packet.packets = packets;
+    packet.type = type;
+    packet.payload = payload;
+    packet.jpg_quality = jpg_quality;
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_DATA_TRANSMISSION_HANDSHAKE, (const char *)&packet, MAVLINK_MSG_ID_DATA_TRANSMISSION_HANDSHAKE_MIN_LEN, MAVLINK_MSG_ID_DATA_TRANSMISSION_HANDSHAKE_LEN, MAVLINK_MSG_ID_DATA_TRANSMISSION_HANDSHAKE_CRC);
+#endif
+}
+
+/**
+ * @brief Send a data_transmission_handshake message
+ * @param chan MAVLink channel to send the message
+ * @param struct The MAVLink struct to serialize
+ */
+static inline void mavlink_msg_data_transmission_handshake_send_struct(mavlink_channel_t chan, const mavlink_data_transmission_handshake_t* data_transmission_handshake)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    mavlink_msg_data_transmission_handshake_sen

@@ -246,3 +246,48 @@ static inline void mavlink_msg_data_transmission_handshake_send_buf(mavlink_mess
     _mav_put_uint16_t(buf, 8, packets);
     _mav_put_uint8_t(buf, 10, type);
     _mav_put_uint8_t(buf, 11, payload);
+    _mav_put_uint8_t(buf, 12, jpg_quality);
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_DATA_TRANSMISSION_HANDSHAKE, buf, MAVLINK_MSG_ID_DATA_TRANSMISSION_HANDSHAKE_MIN_LEN, MAVLINK_MSG_ID_DATA_TRANSMISSION_HANDSHAKE_LEN, MAVLINK_MSG_ID_DATA_TRANSMISSION_HANDSHAKE_CRC);
+#else
+    mavlink_data_transmission_handshake_t *packet = (mavlink_data_transmission_handshake_t *)msgbuf;
+    packet->size = size;
+    packet->width = width;
+    packet->height = height;
+    packet->packets = packets;
+    packet->type = type;
+    packet->payload = payload;
+    packet->jpg_quality = jpg_quality;
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_DATA_TRANSMISSION_HANDSHAKE, (const char *)packet, MAVLINK_MSG_ID_DATA_TRANSMISSION_HANDSHAKE_MIN_LEN, MAVLINK_MSG_ID_DATA_TRANSMISSION_HANDSHAKE_LEN, MAVLINK_MSG_ID_DATA_TRANSMISSION_HANDSHAKE_CRC);
+#endif
+}
+#endif
+
+#endif
+
+// MESSAGE DATA_TRANSMISSION_HANDSHAKE UNPACKING
+
+
+/**
+ * @brief Get field type from data_transmission_handshake message
+ *
+ * @return type of requested/acknowledged data (as defined in ENUM DATA_TYPES in mavlink/include/mavlink_types.h)
+ */
+static inline uint8_t mavlink_msg_data_transmission_handshake_get_type(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  10);
+}
+
+/**
+ * @brief Get field size from data_transmission_handshake message
+ *
+ * @return total data size in bytes (set on ACK only)
+ */
+static inline uint32_t mavlink_msg_data_transmission_handshake_get_size(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint32_t(msg,  0);
+}
+
+/**
+ * @

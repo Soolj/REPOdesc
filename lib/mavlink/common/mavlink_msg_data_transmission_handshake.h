@@ -343,4 +343,21 @@ static inline uint8_t mavlink_msg_data_transmission_handshake_get_jpg_quality(co
  * @brief Decode a data_transmission_handshake message into a struct
  *
  * @param msg The message to decode
- * @param data_transmission_handshake C-struct to
+ * @param data_transmission_handshake C-struct to decode the message contents into
+ */
+static inline void mavlink_msg_data_transmission_handshake_decode(const mavlink_message_t* msg, mavlink_data_transmission_handshake_t* data_transmission_handshake)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    data_transmission_handshake->size = mavlink_msg_data_transmission_handshake_get_size(msg);
+    data_transmission_handshake->width = mavlink_msg_data_transmission_handshake_get_width(msg);
+    data_transmission_handshake->height = mavlink_msg_data_transmission_handshake_get_height(msg);
+    data_transmission_handshake->packets = mavlink_msg_data_transmission_handshake_get_packets(msg);
+    data_transmission_handshake->type = mavlink_msg_data_transmission_handshake_get_type(msg);
+    data_transmission_handshake->payload = mavlink_msg_data_transmission_handshake_get_payload(msg);
+    data_transmission_handshake->jpg_quality = mavlink_msg_data_transmission_handshake_get_jpg_quality(msg);
+#else
+        uint8_t len = msg->len < MAVLINK_MSG_ID_DATA_TRANSMISSION_HANDSHAKE_LEN? msg->len : MAVLINK_MSG_ID_DATA_TRANSMISSION_HANDSHAKE_LEN;
+        memset(data_transmission_handshake, 0, MAVLINK_MSG_ID_DATA_TRANSMISSION_HANDSHAKE_LEN);
+    memcpy(data_transmission_handshake, _MAV_PAYLOAD(msg), len);
+#endif
+}

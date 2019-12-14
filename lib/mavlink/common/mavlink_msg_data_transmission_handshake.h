@@ -290,4 +290,57 @@ static inline uint32_t mavlink_msg_data_transmission_handshake_get_size(const ma
 }
 
 /**
- * @
+ * @brief Get field width from data_transmission_handshake message
+ *
+ * @return Width of a matrix or image
+ */
+static inline uint16_t mavlink_msg_data_transmission_handshake_get_width(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint16_t(msg,  4);
+}
+
+/**
+ * @brief Get field height from data_transmission_handshake message
+ *
+ * @return Height of a matrix or image
+ */
+static inline uint16_t mavlink_msg_data_transmission_handshake_get_height(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint16_t(msg,  6);
+}
+
+/**
+ * @brief Get field packets from data_transmission_handshake message
+ *
+ * @return number of packets beeing sent (set on ACK only)
+ */
+static inline uint16_t mavlink_msg_data_transmission_handshake_get_packets(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint16_t(msg,  8);
+}
+
+/**
+ * @brief Get field payload from data_transmission_handshake message
+ *
+ * @return payload size per packet (normally 253 byte, see DATA field size in message ENCAPSULATED_DATA) (set on ACK only)
+ */
+static inline uint8_t mavlink_msg_data_transmission_handshake_get_payload(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  11);
+}
+
+/**
+ * @brief Get field jpg_quality from data_transmission_handshake message
+ *
+ * @return JPEG quality out of [1,100]
+ */
+static inline uint8_t mavlink_msg_data_transmission_handshake_get_jpg_quality(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  12);
+}
+
+/**
+ * @brief Decode a data_transmission_handshake message into a struct
+ *
+ * @param msg The message to decode
+ * @param data_transmission_handshake C-struct to

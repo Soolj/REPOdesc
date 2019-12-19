@@ -134,4 +134,46 @@ static inline uint16_t mavlink_msg_debug_encode(uint8_t system_id, uint8_t compo
  */
 static inline uint16_t mavlink_msg_debug_encode_chan(uint8_t system_id, uint8_t component_id, uint8_t chan, mavlink_message_t* msg, const mavlink_debug_t* debug)
 {
-    return mavlink_msg_debug_pack_chan(system_id, component_id, chan, 
+    return mavlink_msg_debug_pack_chan(system_id, component_id, chan, msg, debug->time_boot_ms, debug->ind, debug->value);
+}
+
+/**
+ * @brief Send a debug message
+ * @param chan MAVLink channel to send the message
+ *
+ * @param time_boot_ms Timestamp (milliseconds since system boot)
+ * @param ind index of debug variable
+ * @param value DEBUG value
+ */
+#ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
+
+static inline void mavlink_msg_debug_send(mavlink_channel_t chan, uint32_t time_boot_ms, uint8_t ind, float value)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    char buf[MAVLINK_MSG_ID_DEBUG_LEN];
+    _mav_put_uint32_t(buf, 0, time_boot_ms);
+    _mav_put_float(buf, 4, value);
+    _mav_put_uint8_t(buf, 8, ind);
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_DEBUG, buf, MAVLINK_MSG_ID_DEBUG_MIN_LEN, MAVLINK_MSG_ID_DEBUG_LEN, MAVLINK_MSG_ID_DEBUG_CRC);
+#else
+    mavlink_debug_t packet;
+    packet.time_boot_ms = time_boot_ms;
+    packet.value = value;
+    packet.ind = ind;
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_DEBUG, (const char *)&packet, MAVLINK_MSG_ID_DEBUG_MIN_LEN, MAVLINK_MSG_ID_DEBUG_LEN, MAVLINK_MSG_ID_DEBUG_CRC);
+#endif
+}
+
+/**
+ * @brief Send a debug message
+ * @param chan MAVLink channel to send the message
+ * @param struct The MAVLink struct to serialize
+ */
+static inline void mavlink_msg_debug_send_struct(mavlink_channel_t chan, const mavlink_debug_t* debug)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    mavlink_msg_debug_send(chan, debug->time_boot_ms, debug->ind, debug->value);
+#else
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_DEBUG, (const char *)debug, MAVLINK_MSG_ID_DEB

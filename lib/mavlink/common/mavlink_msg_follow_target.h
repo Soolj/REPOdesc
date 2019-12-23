@@ -113,4 +113,33 @@ static inline uint16_t mavlink_msg_follow_target_pack(uint8_t system_id, uint8_t
     packet.lon = lon;
     packet.alt = alt;
     packet.est_capabilities = est_capabilities;
- 
+    mav_array_memcpy(packet.vel, vel, sizeof(float)*3);
+    mav_array_memcpy(packet.acc, acc, sizeof(float)*3);
+    mav_array_memcpy(packet.attitude_q, attitude_q, sizeof(float)*4);
+    mav_array_memcpy(packet.rates, rates, sizeof(float)*3);
+    mav_array_memcpy(packet.position_cov, position_cov, sizeof(float)*3);
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_FOLLOW_TARGET_LEN);
+#endif
+
+    msg->msgid = MAVLINK_MSG_ID_FOLLOW_TARGET;
+    return mavlink_finalize_message(msg, system_id, component_id, MAVLINK_MSG_ID_FOLLOW_TARGET_MIN_LEN, MAVLINK_MSG_ID_FOLLOW_TARGET_LEN, MAVLINK_MSG_ID_FOLLOW_TARGET_CRC);
+}
+
+/**
+ * @brief Pack a follow_target message on a channel
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param chan The MAVLink channel this message will be sent over
+ * @param msg The MAVLink message to compress the data into
+ * @param timestamp Timestamp in milliseconds since system boot
+ * @param est_capabilities bit positions for tracker reporting capabilities (POS = 0, VEL = 1, ACCEL = 2, ATT + RATES = 3)
+ * @param lat Latitude (WGS84), in degrees * 1E7
+ * @param lon Longitude (WGS84), in degrees * 1E7
+ * @param alt AMSL, in meters
+ * @param vel target velocity (0,0,0) for unknown
+ * @param acc linear target acceleration (0,0,0) for unknown
+ * @param attitude_q (1 0 0 0 for unknown)
+ * @param rates (0 0 0 for unknown)
+ * @param position_cov eph epv
+ * @param custom_state button states or switches of a tracker device
+ * @return length of the message in bytes (excluding

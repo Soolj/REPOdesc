@@ -142,4 +142,36 @@ static inline uint16_t mavlink_msg_follow_target_pack(uint8_t system_id, uint8_t
  * @param rates (0 0 0 for unknown)
  * @param position_cov eph epv
  * @param custom_state button states or switches of a tracker device
- * @return length of the message in bytes (excluding
+ * @return length of the message in bytes (excluding serial stream start sign)
+ */
+static inline uint16_t mavlink_msg_follow_target_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
+                               mavlink_message_t* msg,
+                                   uint64_t timestamp,uint8_t est_capabilities,int32_t lat,int32_t lon,float alt,const float *vel,const float *acc,const float *attitude_q,const float *rates,const float *position_cov,uint64_t custom_state)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    char buf[MAVLINK_MSG_ID_FOLLOW_TARGET_LEN];
+    _mav_put_uint64_t(buf, 0, timestamp);
+    _mav_put_uint64_t(buf, 8, custom_state);
+    _mav_put_int32_t(buf, 16, lat);
+    _mav_put_int32_t(buf, 20, lon);
+    _mav_put_float(buf, 24, alt);
+    _mav_put_uint8_t(buf, 92, est_capabilities);
+    _mav_put_float_array(buf, 28, vel, 3);
+    _mav_put_float_array(buf, 40, acc, 3);
+    _mav_put_float_array(buf, 52, attitude_q, 4);
+    _mav_put_float_array(buf, 68, rates, 3);
+    _mav_put_float_array(buf, 80, position_cov, 3);
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_FOLLOW_TARGET_LEN);
+#else
+    mavlink_follow_target_t packet;
+    packet.timestamp = timestamp;
+    packet.custom_state = custom_state;
+    packet.lat = lat;
+    packet.lon = lon;
+    packet.alt = alt;
+    packet.est_capabilities = est_capabilities;
+    mav_array_memcpy(packet.vel, vel, sizeof(float)*3);
+    mav_array_memcpy(packet.acc, acc, sizeof(float)*3);
+    mav_array_memcpy(packet.attitude_q, attitude_q, sizeof(float)*4);
+    mav_array_memcpy(packet.rates, rates, sizeof(float)*3);
+    mav_array_memcpy(packet.position_cov, position_cov, siz

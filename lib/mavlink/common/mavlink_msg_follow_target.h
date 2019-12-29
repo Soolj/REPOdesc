@@ -174,4 +174,34 @@ static inline uint16_t mavlink_msg_follow_target_pack_chan(uint8_t system_id, ui
     mav_array_memcpy(packet.acc, acc, sizeof(float)*3);
     mav_array_memcpy(packet.attitude_q, attitude_q, sizeof(float)*4);
     mav_array_memcpy(packet.rates, rates, sizeof(float)*3);
-    mav_array_memcpy(packet.position_cov, position_cov, siz
+    mav_array_memcpy(packet.position_cov, position_cov, sizeof(float)*3);
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_FOLLOW_TARGET_LEN);
+#endif
+
+    msg->msgid = MAVLINK_MSG_ID_FOLLOW_TARGET;
+    return mavlink_finalize_message_chan(msg, system_id, component_id, chan, MAVLINK_MSG_ID_FOLLOW_TARGET_MIN_LEN, MAVLINK_MSG_ID_FOLLOW_TARGET_LEN, MAVLINK_MSG_ID_FOLLOW_TARGET_CRC);
+}
+
+/**
+ * @brief Encode a follow_target struct
+ *
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param msg The MAVLink message to compress the data into
+ * @param follow_target C-struct to read the message contents from
+ */
+static inline uint16_t mavlink_msg_follow_target_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_follow_target_t* follow_target)
+{
+    return mavlink_msg_follow_target_pack(system_id, component_id, msg, follow_target->timestamp, follow_target->est_capabilities, follow_target->lat, follow_target->lon, follow_target->alt, follow_target->vel, follow_target->acc, follow_target->attitude_q, follow_target->rates, follow_target->position_cov, follow_target->custom_state);
+}
+
+/**
+ * @brief Encode a follow_target struct on a channel
+ *
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param chan The MAVLink channel this message will be sent over
+ * @param msg The MAVLink message to compress the data into
+ * @param follow_target C-struct to read the message contents from
+ */
+static inline uint16_t mavlink_msg_follow_target_encode_chan(uint8_t system_id, uint8_t com

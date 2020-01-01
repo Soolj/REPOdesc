@@ -232,4 +232,37 @@ static inline void mavlink_msg_follow_target_send(mavlink_channel_t chan, uint64
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_FOLLOW_TARGET_LEN];
     _mav_put_uint64_t(buf, 0, timestamp);
-    _mav_put_uint64_t(buf, 
+    _mav_put_uint64_t(buf, 8, custom_state);
+    _mav_put_int32_t(buf, 16, lat);
+    _mav_put_int32_t(buf, 20, lon);
+    _mav_put_float(buf, 24, alt);
+    _mav_put_uint8_t(buf, 92, est_capabilities);
+    _mav_put_float_array(buf, 28, vel, 3);
+    _mav_put_float_array(buf, 40, acc, 3);
+    _mav_put_float_array(buf, 52, attitude_q, 4);
+    _mav_put_float_array(buf, 68, rates, 3);
+    _mav_put_float_array(buf, 80, position_cov, 3);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_FOLLOW_TARGET, buf, MAVLINK_MSG_ID_FOLLOW_TARGET_MIN_LEN, MAVLINK_MSG_ID_FOLLOW_TARGET_LEN, MAVLINK_MSG_ID_FOLLOW_TARGET_CRC);
+#else
+    mavlink_follow_target_t packet;
+    packet.timestamp = timestamp;
+    packet.custom_state = custom_state;
+    packet.lat = lat;
+    packet.lon = lon;
+    packet.alt = alt;
+    packet.est_capabilities = est_capabilities;
+    mav_array_memcpy(packet.vel, vel, sizeof(float)*3);
+    mav_array_memcpy(packet.acc, acc, sizeof(float)*3);
+    mav_array_memcpy(packet.attitude_q, attitude_q, sizeof(float)*4);
+    mav_array_memcpy(packet.rates, rates, sizeof(float)*3);
+    mav_array_memcpy(packet.position_cov, position_cov, sizeof(float)*3);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_FOLLOW_TARGET, (const char *)&packet, MAVLINK_MSG_ID_FOLLOW_TARGET_MIN_LEN, MAVLINK_MSG_ID_FOLLOW_TARGET_LEN, MAVLINK_MSG_ID_FOLLOW_TARGET_CRC);
+#endif
+}
+
+/**
+ * @brief Send a follow_target message
+ * @param chan MAVLink channel to send the message
+ * @param struct The MAVLink struct to serialize
+ */
+static inline void mavlink_msg_follow_target_send_struct(mavlink_channel

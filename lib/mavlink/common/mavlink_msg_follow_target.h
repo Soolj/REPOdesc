@@ -328,4 +328,64 @@ static inline void mavlink_msg_follow_target_send_buf(mavlink_message_t *msgbuf,
  */
 static inline uint64_t mavlink_msg_follow_target_get_timestamp(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_uint64_t(m
+    return _MAV_RETURN_uint64_t(msg,  0);
+}
+
+/**
+ * @brief Get field est_capabilities from follow_target message
+ *
+ * @return bit positions for tracker reporting capabilities (POS = 0, VEL = 1, ACCEL = 2, ATT + RATES = 3)
+ */
+static inline uint8_t mavlink_msg_follow_target_get_est_capabilities(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  92);
+}
+
+/**
+ * @brief Get field lat from follow_target message
+ *
+ * @return Latitude (WGS84), in degrees * 1E7
+ */
+static inline int32_t mavlink_msg_follow_target_get_lat(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int32_t(msg,  16);
+}
+
+/**
+ * @brief Get field lon from follow_target message
+ *
+ * @return Longitude (WGS84), in degrees * 1E7
+ */
+static inline int32_t mavlink_msg_follow_target_get_lon(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int32_t(msg,  20);
+}
+
+/**
+ * @brief Get field alt from follow_target message
+ *
+ * @return AMSL, in meters
+ */
+static inline float mavlink_msg_follow_target_get_alt(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  24);
+}
+
+/**
+ * @brief Get field vel from follow_target message
+ *
+ * @return target velocity (0,0,0) for unknown
+ */
+static inline uint16_t mavlink_msg_follow_target_get_vel(const mavlink_message_t* msg, float *vel)
+{
+    return _MAV_RETURN_float_array(msg, vel, 3,  28);
+}
+
+/**
+ * @brief Get field acc from follow_target message
+ *
+ * @return linear target acceleration (0,0,0) for unknown
+ */
+static inline uint16_t mavlink_msg_follow_target_get_acc(const mavlink_message_t* msg, float *acc)
+{
+    return _MAV_RETURN_float_array(msg, 

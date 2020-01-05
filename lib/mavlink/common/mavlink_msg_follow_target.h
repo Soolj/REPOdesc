@@ -388,4 +388,58 @@ static inline uint16_t mavlink_msg_follow_target_get_vel(const mavlink_message_t
  */
 static inline uint16_t mavlink_msg_follow_target_get_acc(const mavlink_message_t* msg, float *acc)
 {
-    return _MAV_RETURN_float_array(msg, 
+    return _MAV_RETURN_float_array(msg, acc, 3,  40);
+}
+
+/**
+ * @brief Get field attitude_q from follow_target message
+ *
+ * @return (1 0 0 0 for unknown)
+ */
+static inline uint16_t mavlink_msg_follow_target_get_attitude_q(const mavlink_message_t* msg, float *attitude_q)
+{
+    return _MAV_RETURN_float_array(msg, attitude_q, 4,  52);
+}
+
+/**
+ * @brief Get field rates from follow_target message
+ *
+ * @return (0 0 0 for unknown)
+ */
+static inline uint16_t mavlink_msg_follow_target_get_rates(const mavlink_message_t* msg, float *rates)
+{
+    return _MAV_RETURN_float_array(msg, rates, 3,  68);
+}
+
+/**
+ * @brief Get field position_cov from follow_target message
+ *
+ * @return eph epv
+ */
+static inline uint16_t mavlink_msg_follow_target_get_position_cov(const mavlink_message_t* msg, float *position_cov)
+{
+    return _MAV_RETURN_float_array(msg, position_cov, 3,  80);
+}
+
+/**
+ * @brief Get field custom_state from follow_target message
+ *
+ * @return button states or switches of a tracker device
+ */
+static inline uint64_t mavlink_msg_follow_target_get_custom_state(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint64_t(msg,  8);
+}
+
+/**
+ * @brief Decode a follow_target message into a struct
+ *
+ * @param msg The message to decode
+ * @param follow_target C-struct to decode the message contents into
+ */
+static inline void mavlink_msg_follow_target_decode(const mavlink_message_t* msg, mavlink_follow_target_t* follow_target)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    follow_target->timestamp = mavlink_msg_follow_target_get_timestamp(msg);
+    follow_target->custom_state = mavlink_msg_follow_target_get_custom_state(msg);
+    follow_target->lat = mavlink_msg_fo

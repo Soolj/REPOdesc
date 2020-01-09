@@ -442,4 +442,18 @@ static inline void mavlink_msg_follow_target_decode(const mavlink_message_t* msg
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     follow_target->timestamp = mavlink_msg_follow_target_get_timestamp(msg);
     follow_target->custom_state = mavlink_msg_follow_target_get_custom_state(msg);
-    follow_target->lat = mavlink_msg_fo
+    follow_target->lat = mavlink_msg_follow_target_get_lat(msg);
+    follow_target->lon = mavlink_msg_follow_target_get_lon(msg);
+    follow_target->alt = mavlink_msg_follow_target_get_alt(msg);
+    mavlink_msg_follow_target_get_vel(msg, follow_target->vel);
+    mavlink_msg_follow_target_get_acc(msg, follow_target->acc);
+    mavlink_msg_follow_target_get_attitude_q(msg, follow_target->attitude_q);
+    mavlink_msg_follow_target_get_rates(msg, follow_target->rates);
+    mavlink_msg_follow_target_get_position_cov(msg, follow_target->position_cov);
+    follow_target->est_capabilities = mavlink_msg_follow_target_get_est_capabilities(msg);
+#else
+        uint8_t len = msg->len < MAVLINK_MSG_ID_FOLLOW_TARGET_LEN? msg->len : MAVLINK_MSG_ID_FOLLOW_TARGET_LEN;
+        memset(follow_target, 0, MAVLINK_MSG_ID_FOLLOW_TARGET_LEN);
+    memcpy(follow_target, _MAV_PAYLOAD(msg), len);
+#endif
+}

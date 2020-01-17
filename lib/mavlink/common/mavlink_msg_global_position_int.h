@@ -213,4 +213,37 @@ static inline void mavlink_msg_global_position_int_send(mavlink_channel_t chan, 
     char buf[MAVLINK_MSG_ID_GLOBAL_POSITION_INT_LEN];
     _mav_put_uint32_t(buf, 0, time_boot_ms);
     _mav_put_int32_t(buf, 4, lat);
-    _mav_put_int32
+    _mav_put_int32_t(buf, 8, lon);
+    _mav_put_int32_t(buf, 12, alt);
+    _mav_put_int32_t(buf, 16, relative_alt);
+    _mav_put_int16_t(buf, 20, vx);
+    _mav_put_int16_t(buf, 22, vy);
+    _mav_put_int16_t(buf, 24, vz);
+    _mav_put_uint16_t(buf, 26, hdg);
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_GLOBAL_POSITION_INT, buf, MAVLINK_MSG_ID_GLOBAL_POSITION_INT_MIN_LEN, MAVLINK_MSG_ID_GLOBAL_POSITION_INT_LEN, MAVLINK_MSG_ID_GLOBAL_POSITION_INT_CRC);
+#else
+    mavlink_global_position_int_t packet;
+    packet.time_boot_ms = time_boot_ms;
+    packet.lat = lat;
+    packet.lon = lon;
+    packet.alt = alt;
+    packet.relative_alt = relative_alt;
+    packet.vx = vx;
+    packet.vy = vy;
+    packet.vz = vz;
+    packet.hdg = hdg;
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_GLOBAL_POSITION_INT, (const char *)&packet, MAVLINK_MSG_ID_GLOBAL_POSITION_INT_MIN_LEN, MAVLINK_MSG_ID_GLOBAL_POSITION_INT_LEN, MAVLINK_MSG_ID_GLOBAL_POSITION_INT_CRC);
+#endif
+}
+
+/**
+ * @brief Send a global_position_int message
+ * @param chan MAVLink channel to send the message
+ * @param struct The MAVLink struct to serialize
+ */
+static inline void mavlink_msg_global_position_int_send_struct(mavlink_channel_t chan, const mavlink_global_position_int_t* global_position_int)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    mavlink_msg_global_position_int_send(chan, global_position_int->time_boot_ms, global_position_int->lat, global_position_int->lon, global_position_int->alt, global_position_int->relative_alt, global_position_int->vx, global_position_int->vy, global_positi

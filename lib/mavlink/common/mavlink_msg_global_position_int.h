@@ -275,3 +275,59 @@ static inline void mavlink_msg_global_position_int_send_buf(mavlink_message_t *m
     _mav_put_uint16_t(buf, 26, hdg);
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_GLOBAL_POSITION_INT, buf, MAVLINK_MSG_ID_GLOBAL_POSITION_INT_MIN_LEN, MAVLINK_MSG_ID_GLOBAL_POSITION_INT_LEN, MAVLINK_MSG_ID_GLOBAL_POSITION_INT_CRC);
+#else
+    mavlink_global_position_int_t *packet = (mavlink_global_position_int_t *)msgbuf;
+    packet->time_boot_ms = time_boot_ms;
+    packet->lat = lat;
+    packet->lon = lon;
+    packet->alt = alt;
+    packet->relative_alt = relative_alt;
+    packet->vx = vx;
+    packet->vy = vy;
+    packet->vz = vz;
+    packet->hdg = hdg;
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_GLOBAL_POSITION_INT, (const char *)packet, MAVLINK_MSG_ID_GLOBAL_POSITION_INT_MIN_LEN, MAVLINK_MSG_ID_GLOBAL_POSITION_INT_LEN, MAVLINK_MSG_ID_GLOBAL_POSITION_INT_CRC);
+#endif
+}
+#endif
+
+#endif
+
+// MESSAGE GLOBAL_POSITION_INT UNPACKING
+
+
+/**
+ * @brief Get field time_boot_ms from global_position_int message
+ *
+ * @return Timestamp (milliseconds since system boot)
+ */
+static inline uint32_t mavlink_msg_global_position_int_get_time_boot_ms(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint32_t(msg,  0);
+}
+
+/**
+ * @brief Get field lat from global_position_int message
+ *
+ * @return Latitude, expressed as degrees * 1E7
+ */
+static inline int32_t mavlink_msg_global_position_int_get_lat(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int32_t(msg,  4);
+}
+
+/**
+ * @brief Get field lon from global_position_int message
+ *
+ * @return Longitude, expressed as degrees * 1E7
+ */
+static inline int32_t mavlink_msg_global_position_int_get_lon(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int32_t(msg,  8);
+}
+
+/**
+ * @brief Get field alt from global_position_int message
+ *
+ * @return Altitude in meters, expressed as * 1000 (millimeters), AMSL (not WGS84 - note that virtually all GPS modules provide the AMSL as well

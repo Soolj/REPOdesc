@@ -330,4 +330,61 @@ static inline int32_t mavlink_msg_global_position_int_get_lon(const mavlink_mess
 /**
  * @brief Get field alt from global_position_int message
  *
- * @return Altitude in meters, expressed as * 1000 (millimeters), AMSL (not WGS84 - note that virtually all GPS modules provide the AMSL as well
+ * @return Altitude in meters, expressed as * 1000 (millimeters), AMSL (not WGS84 - note that virtually all GPS modules provide the AMSL as well)
+ */
+static inline int32_t mavlink_msg_global_position_int_get_alt(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int32_t(msg,  12);
+}
+
+/**
+ * @brief Get field relative_alt from global_position_int message
+ *
+ * @return Altitude above ground in meters, expressed as * 1000 (millimeters)
+ */
+static inline int32_t mavlink_msg_global_position_int_get_relative_alt(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int32_t(msg,  16);
+}
+
+/**
+ * @brief Get field vx from global_position_int message
+ *
+ * @return Ground X Speed (Latitude, positive north), expressed as m/s * 100
+ */
+static inline int16_t mavlink_msg_global_position_int_get_vx(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int16_t(msg,  20);
+}
+
+/**
+ * @brief Get field vy from global_position_int message
+ *
+ * @return Ground Y Speed (Longitude, positive east), expressed as m/s * 100
+ */
+static inline int16_t mavlink_msg_global_position_int_get_vy(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int16_t(msg,  22);
+}
+
+/**
+ * @brief Get field vz from global_position_int message
+ *
+ * @return Ground Z Speed (Altitude, positive down), expressed as m/s * 100
+ */
+static inline int16_t mavlink_msg_global_position_int_get_vz(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int16_t(msg,  24);
+}
+
+/**
+ * @brief Get field hdg from global_position_int message
+ *
+ * @return Vehicle heading (yaw angle) in degrees * 100, 0.0..359.99 degrees. If unknown, set to: UINT16_MAX
+ */
+static inline uint16_t mavlink_msg_global_position_int_get_hdg(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint16_t(msg,  26);
+}
+
+/*

@@ -387,4 +387,27 @@ static inline uint16_t mavlink_msg_global_position_int_get_hdg(const mavlink_mes
     return _MAV_RETURN_uint16_t(msg,  26);
 }
 
-/*
+/**
+ * @brief Decode a global_position_int message into a struct
+ *
+ * @param msg The message to decode
+ * @param global_position_int C-struct to decode the message contents into
+ */
+static inline void mavlink_msg_global_position_int_decode(const mavlink_message_t* msg, mavlink_global_position_int_t* global_position_int)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    global_position_int->time_boot_ms = mavlink_msg_global_position_int_get_time_boot_ms(msg);
+    global_position_int->lat = mavlink_msg_global_position_int_get_lat(msg);
+    global_position_int->lon = mavlink_msg_global_position_int_get_lon(msg);
+    global_position_int->alt = mavlink_msg_global_position_int_get_alt(msg);
+    global_position_int->relative_alt = mavlink_msg_global_position_int_get_relative_alt(msg);
+    global_position_int->vx = mavlink_msg_global_position_int_get_vx(msg);
+    global_position_int->vy = mavlink_msg_global_position_int_get_vy(msg);
+    global_position_int->vz = mavlink_msg_global_position_int_get_vz(msg);
+    global_position_int->hdg = mavlink_msg_global_position_int_get_hdg(msg);
+#else
+        uint8_t len = msg->len < MAVLINK_MSG_ID_GLOBAL_POSITION_INT_LEN? msg->len : MAVLINK_MSG_ID_GLOBAL_POSITION_INT_LEN;
+        memset(global_position_int, 0, MAVLINK_MSG_ID_GLOBAL_POSITION_INT_LEN);
+    memcpy(global_position_int, _MAV_PAYLOAD(msg), len);
+#endif
+}

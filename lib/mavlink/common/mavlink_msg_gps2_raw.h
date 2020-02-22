@@ -15,4 +15,34 @@ typedef struct __mavlink_gps2_raw_t {
  uint16_t vel; /*< GPS ground speed (m/s * 100). If unknown, set to: UINT16_MAX*/
  uint16_t cog; /*< Course over ground (NOT heading, but direction of movement) in degrees * 100, 0.0..359.99 degrees. If unknown, set to: UINT16_MAX*/
  uint8_t fix_type; /*< See the GPS_FIX_TYPE enum.*/
- uint8_t satellites_visible; /*< Number of satellite
+ uint8_t satellites_visible; /*< Number of satellites visible. If unknown, set to 255*/
+ uint8_t dgps_numch; /*< Number of DGPS satellites*/
+}) mavlink_gps2_raw_t;
+
+#define MAVLINK_MSG_ID_GPS2_RAW_LEN 35
+#define MAVLINK_MSG_ID_GPS2_RAW_MIN_LEN 35
+#define MAVLINK_MSG_ID_124_LEN 35
+#define MAVLINK_MSG_ID_124_MIN_LEN 35
+
+#define MAVLINK_MSG_ID_GPS2_RAW_CRC 87
+#define MAVLINK_MSG_ID_124_CRC 87
+
+
+
+#if MAVLINK_COMMAND_24BIT
+#define MAVLINK_MESSAGE_INFO_GPS2_RAW { \
+    124, \
+    "GPS2_RAW", \
+    12, \
+    {  { "time_usec", NULL, MAVLINK_TYPE_UINT64_T, 0, 0, offsetof(mavlink_gps2_raw_t, time_usec) }, \
+         { "fix_type", NULL, MAVLINK_TYPE_UINT8_T, 0, 32, offsetof(mavlink_gps2_raw_t, fix_type) }, \
+         { "lat", NULL, MAVLINK_TYPE_INT32_T, 0, 8, offsetof(mavlink_gps2_raw_t, lat) }, \
+         { "lon", NULL, MAVLINK_TYPE_INT32_T, 0, 12, offsetof(mavlink_gps2_raw_t, lon) }, \
+         { "alt", NULL, MAVLINK_TYPE_INT32_T, 0, 16, offsetof(mavlink_gps2_raw_t, alt) }, \
+         { "eph", NULL, MAVLINK_TYPE_UINT16_T, 0, 24, offsetof(mavlink_gps2_raw_t, eph) }, \
+         { "epv", NULL, MAVLINK_TYPE_UINT16_T, 0, 26, offsetof(mavlink_gps2_raw_t, epv) }, \
+         { "vel", NULL, MAVLINK_TYPE_UINT16_T, 0, 28, offsetof(mavlink_gps2_raw_t, vel) }, \
+         { "cog", NULL, MAVLINK_TYPE_UINT16_T, 0, 30, offsetof(mavlink_gps2_raw_t, cog) }, \
+         { "satellites_visible", NULL, MAVLINK_TYPE_UINT8_T, 0, 33, offsetof(mavlink_gps2_raw_t, satellites_visible) }, \
+         { "dgps_numch", NULL, MAVLINK_TYPE_UINT8_T, 0, 34, offsetof(mavlink_gps2_raw_t, dgps_numch) }, \
+         { "dgps_age", NULL, MAVLINK_TYPE_UINT32_T, 0, 20, offsetof(mavlink_gps2_raw_t, dgp

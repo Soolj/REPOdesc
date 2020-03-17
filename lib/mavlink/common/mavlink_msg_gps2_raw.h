@@ -74,4 +74,28 @@ typedef struct __mavlink_gps2_raw_t {
  * @param component_id ID of this component (e.g. 200 for IMU)
  * @param msg The MAVLink message to compress the data into
  *
- * @
+ * @param time_usec Timestamp (microseconds since UNIX epoch or microseconds since system boot)
+ * @param fix_type See the GPS_FIX_TYPE enum.
+ * @param lat Latitude (WGS84), in degrees * 1E7
+ * @param lon Longitude (WGS84), in degrees * 1E7
+ * @param alt Altitude (AMSL, not WGS84), in meters * 1000 (positive for up)
+ * @param eph GPS HDOP horizontal dilution of position in cm (m*100). If unknown, set to: UINT16_MAX
+ * @param epv GPS VDOP vertical dilution of position in cm (m*100). If unknown, set to: UINT16_MAX
+ * @param vel GPS ground speed (m/s * 100). If unknown, set to: UINT16_MAX
+ * @param cog Course over ground (NOT heading, but direction of movement) in degrees * 100, 0.0..359.99 degrees. If unknown, set to: UINT16_MAX
+ * @param satellites_visible Number of satellites visible. If unknown, set to 255
+ * @param dgps_numch Number of DGPS satellites
+ * @param dgps_age Age of DGPS info
+ * @return length of the message in bytes (excluding serial stream start sign)
+ */
+static inline uint16_t mavlink_msg_gps2_raw_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
+                               uint64_t time_usec, uint8_t fix_type, int32_t lat, int32_t lon, int32_t alt, uint16_t eph, uint16_t epv, uint16_t vel, uint16_t cog, uint8_t satellites_visible, uint8_t dgps_numch, uint32_t dgps_age)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    char buf[MAVLINK_MSG_ID_GPS2_RAW_LEN];
+    _mav_put_uint64_t(buf, 0, time_usec);
+    _mav_put_int32_t(buf, 8, lat);
+    _mav_put_int32_t(buf, 12, lon);
+    _mav_put_int32_t(buf, 16, alt);
+    _mav_put_uint32_t(buf, 20, dgps_age);
+    _mav_put_uint16_t(buf, 24, eph)

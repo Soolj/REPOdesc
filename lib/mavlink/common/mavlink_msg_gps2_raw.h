@@ -98,4 +98,45 @@ static inline uint16_t mavlink_msg_gps2_raw_pack(uint8_t system_id, uint8_t comp
     _mav_put_int32_t(buf, 12, lon);
     _mav_put_int32_t(buf, 16, alt);
     _mav_put_uint32_t(buf, 20, dgps_age);
-    _mav_put_uint16_t(buf, 24, eph)
+    _mav_put_uint16_t(buf, 24, eph);
+    _mav_put_uint16_t(buf, 26, epv);
+    _mav_put_uint16_t(buf, 28, vel);
+    _mav_put_uint16_t(buf, 30, cog);
+    _mav_put_uint8_t(buf, 32, fix_type);
+    _mav_put_uint8_t(buf, 33, satellites_visible);
+    _mav_put_uint8_t(buf, 34, dgps_numch);
+
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_GPS2_RAW_LEN);
+#else
+    mavlink_gps2_raw_t packet;
+    packet.time_usec = time_usec;
+    packet.lat = lat;
+    packet.lon = lon;
+    packet.alt = alt;
+    packet.dgps_age = dgps_age;
+    packet.eph = eph;
+    packet.epv = epv;
+    packet.vel = vel;
+    packet.cog = cog;
+    packet.fix_type = fix_type;
+    packet.satellites_visible = satellites_visible;
+    packet.dgps_numch = dgps_numch;
+
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_GPS2_RAW_LEN);
+#endif
+
+    msg->msgid = MAVLINK_MSG_ID_GPS2_RAW;
+    return mavlink_finalize_message(msg, system_id, component_id, MAVLINK_MSG_ID_GPS2_RAW_MIN_LEN, MAVLINK_MSG_ID_GPS2_RAW_LEN, MAVLINK_MSG_ID_GPS2_RAW_CRC);
+}
+
+/**
+ * @brief Pack a gps2_raw message on a channel
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param chan The MAVLink channel this message will be sent over
+ * @param msg The MAVLink message to compress the data into
+ * @param time_usec Timestamp (microseconds since UNIX epoch or microseconds since system boot)
+ * @param fix_type See the GPS_FIX_TYPE enum.
+ * @param lat Latitude (WGS84), in degrees * 1E7
+ * @param lon Longitude (WGS84), in degrees * 1E7
+ * @param alt Altitude (AMSL, not WGS84), in meter

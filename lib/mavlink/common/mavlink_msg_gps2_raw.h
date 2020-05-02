@@ -205,4 +205,29 @@ static inline uint16_t mavlink_msg_gps2_raw_encode(uint8_t system_id, uint8_t co
 }
 
 /**
- * @brief Encode a gps2_raw struct 
+ * @brief Encode a gps2_raw struct on a channel
+ *
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param chan The MAVLink channel this message will be sent over
+ * @param msg The MAVLink message to compress the data into
+ * @param gps2_raw C-struct to read the message contents from
+ */
+static inline uint16_t mavlink_msg_gps2_raw_encode_chan(uint8_t system_id, uint8_t component_id, uint8_t chan, mavlink_message_t* msg, const mavlink_gps2_raw_t* gps2_raw)
+{
+    return mavlink_msg_gps2_raw_pack_chan(system_id, component_id, chan, msg, gps2_raw->time_usec, gps2_raw->fix_type, gps2_raw->lat, gps2_raw->lon, gps2_raw->alt, gps2_raw->eph, gps2_raw->epv, gps2_raw->vel, gps2_raw->cog, gps2_raw->satellites_visible, gps2_raw->dgps_numch, gps2_raw->dgps_age);
+}
+
+/**
+ * @brief Send a gps2_raw message
+ * @param chan MAVLink channel to send the message
+ *
+ * @param time_usec Timestamp (microseconds since UNIX epoch or microseconds since system boot)
+ * @param fix_type See the GPS_FIX_TYPE enum.
+ * @param lat Latitude (WGS84), in degrees * 1E7
+ * @param lon Longitude (WGS84), in degrees * 1E7
+ * @param alt Altitude (AMSL, not WGS84), in meters * 1000 (positive for up)
+ * @param eph GPS HDOP horizontal dilution of position in cm (m*100). If unknown, set to: UINT16_MAX
+ * @param epv GPS VDOP vertical dilution of position in cm (m*100). If unknown, set to: UINT16_MAX
+ * @param vel GPS ground speed (m/s * 100). If unknown, set to: UINT16_MAX
+ * @param cog Course over ground (NOT heading, but direction of movement) in degrees * 100, 0.0

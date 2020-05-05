@@ -296,4 +296,50 @@ static inline void mavlink_msg_gps2_raw_send_struct(mavlink_channel_t chan, cons
   is usually the receive buffer for the channel, and allows a reply to an
   incoming message with minimum stack space usage.
  */
-static inline void mavlink_msg_gps2_raw_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  uint64_t time_usec, uint8_t fix_type, int32_t lat, i
+static inline void mavlink_msg_gps2_raw_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  uint64_t time_usec, uint8_t fix_type, int32_t lat, int32_t lon, int32_t alt, uint16_t eph, uint16_t epv, uint16_t vel, uint16_t cog, uint8_t satellites_visible, uint8_t dgps_numch, uint32_t dgps_age)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    char *buf = (char *)msgbuf;
+    _mav_put_uint64_t(buf, 0, time_usec);
+    _mav_put_int32_t(buf, 8, lat);
+    _mav_put_int32_t(buf, 12, lon);
+    _mav_put_int32_t(buf, 16, alt);
+    _mav_put_uint32_t(buf, 20, dgps_age);
+    _mav_put_uint16_t(buf, 24, eph);
+    _mav_put_uint16_t(buf, 26, epv);
+    _mav_put_uint16_t(buf, 28, vel);
+    _mav_put_uint16_t(buf, 30, cog);
+    _mav_put_uint8_t(buf, 32, fix_type);
+    _mav_put_uint8_t(buf, 33, satellites_visible);
+    _mav_put_uint8_t(buf, 34, dgps_numch);
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_GPS2_RAW, buf, MAVLINK_MSG_ID_GPS2_RAW_MIN_LEN, MAVLINK_MSG_ID_GPS2_RAW_LEN, MAVLINK_MSG_ID_GPS2_RAW_CRC);
+#else
+    mavlink_gps2_raw_t *packet = (mavlink_gps2_raw_t *)msgbuf;
+    packet->time_usec = time_usec;
+    packet->lat = lat;
+    packet->lon = lon;
+    packet->alt = alt;
+    packet->dgps_age = dgps_age;
+    packet->eph = eph;
+    packet->epv = epv;
+    packet->vel = vel;
+    packet->cog = cog;
+    packet->fix_type = fix_type;
+    packet->satellites_visible = satellites_visible;
+    packet->dgps_numch = dgps_numch;
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_GPS2_RAW, (const char *)packet, MAVLINK_MSG_ID_GPS2_RAW_MIN_LEN, MAVLINK_MSG_ID_GPS2_RAW_LEN, MAVLINK_MSG_ID_GPS2_RAW_CRC);
+#endif
+}
+#endif
+
+#endif
+
+// MESSAGE GPS2_RAW UNPACKING
+
+
+/**
+ * @brief Get field time_usec from gps2_raw message
+ *
+ * @return Timestamp (microseconds sin

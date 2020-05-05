@@ -342,4 +342,66 @@ static inline void mavlink_msg_gps2_raw_send_buf(mavlink_message_t *msgbuf, mavl
 /**
  * @brief Get field time_usec from gps2_raw message
  *
- * @return Timestamp (microseconds sin
+ * @return Timestamp (microseconds since UNIX epoch or microseconds since system boot)
+ */
+static inline uint64_t mavlink_msg_gps2_raw_get_time_usec(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint64_t(msg,  0);
+}
+
+/**
+ * @brief Get field fix_type from gps2_raw message
+ *
+ * @return See the GPS_FIX_TYPE enum.
+ */
+static inline uint8_t mavlink_msg_gps2_raw_get_fix_type(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  32);
+}
+
+/**
+ * @brief Get field lat from gps2_raw message
+ *
+ * @return Latitude (WGS84), in degrees * 1E7
+ */
+static inline int32_t mavlink_msg_gps2_raw_get_lat(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int32_t(msg,  8);
+}
+
+/**
+ * @brief Get field lon from gps2_raw message
+ *
+ * @return Longitude (WGS84), in degrees * 1E7
+ */
+static inline int32_t mavlink_msg_gps2_raw_get_lon(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int32_t(msg,  12);
+}
+
+/**
+ * @brief Get field alt from gps2_raw message
+ *
+ * @return Altitude (AMSL, not WGS84), in meters * 1000 (positive for up)
+ */
+static inline int32_t mavlink_msg_gps2_raw_get_alt(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int32_t(msg,  16);
+}
+
+/**
+ * @brief Get field eph from gps2_raw message
+ *
+ * @return GPS HDOP horizontal dilution of position in cm (m*100). If unknown, set to: UINT16_MAX
+ */
+static inline uint16_t mavlink_msg_gps2_raw_get_eph(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint16_t(msg,  24);
+}
+
+/**
+ * @brief Get field epv from gps2_raw message
+ *
+ * @return GPS VDOP vertical dilution of position in cm (m*100). If unknown, set to: UINT16_MAX
+ */
+stati

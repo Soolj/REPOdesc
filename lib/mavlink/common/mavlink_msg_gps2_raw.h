@@ -463,4 +463,26 @@ static inline uint32_t mavlink_msg_gps2_raw_get_dgps_age(const mavlink_message_t
  * @brief Decode a gps2_raw message into a struct
  *
  * @param msg The message to decode
- * @param gps2_
+ * @param gps2_raw C-struct to decode the message contents into
+ */
+static inline void mavlink_msg_gps2_raw_decode(const mavlink_message_t* msg, mavlink_gps2_raw_t* gps2_raw)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    gps2_raw->time_usec = mavlink_msg_gps2_raw_get_time_usec(msg);
+    gps2_raw->lat = mavlink_msg_gps2_raw_get_lat(msg);
+    gps2_raw->lon = mavlink_msg_gps2_raw_get_lon(msg);
+    gps2_raw->alt = mavlink_msg_gps2_raw_get_alt(msg);
+    gps2_raw->dgps_age = mavlink_msg_gps2_raw_get_dgps_age(msg);
+    gps2_raw->eph = mavlink_msg_gps2_raw_get_eph(msg);
+    gps2_raw->epv = mavlink_msg_gps2_raw_get_epv(msg);
+    gps2_raw->vel = mavlink_msg_gps2_raw_get_vel(msg);
+    gps2_raw->cog = mavlink_msg_gps2_raw_get_cog(msg);
+    gps2_raw->fix_type = mavlink_msg_gps2_raw_get_fix_type(msg);
+    gps2_raw->satellites_visible = mavlink_msg_gps2_raw_get_satellites_visible(msg);
+    gps2_raw->dgps_numch = mavlink_msg_gps2_raw_get_dgps_numch(msg);
+#else
+        uint8_t len = msg->len < MAVLINK_MSG_ID_GPS2_RAW_LEN? msg->len : MAVLINK_MSG_ID_GPS2_RAW_LEN;
+        memset(gps2_raw, 0, MAVLINK_MSG_ID_GPS2_RAW_LEN);
+    memcpy(gps2_raw, _MAV_PAYLOAD(msg), len);
+#endif
+}

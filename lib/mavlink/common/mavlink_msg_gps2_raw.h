@@ -404,4 +404,63 @@ static inline uint16_t mavlink_msg_gps2_raw_get_eph(const mavlink_message_t* msg
  *
  * @return GPS VDOP vertical dilution of position in cm (m*100). If unknown, set to: UINT16_MAX
  */
-stati
+static inline uint16_t mavlink_msg_gps2_raw_get_epv(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint16_t(msg,  26);
+}
+
+/**
+ * @brief Get field vel from gps2_raw message
+ *
+ * @return GPS ground speed (m/s * 100). If unknown, set to: UINT16_MAX
+ */
+static inline uint16_t mavlink_msg_gps2_raw_get_vel(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint16_t(msg,  28);
+}
+
+/**
+ * @brief Get field cog from gps2_raw message
+ *
+ * @return Course over ground (NOT heading, but direction of movement) in degrees * 100, 0.0..359.99 degrees. If unknown, set to: UINT16_MAX
+ */
+static inline uint16_t mavlink_msg_gps2_raw_get_cog(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint16_t(msg,  30);
+}
+
+/**
+ * @brief Get field satellites_visible from gps2_raw message
+ *
+ * @return Number of satellites visible. If unknown, set to 255
+ */
+static inline uint8_t mavlink_msg_gps2_raw_get_satellites_visible(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  33);
+}
+
+/**
+ * @brief Get field dgps_numch from gps2_raw message
+ *
+ * @return Number of DGPS satellites
+ */
+static inline uint8_t mavlink_msg_gps2_raw_get_dgps_numch(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  34);
+}
+
+/**
+ * @brief Get field dgps_age from gps2_raw message
+ *
+ * @return Age of DGPS info
+ */
+static inline uint32_t mavlink_msg_gps2_raw_get_dgps_age(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint32_t(msg,  20);
+}
+
+/**
+ * @brief Decode a gps2_raw message into a struct
+ *
+ * @param msg The message to decode
+ * @param gps2_

@@ -111,4 +111,41 @@ static inline uint16_t mavlink_msg_gps2_rtk_pack(uint8_t system_id, uint8_t comp
     _mav_put_uint8_t(buf, 33, nsats);
     _mav_put_uint8_t(buf, 34, baseline_coords_type);
 
-  
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_GPS2_RTK_LEN);
+#else
+    mavlink_gps2_rtk_t packet;
+    packet.time_last_baseline_ms = time_last_baseline_ms;
+    packet.tow = tow;
+    packet.baseline_a_mm = baseline_a_mm;
+    packet.baseline_b_mm = baseline_b_mm;
+    packet.baseline_c_mm = baseline_c_mm;
+    packet.accuracy = accuracy;
+    packet.iar_num_hypotheses = iar_num_hypotheses;
+    packet.wn = wn;
+    packet.rtk_receiver_id = rtk_receiver_id;
+    packet.rtk_health = rtk_health;
+    packet.rtk_rate = rtk_rate;
+    packet.nsats = nsats;
+    packet.baseline_coords_type = baseline_coords_type;
+
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_GPS2_RTK_LEN);
+#endif
+
+    msg->msgid = MAVLINK_MSG_ID_GPS2_RTK;
+    return mavlink_finalize_message(msg, system_id, component_id, MAVLINK_MSG_ID_GPS2_RTK_MIN_LEN, MAVLINK_MSG_ID_GPS2_RTK_LEN, MAVLINK_MSG_ID_GPS2_RTK_CRC);
+}
+
+/**
+ * @brief Pack a gps2_rtk message on a channel
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param chan The MAVLink channel this message will be sent over
+ * @param msg The MAVLink message to compress the data into
+ * @param time_last_baseline_ms Time since boot of last baseline message received in ms.
+ * @param rtk_receiver_id Identification of connected RTK receiver.
+ * @param wn GPS Week Number of last baseline
+ * @param tow GPS Time of Week of last baseline
+ * @param rtk_health GPS-specific health report for RTK data.
+ * @param rtk_rate Rate of baseline messages being received by GPS, in HZ
+ * @param nsats Current number of sats used for RTK calculation.
+ * @param baseline_coor

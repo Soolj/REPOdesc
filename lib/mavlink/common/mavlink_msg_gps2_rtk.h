@@ -148,4 +148,30 @@ static inline uint16_t mavlink_msg_gps2_rtk_pack(uint8_t system_id, uint8_t comp
  * @param rtk_health GPS-specific health report for RTK data.
  * @param rtk_rate Rate of baseline messages being received by GPS, in HZ
  * @param nsats Current number of sats used for RTK calculation.
- * @param baseline_coor
+ * @param baseline_coords_type Coordinate system of baseline
+ * @param baseline_a_mm Current baseline in ECEF x or NED north component in mm.
+ * @param baseline_b_mm Current baseline in ECEF y or NED east component in mm.
+ * @param baseline_c_mm Current baseline in ECEF z or NED down component in mm.
+ * @param accuracy Current estimate of baseline accuracy.
+ * @param iar_num_hypotheses Current number of integer ambiguity hypotheses.
+ * @return length of the message in bytes (excluding serial stream start sign)
+ */
+static inline uint16_t mavlink_msg_gps2_rtk_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
+                               mavlink_message_t* msg,
+                                   uint32_t time_last_baseline_ms,uint8_t rtk_receiver_id,uint16_t wn,uint32_t tow,uint8_t rtk_health,uint8_t rtk_rate,uint8_t nsats,uint8_t baseline_coords_type,int32_t baseline_a_mm,int32_t baseline_b_mm,int32_t baseline_c_mm,uint32_t accuracy,int32_t iar_num_hypotheses)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    char buf[MAVLINK_MSG_ID_GPS2_RTK_LEN];
+    _mav_put_uint32_t(buf, 0, time_last_baseline_ms);
+    _mav_put_uint32_t(buf, 4, tow);
+    _mav_put_int32_t(buf, 8, baseline_a_mm);
+    _mav_put_int32_t(buf, 12, baseline_b_mm);
+    _mav_put_int32_t(buf, 16, baseline_c_mm);
+    _mav_put_uint32_t(buf, 20, accuracy);
+    _mav_put_int32_t(buf, 24, iar_num_hypotheses);
+    _mav_put_uint16_t(buf, 28, wn);
+    _mav_put_uint8_t(buf, 30, rtk_receiver_id);
+    _mav_put_uint8_t(buf, 31, rtk_health);
+    _mav_put_uint8_t(buf, 32, rtk_rate);
+    _mav_put_uint8_t(buf, 33, nsats);
+    _mav_put_uint8_t(buf, 34, baseline_coor

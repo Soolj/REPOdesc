@@ -174,4 +174,40 @@ static inline uint16_t mavlink_msg_gps2_rtk_pack_chan(uint8_t system_id, uint8_t
     _mav_put_uint8_t(buf, 31, rtk_health);
     _mav_put_uint8_t(buf, 32, rtk_rate);
     _mav_put_uint8_t(buf, 33, nsats);
-    _mav_put_uint8_t(buf, 34, baseline_coor
+    _mav_put_uint8_t(buf, 34, baseline_coords_type);
+
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_GPS2_RTK_LEN);
+#else
+    mavlink_gps2_rtk_t packet;
+    packet.time_last_baseline_ms = time_last_baseline_ms;
+    packet.tow = tow;
+    packet.baseline_a_mm = baseline_a_mm;
+    packet.baseline_b_mm = baseline_b_mm;
+    packet.baseline_c_mm = baseline_c_mm;
+    packet.accuracy = accuracy;
+    packet.iar_num_hypotheses = iar_num_hypotheses;
+    packet.wn = wn;
+    packet.rtk_receiver_id = rtk_receiver_id;
+    packet.rtk_health = rtk_health;
+    packet.rtk_rate = rtk_rate;
+    packet.nsats = nsats;
+    packet.baseline_coords_type = baseline_coords_type;
+
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_GPS2_RTK_LEN);
+#endif
+
+    msg->msgid = MAVLINK_MSG_ID_GPS2_RTK;
+    return mavlink_finalize_message_chan(msg, system_id, component_id, chan, MAVLINK_MSG_ID_GPS2_RTK_MIN_LEN, MAVLINK_MSG_ID_GPS2_RTK_LEN, MAVLINK_MSG_ID_GPS2_RTK_CRC);
+}
+
+/**
+ * @brief Encode a gps2_rtk struct
+ *
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param msg The MAVLink message to compress the data into
+ * @param gps2_rtk C-struct to read the message contents from
+ */
+static inline uint16_t mavlink_msg_gps2_rtk_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_gps2_rtk_t* gps2_rtk)
+{
+    return mavlink_msg_gps2_rtk_pack(system_id, component_id, msg, gps2_rtk->time_last_baseline_ms, gps2_rtk->rtk_receiver_id, gps2_rtk->wn,

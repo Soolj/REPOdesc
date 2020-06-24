@@ -263,4 +263,37 @@ static inline void mavlink_msg_gps2_rtk_send(mavlink_channel_t chan, uint32_t ti
     _mav_put_uint8_t(buf, 31, rtk_health);
     _mav_put_uint8_t(buf, 32, rtk_rate);
     _mav_put_uint8_t(buf, 33, nsats);
-    _mav_put_uint8_t(buf, 34, 
+    _mav_put_uint8_t(buf, 34, baseline_coords_type);
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_GPS2_RTK, buf, MAVLINK_MSG_ID_GPS2_RTK_MIN_LEN, MAVLINK_MSG_ID_GPS2_RTK_LEN, MAVLINK_MSG_ID_GPS2_RTK_CRC);
+#else
+    mavlink_gps2_rtk_t packet;
+    packet.time_last_baseline_ms = time_last_baseline_ms;
+    packet.tow = tow;
+    packet.baseline_a_mm = baseline_a_mm;
+    packet.baseline_b_mm = baseline_b_mm;
+    packet.baseline_c_mm = baseline_c_mm;
+    packet.accuracy = accuracy;
+    packet.iar_num_hypotheses = iar_num_hypotheses;
+    packet.wn = wn;
+    packet.rtk_receiver_id = rtk_receiver_id;
+    packet.rtk_health = rtk_health;
+    packet.rtk_rate = rtk_rate;
+    packet.nsats = nsats;
+    packet.baseline_coords_type = baseline_coords_type;
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_GPS2_RTK, (const char *)&packet, MAVLINK_MSG_ID_GPS2_RTK_MIN_LEN, MAVLINK_MSG_ID_GPS2_RTK_LEN, MAVLINK_MSG_ID_GPS2_RTK_CRC);
+#endif
+}
+
+/**
+ * @brief Send a gps2_rtk message
+ * @param chan MAVLink channel to send the message
+ * @param struct The MAVLink struct to serialize
+ */
+static inline void mavlink_msg_gps2_rtk_send_struct(mavlink_channel_t chan, const mavlink_gps2_rtk_t* gps2_rtk)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    mavlink_msg_gps2_rtk_send(chan, gps2_rtk->time_last_baseline_ms, gps2_rtk->rtk_receiver_id, gps2_rtk->wn, gps2_rtk->tow, gps2_rtk->rtk_health, gps2_rtk->rtk_rate, gps2_rtk->nsats, gps2_rtk->baseline_coords_type, gps2_rtk->baseline_a_mm, gps2_rtk->baseline_b_mm, gps2_rtk->baseline_c_mm, gps2_rtk->accuracy, gps2_rtk->iar_num_hypotheses);
+#else
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_GPS2_RTK, (const char *)gps2_rtk, MAVLINK_MSG_ID_GPS

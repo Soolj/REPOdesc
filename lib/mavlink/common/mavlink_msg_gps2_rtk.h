@@ -296,4 +296,34 @@ static inline void mavlink_msg_gps2_rtk_send_struct(mavlink_channel_t chan, cons
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     mavlink_msg_gps2_rtk_send(chan, gps2_rtk->time_last_baseline_ms, gps2_rtk->rtk_receiver_id, gps2_rtk->wn, gps2_rtk->tow, gps2_rtk->rtk_health, gps2_rtk->rtk_rate, gps2_rtk->nsats, gps2_rtk->baseline_coords_type, gps2_rtk->baseline_a_mm, gps2_rtk->baseline_b_mm, gps2_rtk->baseline_c_mm, gps2_rtk->accuracy, gps2_rtk->iar_num_hypotheses);
 #else
-    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_GPS2_RTK, (const char *)gps2_rtk, MAVLINK_MSG_ID_GPS
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_GPS2_RTK, (const char *)gps2_rtk, MAVLINK_MSG_ID_GPS2_RTK_MIN_LEN, MAVLINK_MSG_ID_GPS2_RTK_LEN, MAVLINK_MSG_ID_GPS2_RTK_CRC);
+#endif
+}
+
+#if MAVLINK_MSG_ID_GPS2_RTK_LEN <= MAVLINK_MAX_PAYLOAD_LEN
+/*
+  This varient of _send() can be used to save stack space by re-using
+  memory from the receive buffer.  The caller provides a
+  mavlink_message_t which is the size of a full mavlink message. This
+  is usually the receive buffer for the channel, and allows a reply to an
+  incoming message with minimum stack space usage.
+ */
+static inline void mavlink_msg_gps2_rtk_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  uint32_t time_last_baseline_ms, uint8_t rtk_receiver_id, uint16_t wn, uint32_t tow, uint8_t rtk_health, uint8_t rtk_rate, uint8_t nsats, uint8_t baseline_coords_type, int32_t baseline_a_mm, int32_t baseline_b_mm, int32_t baseline_c_mm, uint32_t accuracy, int32_t iar_num_hypotheses)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    char *buf = (char *)msgbuf;
+    _mav_put_uint32_t(buf, 0, time_last_baseline_ms);
+    _mav_put_uint32_t(buf, 4, tow);
+    _mav_put_int32_t(buf, 8, baseline_a_mm);
+    _mav_put_int32_t(buf, 12, baseline_b_mm);
+    _mav_put_int32_t(buf, 16, baseline_c_mm);
+    _mav_put_uint32_t(buf, 20, accuracy);
+    _mav_put_int32_t(buf, 24, iar_num_hypotheses);
+    _mav_put_uint16_t(buf, 28, wn);
+    _mav_put_uint8_t(buf, 30, rtk_receiver_id);
+    _mav_put_uint8_t(buf, 31, rtk_health);
+    _mav_put_uint8_t(buf, 32, rtk_rate);
+    _mav_put_uint8_t(buf, 33, nsats);
+    _mav_put_uint8_t(buf, 34, baseline_coords_type);
+
+    _mav_finalize_message_chan_send(c

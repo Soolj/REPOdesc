@@ -376,4 +376,66 @@ static inline uint8_t mavlink_msg_gps2_rtk_get_rtk_receiver_id(const mavlink_mes
 /**
  * @brief Get field wn from gps2_rtk message
  *
- * @return GPS Week Number of last
+ * @return GPS Week Number of last baseline
+ */
+static inline uint16_t mavlink_msg_gps2_rtk_get_wn(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint16_t(msg,  28);
+}
+
+/**
+ * @brief Get field tow from gps2_rtk message
+ *
+ * @return GPS Time of Week of last baseline
+ */
+static inline uint32_t mavlink_msg_gps2_rtk_get_tow(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint32_t(msg,  4);
+}
+
+/**
+ * @brief Get field rtk_health from gps2_rtk message
+ *
+ * @return GPS-specific health report for RTK data.
+ */
+static inline uint8_t mavlink_msg_gps2_rtk_get_rtk_health(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  31);
+}
+
+/**
+ * @brief Get field rtk_rate from gps2_rtk message
+ *
+ * @return Rate of baseline messages being received by GPS, in HZ
+ */
+static inline uint8_t mavlink_msg_gps2_rtk_get_rtk_rate(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  32);
+}
+
+/**
+ * @brief Get field nsats from gps2_rtk message
+ *
+ * @return Current number of sats used for RTK calculation.
+ */
+static inline uint8_t mavlink_msg_gps2_rtk_get_nsats(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  33);
+}
+
+/**
+ * @brief Get field baseline_coords_type from gps2_rtk message
+ *
+ * @return Coordinate system of baseline
+ */
+static inline uint8_t mavlink_msg_gps2_rtk_get_baseline_coords_type(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  34);
+}
+
+/**
+ * @brief Get field baseline_a_mm from gps2_rtk message
+ *
+ * @return Current baseline in ECEF x or NED north component in mm.
+ */
+static inline 

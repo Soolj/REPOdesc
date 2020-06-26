@@ -326,4 +326,54 @@ static inline void mavlink_msg_gps2_rtk_send_buf(mavlink_message_t *msgbuf, mavl
     _mav_put_uint8_t(buf, 33, nsats);
     _mav_put_uint8_t(buf, 34, baseline_coords_type);
 
-    _mav_finalize_message_chan_send(c
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_GPS2_RTK, buf, MAVLINK_MSG_ID_GPS2_RTK_MIN_LEN, MAVLINK_MSG_ID_GPS2_RTK_LEN, MAVLINK_MSG_ID_GPS2_RTK_CRC);
+#else
+    mavlink_gps2_rtk_t *packet = (mavlink_gps2_rtk_t *)msgbuf;
+    packet->time_last_baseline_ms = time_last_baseline_ms;
+    packet->tow = tow;
+    packet->baseline_a_mm = baseline_a_mm;
+    packet->baseline_b_mm = baseline_b_mm;
+    packet->baseline_c_mm = baseline_c_mm;
+    packet->accuracy = accuracy;
+    packet->iar_num_hypotheses = iar_num_hypotheses;
+    packet->wn = wn;
+    packet->rtk_receiver_id = rtk_receiver_id;
+    packet->rtk_health = rtk_health;
+    packet->rtk_rate = rtk_rate;
+    packet->nsats = nsats;
+    packet->baseline_coords_type = baseline_coords_type;
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_GPS2_RTK, (const char *)packet, MAVLINK_MSG_ID_GPS2_RTK_MIN_LEN, MAVLINK_MSG_ID_GPS2_RTK_LEN, MAVLINK_MSG_ID_GPS2_RTK_CRC);
+#endif
+}
+#endif
+
+#endif
+
+// MESSAGE GPS2_RTK UNPACKING
+
+
+/**
+ * @brief Get field time_last_baseline_ms from gps2_rtk message
+ *
+ * @return Time since boot of last baseline message received in ms.
+ */
+static inline uint32_t mavlink_msg_gps2_rtk_get_time_last_baseline_ms(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint32_t(msg,  0);
+}
+
+/**
+ * @brief Get field rtk_receiver_id from gps2_rtk message
+ *
+ * @return Identification of connected RTK receiver.
+ */
+static inline uint8_t mavlink_msg_gps2_rtk_get_rtk_receiver_id(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  30);
+}
+
+/**
+ * @brief Get field wn from gps2_rtk message
+ *
+ * @return GPS Week Number of last

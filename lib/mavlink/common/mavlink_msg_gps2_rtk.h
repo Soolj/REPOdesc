@@ -438,4 +438,58 @@ static inline uint8_t mavlink_msg_gps2_rtk_get_baseline_coords_type(const mavlin
  *
  * @return Current baseline in ECEF x or NED north component in mm.
  */
-static inline 
+static inline int32_t mavlink_msg_gps2_rtk_get_baseline_a_mm(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int32_t(msg,  8);
+}
+
+/**
+ * @brief Get field baseline_b_mm from gps2_rtk message
+ *
+ * @return Current baseline in ECEF y or NED east component in mm.
+ */
+static inline int32_t mavlink_msg_gps2_rtk_get_baseline_b_mm(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int32_t(msg,  12);
+}
+
+/**
+ * @brief Get field baseline_c_mm from gps2_rtk message
+ *
+ * @return Current baseline in ECEF z or NED down component in mm.
+ */
+static inline int32_t mavlink_msg_gps2_rtk_get_baseline_c_mm(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int32_t(msg,  16);
+}
+
+/**
+ * @brief Get field accuracy from gps2_rtk message
+ *
+ * @return Current estimate of baseline accuracy.
+ */
+static inline uint32_t mavlink_msg_gps2_rtk_get_accuracy(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint32_t(msg,  20);
+}
+
+/**
+ * @brief Get field iar_num_hypotheses from gps2_rtk message
+ *
+ * @return Current number of integer ambiguity hypotheses.
+ */
+static inline int32_t mavlink_msg_gps2_rtk_get_iar_num_hypotheses(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int32_t(msg,  24);
+}
+
+/**
+ * @brief Decode a gps2_rtk message into a struct
+ *
+ * @param msg The message to decode
+ * @param gps2_rtk C-struct to decode the message contents into
+ */
+static inline void mavlink_msg_gps2_rtk_decode(const mavlink_message_t* msg, mavlink_gps2_rtk_t* gps2_rtk)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    gps2_rtk->time_last_baseline_ms = mavlink_msg_gps2_rtk_get_time_last_b

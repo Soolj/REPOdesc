@@ -492,4 +492,22 @@ static inline int32_t mavlink_msg_gps2_rtk_get_iar_num_hypotheses(const mavlink_
 static inline void mavlink_msg_gps2_rtk_decode(const mavlink_message_t* msg, mavlink_gps2_rtk_t* gps2_rtk)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    gps2_rtk->time_last_baseline_ms = mavlink_msg_gps2_rtk_get_time_last_b
+    gps2_rtk->time_last_baseline_ms = mavlink_msg_gps2_rtk_get_time_last_baseline_ms(msg);
+    gps2_rtk->tow = mavlink_msg_gps2_rtk_get_tow(msg);
+    gps2_rtk->baseline_a_mm = mavlink_msg_gps2_rtk_get_baseline_a_mm(msg);
+    gps2_rtk->baseline_b_mm = mavlink_msg_gps2_rtk_get_baseline_b_mm(msg);
+    gps2_rtk->baseline_c_mm = mavlink_msg_gps2_rtk_get_baseline_c_mm(msg);
+    gps2_rtk->accuracy = mavlink_msg_gps2_rtk_get_accuracy(msg);
+    gps2_rtk->iar_num_hypotheses = mavlink_msg_gps2_rtk_get_iar_num_hypotheses(msg);
+    gps2_rtk->wn = mavlink_msg_gps2_rtk_get_wn(msg);
+    gps2_rtk->rtk_receiver_id = mavlink_msg_gps2_rtk_get_rtk_receiver_id(msg);
+    gps2_rtk->rtk_health = mavlink_msg_gps2_rtk_get_rtk_health(msg);
+    gps2_rtk->rtk_rate = mavlink_msg_gps2_rtk_get_rtk_rate(msg);
+    gps2_rtk->nsats = mavlink_msg_gps2_rtk_get_nsats(msg);
+    gps2_rtk->baseline_coords_type = mavlink_msg_gps2_rtk_get_baseline_coords_type(msg);
+#else
+        uint8_t len = msg->len < MAVLINK_MSG_ID_GPS2_RTK_LEN? msg->len : MAVLINK_MSG_ID_GPS2_RTK_LEN;
+        memset(gps2_rtk, 0, MAVLINK_MSG_ID_GPS2_RTK_LEN);
+    memcpy(gps2_rtk, _MAV_PAYLOAD(msg), len);
+#endif
+}

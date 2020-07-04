@@ -209,4 +209,55 @@ static inline void mavlink_msg_gps_global_origin_send_buf(mavlink_message_t *msg
     _mav_put_int32_t(buf, 8, altitude);
     _mav_put_uint64_t(buf, 12, time_usec);
 
-    _mav_f
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_GPS_GLOBAL_ORIGIN, buf, MAVLINK_MSG_ID_GPS_GLOBAL_ORIGIN_MIN_LEN, MAVLINK_MSG_ID_GPS_GLOBAL_ORIGIN_LEN, MAVLINK_MSG_ID_GPS_GLOBAL_ORIGIN_CRC);
+#else
+    mavlink_gps_global_origin_t *packet = (mavlink_gps_global_origin_t *)msgbuf;
+    packet->latitude = latitude;
+    packet->longitude = longitude;
+    packet->altitude = altitude;
+    packet->time_usec = time_usec;
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_GPS_GLOBAL_ORIGIN, (const char *)packet, MAVLINK_MSG_ID_GPS_GLOBAL_ORIGIN_MIN_LEN, MAVLINK_MSG_ID_GPS_GLOBAL_ORIGIN_LEN, MAVLINK_MSG_ID_GPS_GLOBAL_ORIGIN_CRC);
+#endif
+}
+#endif
+
+#endif
+
+// MESSAGE GPS_GLOBAL_ORIGIN UNPACKING
+
+
+/**
+ * @brief Get field latitude from gps_global_origin message
+ *
+ * @return Latitude (WGS84), in degrees * 1E7
+ */
+static inline int32_t mavlink_msg_gps_global_origin_get_latitude(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int32_t(msg,  0);
+}
+
+/**
+ * @brief Get field longitude from gps_global_origin message
+ *
+ * @return Longitude (WGS84), in degrees * 1E7
+ */
+static inline int32_t mavlink_msg_gps_global_origin_get_longitude(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int32_t(msg,  4);
+}
+
+/**
+ * @brief Get field altitude from gps_global_origin message
+ *
+ * @return Altitude (AMSL), in meters * 1000 (positive for up)
+ */
+static inline int32_t mavlink_msg_gps_global_origin_get_altitude(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int32_t(msg,  8);
+}
+
+/**
+ * @brief Get field time_usec from gps_global_origin message
+ *
+ * @return Times

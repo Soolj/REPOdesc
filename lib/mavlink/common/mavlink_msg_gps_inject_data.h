@@ -206,4 +206,63 @@ static inline void mavlink_msg_gps_inject_data_send_buf(mavlink_message_t *msgbu
 #else
     mavlink_gps_inject_data_t *packet = (mavlink_gps_inject_data_t *)msgbuf;
     packet->target_system = target_system;
-    packet->target_component = target_co
+    packet->target_component = target_component;
+    packet->len = len;
+    mav_array_memcpy(packet->data, data, sizeof(uint8_t)*110);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_GPS_INJECT_DATA, (const char *)packet, MAVLINK_MSG_ID_GPS_INJECT_DATA_MIN_LEN, MAVLINK_MSG_ID_GPS_INJECT_DATA_LEN, MAVLINK_MSG_ID_GPS_INJECT_DATA_CRC);
+#endif
+}
+#endif
+
+#endif
+
+// MESSAGE GPS_INJECT_DATA UNPACKING
+
+
+/**
+ * @brief Get field target_system from gps_inject_data message
+ *
+ * @return System ID
+ */
+static inline uint8_t mavlink_msg_gps_inject_data_get_target_system(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  0);
+}
+
+/**
+ * @brief Get field target_component from gps_inject_data message
+ *
+ * @return Component ID
+ */
+static inline uint8_t mavlink_msg_gps_inject_data_get_target_component(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  1);
+}
+
+/**
+ * @brief Get field len from gps_inject_data message
+ *
+ * @return data length
+ */
+static inline uint8_t mavlink_msg_gps_inject_data_get_len(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  2);
+}
+
+/**
+ * @brief Get field data from gps_inject_data message
+ *
+ * @return raw data (110 is enough for 12 satellites of RTCMv2)
+ */
+static inline uint16_t mavlink_msg_gps_inject_data_get_data(const mavlink_message_t* msg, uint8_t *data)
+{
+    return _MAV_RETURN_uint8_t_array(msg, data, 110,  3);
+}
+
+/**
+ * @brief Decode a gps_inject_data message into a struct
+ *
+ * @param msg The message to decode
+ * @param gps_inject_data C-struct to decode the message contents into
+ */
+static inline void mavlink_msg_gps_inject_data_decode(const mavlink_message_t* msg, m

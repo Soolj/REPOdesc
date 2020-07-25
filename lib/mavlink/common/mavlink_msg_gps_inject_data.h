@@ -265,4 +265,16 @@ static inline uint16_t mavlink_msg_gps_inject_data_get_data(const mavlink_messag
  * @param msg The message to decode
  * @param gps_inject_data C-struct to decode the message contents into
  */
-static inline void mavlink_msg_gps_inject_data_decode(const mavlink_message_t* msg, m
+static inline void mavlink_msg_gps_inject_data_decode(const mavlink_message_t* msg, mavlink_gps_inject_data_t* gps_inject_data)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    gps_inject_data->target_system = mavlink_msg_gps_inject_data_get_target_system(msg);
+    gps_inject_data->target_component = mavlink_msg_gps_inject_data_get_target_component(msg);
+    gps_inject_data->len = mavlink_msg_gps_inject_data_get_len(msg);
+    mavlink_msg_gps_inject_data_get_data(msg, gps_inject_data->data);
+#else
+        uint8_t len = msg->len < MAVLINK_MSG_ID_GPS_INJECT_DATA_LEN? msg->len : MAVLINK_MSG_ID_GPS_INJECT_DATA_LEN;
+        memset(gps_inject_data, 0, MAVLINK_MSG_ID_GPS_INJECT_DATA_LEN);
+    memcpy(gps_inject_data, _MAV_PAYLOAD(msg), len);
+#endif
+}

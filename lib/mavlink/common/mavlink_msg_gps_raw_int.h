@@ -161,4 +161,30 @@ static inline uint16_t mavlink_msg_gps_raw_int_pack(uint8_t system_id, uint8_t c
  * @param eph GPS HDOP horizontal dilution of position (unitless). If unknown, set to: UINT16_MAX
  * @param epv GPS VDOP vertical dilution of position (unitless). If unknown, set to: UINT16_MAX
  * @param vel GPS ground speed (m/s * 100). If unknown, set to: UINT16_MAX
- * @param cog Course over ground (NOT heading, but direction of movemen
+ * @param cog Course over ground (NOT heading, but direction of movement) in degrees * 100, 0.0..359.99 degrees. If unknown, set to: UINT16_MAX
+ * @param satellites_visible Number of satellites visible. If unknown, set to 255
+ * @param alt_ellipsoid Altitude (above WGS84, EGM96 ellipsoid), in meters * 1000 (positive for up).
+ * @param h_acc Position uncertainty in meters * 1000 (positive for up).
+ * @param v_acc Altitude uncertainty in meters * 1000 (positive for up).
+ * @param vel_acc Speed uncertainty in meters * 1000 (positive for up).
+ * @param hdg_acc Heading / track uncertainty in degrees * 1e5.
+ * @return length of the message in bytes (excluding serial stream start sign)
+ */
+static inline uint16_t mavlink_msg_gps_raw_int_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
+                               mavlink_message_t* msg,
+                                   uint64_t time_usec,uint8_t fix_type,int32_t lat,int32_t lon,int32_t alt,uint16_t eph,uint16_t epv,uint16_t vel,uint16_t cog,uint8_t satellites_visible,int32_t alt_ellipsoid,uint32_t h_acc,uint32_t v_acc,uint32_t vel_acc,uint32_t hdg_acc)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    char buf[MAVLINK_MSG_ID_GPS_RAW_INT_LEN];
+    _mav_put_uint64_t(buf, 0, time_usec);
+    _mav_put_int32_t(buf, 8, lat);
+    _mav_put_int32_t(buf, 12, lon);
+    _mav_put_int32_t(buf, 16, alt);
+    _mav_put_uint16_t(buf, 20, eph);
+    _mav_put_uint16_t(buf, 22, epv);
+    _mav_put_uint16_t(buf, 24, vel);
+    _mav_put_uint16_t(buf, 26, cog);
+    _mav_put_uint8_t(buf, 28, fix_type);
+    _mav_put_uint8_t(buf, 29, satellites_visible);
+    _mav_put_int32_t(buf, 30, alt_ellipsoid);
+   

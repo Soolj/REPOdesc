@@ -187,4 +187,45 @@ static inline uint16_t mavlink_msg_gps_raw_int_pack_chan(uint8_t system_id, uint
     _mav_put_uint8_t(buf, 28, fix_type);
     _mav_put_uint8_t(buf, 29, satellites_visible);
     _mav_put_int32_t(buf, 30, alt_ellipsoid);
-   
+    _mav_put_uint32_t(buf, 34, h_acc);
+    _mav_put_uint32_t(buf, 38, v_acc);
+    _mav_put_uint32_t(buf, 42, vel_acc);
+    _mav_put_uint32_t(buf, 46, hdg_acc);
+
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_GPS_RAW_INT_LEN);
+#else
+    mavlink_gps_raw_int_t packet;
+    packet.time_usec = time_usec;
+    packet.lat = lat;
+    packet.lon = lon;
+    packet.alt = alt;
+    packet.eph = eph;
+    packet.epv = epv;
+    packet.vel = vel;
+    packet.cog = cog;
+    packet.fix_type = fix_type;
+    packet.satellites_visible = satellites_visible;
+    packet.alt_ellipsoid = alt_ellipsoid;
+    packet.h_acc = h_acc;
+    packet.v_acc = v_acc;
+    packet.vel_acc = vel_acc;
+    packet.hdg_acc = hdg_acc;
+
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_GPS_RAW_INT_LEN);
+#endif
+
+    msg->msgid = MAVLINK_MSG_ID_GPS_RAW_INT;
+    return mavlink_finalize_message_chan(msg, system_id, component_id, chan, MAVLINK_MSG_ID_GPS_RAW_INT_MIN_LEN, MAVLINK_MSG_ID_GPS_RAW_INT_LEN, MAVLINK_MSG_ID_GPS_RAW_INT_CRC);
+}
+
+/**
+ * @brief Encode a gps_raw_int struct
+ *
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param msg The MAVLink message to compress the data into
+ * @param gps_raw_int C-struct to read the message contents from
+ */
+static inline uint16_t mavlink_msg_gps_raw_int_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_gps_raw_int_t* gps_raw_int)
+{
+    return mavlink_msg_gps_raw_int_pack(system_id, component_id, msg,

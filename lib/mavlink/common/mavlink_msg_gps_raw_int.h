@@ -228,4 +228,28 @@ static inline uint16_t mavlink_msg_gps_raw_int_pack_chan(uint8_t system_id, uint
  */
 static inline uint16_t mavlink_msg_gps_raw_int_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_gps_raw_int_t* gps_raw_int)
 {
-    return mavlink_msg_gps_raw_int_pack(system_id, component_id, msg,
+    return mavlink_msg_gps_raw_int_pack(system_id, component_id, msg, gps_raw_int->time_usec, gps_raw_int->fix_type, gps_raw_int->lat, gps_raw_int->lon, gps_raw_int->alt, gps_raw_int->eph, gps_raw_int->epv, gps_raw_int->vel, gps_raw_int->cog, gps_raw_int->satellites_visible, gps_raw_int->alt_ellipsoid, gps_raw_int->h_acc, gps_raw_int->v_acc, gps_raw_int->vel_acc, gps_raw_int->hdg_acc);
+}
+
+/**
+ * @brief Encode a gps_raw_int struct on a channel
+ *
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param chan The MAVLink channel this message will be sent over
+ * @param msg The MAVLink message to compress the data into
+ * @param gps_raw_int C-struct to read the message contents from
+ */
+static inline uint16_t mavlink_msg_gps_raw_int_encode_chan(uint8_t system_id, uint8_t component_id, uint8_t chan, mavlink_message_t* msg, const mavlink_gps_raw_int_t* gps_raw_int)
+{
+    return mavlink_msg_gps_raw_int_pack_chan(system_id, component_id, chan, msg, gps_raw_int->time_usec, gps_raw_int->fix_type, gps_raw_int->lat, gps_raw_int->lon, gps_raw_int->alt, gps_raw_int->eph, gps_raw_int->epv, gps_raw_int->vel, gps_raw_int->cog, gps_raw_int->satellites_visible, gps_raw_int->alt_ellipsoid, gps_raw_int->h_acc, gps_raw_int->v_acc, gps_raw_int->vel_acc, gps_raw_int->hdg_acc);
+}
+
+/**
+ * @brief Send a gps_raw_int message
+ * @param chan MAVLink channel to send the message
+ *
+ * @param time_usec Timestamp (microseconds since UNIX epoch or microseconds since system boot)
+ * @param fix_type See the GPS_FIX_TYPE enum.
+ * @param lat Latitude (WGS84, EGM96 ellipsoid), in degrees * 1E7
+ * @param l

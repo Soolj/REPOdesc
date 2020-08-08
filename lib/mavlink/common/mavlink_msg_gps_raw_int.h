@@ -371,4 +371,65 @@ static inline void mavlink_msg_gps_raw_int_send_buf(mavlink_message_t *msgbuf, m
     packet->vel_acc = vel_acc;
     packet->hdg_acc = hdg_acc;
 
-    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_GPS_RAW_INT, (const char *)packet, MAVLINK_MSG_ID_GPS_RAW_INT_MIN_
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_GPS_RAW_INT, (const char *)packet, MAVLINK_MSG_ID_GPS_RAW_INT_MIN_LEN, MAVLINK_MSG_ID_GPS_RAW_INT_LEN, MAVLINK_MSG_ID_GPS_RAW_INT_CRC);
+#endif
+}
+#endif
+
+#endif
+
+// MESSAGE GPS_RAW_INT UNPACKING
+
+
+/**
+ * @brief Get field time_usec from gps_raw_int message
+ *
+ * @return Timestamp (microseconds since UNIX epoch or microseconds since system boot)
+ */
+static inline uint64_t mavlink_msg_gps_raw_int_get_time_usec(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint64_t(msg,  0);
+}
+
+/**
+ * @brief Get field fix_type from gps_raw_int message
+ *
+ * @return See the GPS_FIX_TYPE enum.
+ */
+static inline uint8_t mavlink_msg_gps_raw_int_get_fix_type(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  28);
+}
+
+/**
+ * @brief Get field lat from gps_raw_int message
+ *
+ * @return Latitude (WGS84, EGM96 ellipsoid), in degrees * 1E7
+ */
+static inline int32_t mavlink_msg_gps_raw_int_get_lat(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int32_t(msg,  8);
+}
+
+/**
+ * @brief Get field lon from gps_raw_int message
+ *
+ * @return Longitude (WGS84, EGM96 ellipsoid), in degrees * 1E7
+ */
+static inline int32_t mavlink_msg_gps_raw_int_get_lon(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int32_t(msg,  12);
+}
+
+/**
+ * @brief Get field alt from gps_raw_int message
+ *
+ * @return Altitude (AMSL, NOT WGS84), in meters * 1000 (positive for up). Note that virtually all GPS modules provide the AMSL altitude in addition to the WGS84 altitude.
+ */
+static inline int32_t mavlink_msg_gps_raw_int_get_alt(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int32_t(msg,  16);
+}
+
+/**
+ * @brief Get field ep

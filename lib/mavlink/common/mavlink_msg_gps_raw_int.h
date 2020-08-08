@@ -484,4 +484,60 @@ static inline uint8_t mavlink_msg_gps_raw_int_get_satellites_visible(const mavli
 /**
  * @brief Get field alt_ellipsoid from gps_raw_int message
  *
- * @return Altitude (above WGS84, EGM96 ellipsoid), in meters * 1000 (p
+ * @return Altitude (above WGS84, EGM96 ellipsoid), in meters * 1000 (positive for up).
+ */
+static inline int32_t mavlink_msg_gps_raw_int_get_alt_ellipsoid(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int32_t(msg,  30);
+}
+
+/**
+ * @brief Get field h_acc from gps_raw_int message
+ *
+ * @return Position uncertainty in meters * 1000 (positive for up).
+ */
+static inline uint32_t mavlink_msg_gps_raw_int_get_h_acc(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint32_t(msg,  34);
+}
+
+/**
+ * @brief Get field v_acc from gps_raw_int message
+ *
+ * @return Altitude uncertainty in meters * 1000 (positive for up).
+ */
+static inline uint32_t mavlink_msg_gps_raw_int_get_v_acc(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint32_t(msg,  38);
+}
+
+/**
+ * @brief Get field vel_acc from gps_raw_int message
+ *
+ * @return Speed uncertainty in meters * 1000 (positive for up).
+ */
+static inline uint32_t mavlink_msg_gps_raw_int_get_vel_acc(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint32_t(msg,  42);
+}
+
+/**
+ * @brief Get field hdg_acc from gps_raw_int message
+ *
+ * @return Heading / track uncertainty in degrees * 1e5.
+ */
+static inline uint32_t mavlink_msg_gps_raw_int_get_hdg_acc(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint32_t(msg,  46);
+}
+
+/**
+ * @brief Decode a gps_raw_int message into a struct
+ *
+ * @param msg The message to decode
+ * @param gps_raw_int C-struct to decode the message contents into
+ */
+static inline void mavlink_msg_gps_raw_int_decode(const mavlink_message_t* msg, mavlink_gps_raw_int_t* gps_raw_int)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    gps_raw_int->time_

@@ -432,4 +432,56 @@ static inline int32_t mavlink_msg_gps_raw_int_get_alt(const mavlink_message_t* m
 }
 
 /**
- * @brief Get field ep
+ * @brief Get field eph from gps_raw_int message
+ *
+ * @return GPS HDOP horizontal dilution of position (unitless). If unknown, set to: UINT16_MAX
+ */
+static inline uint16_t mavlink_msg_gps_raw_int_get_eph(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint16_t(msg,  20);
+}
+
+/**
+ * @brief Get field epv from gps_raw_int message
+ *
+ * @return GPS VDOP vertical dilution of position (unitless). If unknown, set to: UINT16_MAX
+ */
+static inline uint16_t mavlink_msg_gps_raw_int_get_epv(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint16_t(msg,  22);
+}
+
+/**
+ * @brief Get field vel from gps_raw_int message
+ *
+ * @return GPS ground speed (m/s * 100). If unknown, set to: UINT16_MAX
+ */
+static inline uint16_t mavlink_msg_gps_raw_int_get_vel(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint16_t(msg,  24);
+}
+
+/**
+ * @brief Get field cog from gps_raw_int message
+ *
+ * @return Course over ground (NOT heading, but direction of movement) in degrees * 100, 0.0..359.99 degrees. If unknown, set to: UINT16_MAX
+ */
+static inline uint16_t mavlink_msg_gps_raw_int_get_cog(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint16_t(msg,  26);
+}
+
+/**
+ * @brief Get field satellites_visible from gps_raw_int message
+ *
+ * @return Number of satellites visible. If unknown, set to 255
+ */
+static inline uint8_t mavlink_msg_gps_raw_int_get_satellites_visible(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  29);
+}
+
+/**
+ * @brief Get field alt_ellipsoid from gps_raw_int message
+ *
+ * @return Altitude (above WGS84, EGM96 ellipsoid), in meters * 1000 (p

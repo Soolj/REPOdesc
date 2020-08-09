@@ -540,4 +540,24 @@ static inline uint32_t mavlink_msg_gps_raw_int_get_hdg_acc(const mavlink_message
 static inline void mavlink_msg_gps_raw_int_decode(const mavlink_message_t* msg, mavlink_gps_raw_int_t* gps_raw_int)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    gps_raw_int->time_
+    gps_raw_int->time_usec = mavlink_msg_gps_raw_int_get_time_usec(msg);
+    gps_raw_int->lat = mavlink_msg_gps_raw_int_get_lat(msg);
+    gps_raw_int->lon = mavlink_msg_gps_raw_int_get_lon(msg);
+    gps_raw_int->alt = mavlink_msg_gps_raw_int_get_alt(msg);
+    gps_raw_int->eph = mavlink_msg_gps_raw_int_get_eph(msg);
+    gps_raw_int->epv = mavlink_msg_gps_raw_int_get_epv(msg);
+    gps_raw_int->vel = mavlink_msg_gps_raw_int_get_vel(msg);
+    gps_raw_int->cog = mavlink_msg_gps_raw_int_get_cog(msg);
+    gps_raw_int->fix_type = mavlink_msg_gps_raw_int_get_fix_type(msg);
+    gps_raw_int->satellites_visible = mavlink_msg_gps_raw_int_get_satellites_visible(msg);
+    gps_raw_int->alt_ellipsoid = mavlink_msg_gps_raw_int_get_alt_ellipsoid(msg);
+    gps_raw_int->h_acc = mavlink_msg_gps_raw_int_get_h_acc(msg);
+    gps_raw_int->v_acc = mavlink_msg_gps_raw_int_get_v_acc(msg);
+    gps_raw_int->vel_acc = mavlink_msg_gps_raw_int_get_vel_acc(msg);
+    gps_raw_int->hdg_acc = mavlink_msg_gps_raw_int_get_hdg_acc(msg);
+#else
+        uint8_t len = msg->len < MAVLINK_MSG_ID_GPS_RAW_INT_LEN? msg->len : MAVLINK_MSG_ID_GPS_RAW_INT_LEN;
+        memset(gps_raw_int, 0, MAVLINK_MSG_ID_GPS_RAW_INT_LEN);
+    memcpy(gps_raw_int, _MAV_PAYLOAD(msg), len);
+#endif
+}

@@ -107,4 +107,27 @@ static inline uint16_t mavlink_msg_gps_status_pack(uint8_t system_id, uint8_t co
  * @param satellite_elevation Elevation (0: right on top of receiver, 90: on the horizon) of satellite
  * @param satellite_azimuth Direction of satellite, 0: 0 deg, 255: 360 deg.
  * @param satellite_snr Signal to noise ratio of satellite
- * @retur
+ * @return length of the message in bytes (excluding serial stream start sign)
+ */
+static inline uint16_t mavlink_msg_gps_status_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
+                               mavlink_message_t* msg,
+                                   uint8_t satellites_visible,const uint8_t *satellite_prn,const uint8_t *satellite_used,const uint8_t *satellite_elevation,const uint8_t *satellite_azimuth,const uint8_t *satellite_snr)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    char buf[MAVLINK_MSG_ID_GPS_STATUS_LEN];
+    _mav_put_uint8_t(buf, 0, satellites_visible);
+    _mav_put_uint8_t_array(buf, 1, satellite_prn, 20);
+    _mav_put_uint8_t_array(buf, 21, satellite_used, 20);
+    _mav_put_uint8_t_array(buf, 41, satellite_elevation, 20);
+    _mav_put_uint8_t_array(buf, 61, satellite_azimuth, 20);
+    _mav_put_uint8_t_array(buf, 81, satellite_snr, 20);
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_GPS_STATUS_LEN);
+#else
+    mavlink_gps_status_t packet;
+    packet.satellites_visible = satellites_visible;
+    mav_array_memcpy(packet.satellite_prn, satellite_prn, sizeof(uint8_t)*20);
+    mav_array_memcpy(packet.satellite_used, satellite_used, sizeof(uint8_t)*20);
+    mav_array_memcpy(packet.satellite_elevation, satellite_elevation, sizeof(uint8_t)*20);
+    mav_array_memcpy(packet.satellite_azimuth, satellite_azimuth, sizeof(uint8_t)*20);
+    mav_array_memcpy(packet.satellite_snr, satellite_snr, sizeof(uint8_t)*20);
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_G

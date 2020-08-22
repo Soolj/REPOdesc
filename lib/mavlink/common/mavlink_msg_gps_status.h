@@ -161,4 +161,34 @@ static inline uint16_t mavlink_msg_gps_status_encode(uint8_t system_id, uint8_t 
  */
 static inline uint16_t mavlink_msg_gps_status_encode_chan(uint8_t system_id, uint8_t component_id, uint8_t chan, mavlink_message_t* msg, const mavlink_gps_status_t* gps_status)
 {
-    return mavlink_msg_gps_status_pack_chan(system_id, component_id, chan, msg, gps_status->satellites_visible, gps_status->satelli
+    return mavlink_msg_gps_status_pack_chan(system_id, component_id, chan, msg, gps_status->satellites_visible, gps_status->satellite_prn, gps_status->satellite_used, gps_status->satellite_elevation, gps_status->satellite_azimuth, gps_status->satellite_snr);
+}
+
+/**
+ * @brief Send a gps_status message
+ * @param chan MAVLink channel to send the message
+ *
+ * @param satellites_visible Number of satellites visible
+ * @param satellite_prn Global satellite ID
+ * @param satellite_used 0: Satellite not used, 1: used for localization
+ * @param satellite_elevation Elevation (0: right on top of receiver, 90: on the horizon) of satellite
+ * @param satellite_azimuth Direction of satellite, 0: 0 deg, 255: 360 deg.
+ * @param satellite_snr Signal to noise ratio of satellite
+ */
+#ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
+
+static inline void mavlink_msg_gps_status_send(mavlink_channel_t chan, uint8_t satellites_visible, const uint8_t *satellite_prn, const uint8_t *satellite_used, const uint8_t *satellite_elevation, const uint8_t *satellite_azimuth, const uint8_t *satellite_snr)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    char buf[MAVLINK_MSG_ID_GPS_STATUS_LEN];
+    _mav_put_uint8_t(buf, 0, satellites_visible);
+    _mav_put_uint8_t_array(buf, 1, satellite_prn, 20);
+    _mav_put_uint8_t_array(buf, 21, satellite_used, 20);
+    _mav_put_uint8_t_array(buf, 41, satellite_elevation, 20);
+    _mav_put_uint8_t_array(buf, 61, satellite_azimuth, 20);
+    _mav_put_uint8_t_array(buf, 81, satellite_snr, 20);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_GPS_STATUS, buf, MAVLINK_MSG_ID_GPS_STATUS_MIN_LEN, MAVLINK_MSG_ID_GPS_STATUS_LEN, MAVLINK_MSG_ID_GPS_STATUS_CRC);
+#else
+    mavlink_gps_status_t packet;
+    packet.satellites_visible = satellites_visible;
+    mav

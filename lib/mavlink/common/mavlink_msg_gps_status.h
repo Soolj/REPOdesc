@@ -191,4 +191,32 @@ static inline void mavlink_msg_gps_status_send(mavlink_channel_t chan, uint8_t s
 #else
     mavlink_gps_status_t packet;
     packet.satellites_visible = satellites_visible;
-    mav
+    mav_array_memcpy(packet.satellite_prn, satellite_prn, sizeof(uint8_t)*20);
+    mav_array_memcpy(packet.satellite_used, satellite_used, sizeof(uint8_t)*20);
+    mav_array_memcpy(packet.satellite_elevation, satellite_elevation, sizeof(uint8_t)*20);
+    mav_array_memcpy(packet.satellite_azimuth, satellite_azimuth, sizeof(uint8_t)*20);
+    mav_array_memcpy(packet.satellite_snr, satellite_snr, sizeof(uint8_t)*20);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_GPS_STATUS, (const char *)&packet, MAVLINK_MSG_ID_GPS_STATUS_MIN_LEN, MAVLINK_MSG_ID_GPS_STATUS_LEN, MAVLINK_MSG_ID_GPS_STATUS_CRC);
+#endif
+}
+
+/**
+ * @brief Send a gps_status message
+ * @param chan MAVLink channel to send the message
+ * @param struct The MAVLink struct to serialize
+ */
+static inline void mavlink_msg_gps_status_send_struct(mavlink_channel_t chan, const mavlink_gps_status_t* gps_status)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    mavlink_msg_gps_status_send(chan, gps_status->satellites_visible, gps_status->satellite_prn, gps_status->satellite_used, gps_status->satellite_elevation, gps_status->satellite_azimuth, gps_status->satellite_snr);
+#else
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_GPS_STATUS, (const char *)gps_status, MAVLINK_MSG_ID_GPS_STATUS_MIN_LEN, MAVLINK_MSG_ID_GPS_STATUS_LEN, MAVLINK_MSG_ID_GPS_STATUS_CRC);
+#endif
+}
+
+#if MAVLINK_MSG_ID_GPS_STATUS_LEN <= MAVLINK_MAX_PAYLOAD_LEN
+/*
+  This varient of _send() can be used to save stack space by re-using
+  memory from the receive buffer.  The caller provides a
+  mavlink_message_t which is the size of a full mavlink message. This
+  is usually the rec

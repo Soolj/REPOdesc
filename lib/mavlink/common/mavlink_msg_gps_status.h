@@ -240,4 +240,58 @@ static inline void mavlink_msg_gps_status_send_buf(mavlink_message_t *msgbuf, ma
     mav_array_memcpy(packet->satellite_used, satellite_used, sizeof(uint8_t)*20);
     mav_array_memcpy(packet->satellite_elevation, satellite_elevation, sizeof(uint8_t)*20);
     mav_array_memcpy(packet->satellite_azimuth, satellite_azimuth, sizeof(uint8_t)*20);
-    mav_array_memcpy(packet->satellite_snr, satellite_snr, sizeof(uint8_
+    mav_array_memcpy(packet->satellite_snr, satellite_snr, sizeof(uint8_t)*20);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_GPS_STATUS, (const char *)packet, MAVLINK_MSG_ID_GPS_STATUS_MIN_LEN, MAVLINK_MSG_ID_GPS_STATUS_LEN, MAVLINK_MSG_ID_GPS_STATUS_CRC);
+#endif
+}
+#endif
+
+#endif
+
+// MESSAGE GPS_STATUS UNPACKING
+
+
+/**
+ * @brief Get field satellites_visible from gps_status message
+ *
+ * @return Number of satellites visible
+ */
+static inline uint8_t mavlink_msg_gps_status_get_satellites_visible(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  0);
+}
+
+/**
+ * @brief Get field satellite_prn from gps_status message
+ *
+ * @return Global satellite ID
+ */
+static inline uint16_t mavlink_msg_gps_status_get_satellite_prn(const mavlink_message_t* msg, uint8_t *satellite_prn)
+{
+    return _MAV_RETURN_uint8_t_array(msg, satellite_prn, 20,  1);
+}
+
+/**
+ * @brief Get field satellite_used from gps_status message
+ *
+ * @return 0: Satellite not used, 1: used for localization
+ */
+static inline uint16_t mavlink_msg_gps_status_get_satellite_used(const mavlink_message_t* msg, uint8_t *satellite_used)
+{
+    return _MAV_RETURN_uint8_t_array(msg, satellite_used, 20,  21);
+}
+
+/**
+ * @brief Get field satellite_elevation from gps_status message
+ *
+ * @return Elevation (0: right on top of receiver, 90: on the horizon) of satellite
+ */
+static inline uint16_t mavlink_msg_gps_status_get_satellite_elevation(const mavlink_message_t* msg, uint8_t *satellite_elevation)
+{
+    return _MAV_RETURN_uint8_t_array(msg, satellite_elevation, 20,  41);
+}
+
+/**
+ * @brief Get field satellite_azimuth from gps_status message
+ *
+ * @return Direction of satellite, 0: 0 deg, 2

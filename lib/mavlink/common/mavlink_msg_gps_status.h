@@ -219,4 +219,25 @@ static inline void mavlink_msg_gps_status_send_struct(mavlink_channel_t chan, co
   This varient of _send() can be used to save stack space by re-using
   memory from the receive buffer.  The caller provides a
   mavlink_message_t which is the size of a full mavlink message. This
-  is usually the rec
+  is usually the receive buffer for the channel, and allows a reply to an
+  incoming message with minimum stack space usage.
+ */
+static inline void mavlink_msg_gps_status_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  uint8_t satellites_visible, const uint8_t *satellite_prn, const uint8_t *satellite_used, const uint8_t *satellite_elevation, const uint8_t *satellite_azimuth, const uint8_t *satellite_snr)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    char *buf = (char *)msgbuf;
+    _mav_put_uint8_t(buf, 0, satellites_visible);
+    _mav_put_uint8_t_array(buf, 1, satellite_prn, 20);
+    _mav_put_uint8_t_array(buf, 21, satellite_used, 20);
+    _mav_put_uint8_t_array(buf, 41, satellite_elevation, 20);
+    _mav_put_uint8_t_array(buf, 61, satellite_azimuth, 20);
+    _mav_put_uint8_t_array(buf, 81, satellite_snr, 20);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_GPS_STATUS, buf, MAVLINK_MSG_ID_GPS_STATUS_MIN_LEN, MAVLINK_MSG_ID_GPS_STATUS_LEN, MAVLINK_MSG_ID_GPS_STATUS_CRC);
+#else
+    mavlink_gps_status_t *packet = (mavlink_gps_status_t *)msgbuf;
+    packet->satellites_visible = satellites_visible;
+    mav_array_memcpy(packet->satellite_prn, satellite_prn, sizeof(uint8_t)*20);
+    mav_array_memcpy(packet->satellite_used, satellite_used, sizeof(uint8_t)*20);
+    mav_array_memcpy(packet->satellite_elevation, satellite_elevation, sizeof(uint8_t)*20);
+    mav_array_memcpy(packet->satellite_azimuth, satellite_azimuth, sizeof(uint8_t)*20);
+    mav_array_memcpy(packet->satellite_snr, satellite_snr, sizeof(uint8_

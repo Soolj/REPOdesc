@@ -294,4 +294,41 @@ static inline uint16_t mavlink_msg_gps_status_get_satellite_elevation(const mavl
 /**
  * @brief Get field satellite_azimuth from gps_status message
  *
- * @return Direction of satellite, 0: 0 deg, 2
+ * @return Direction of satellite, 0: 0 deg, 255: 360 deg.
+ */
+static inline uint16_t mavlink_msg_gps_status_get_satellite_azimuth(const mavlink_message_t* msg, uint8_t *satellite_azimuth)
+{
+    return _MAV_RETURN_uint8_t_array(msg, satellite_azimuth, 20,  61);
+}
+
+/**
+ * @brief Get field satellite_snr from gps_status message
+ *
+ * @return Signal to noise ratio of satellite
+ */
+static inline uint16_t mavlink_msg_gps_status_get_satellite_snr(const mavlink_message_t* msg, uint8_t *satellite_snr)
+{
+    return _MAV_RETURN_uint8_t_array(msg, satellite_snr, 20,  81);
+}
+
+/**
+ * @brief Decode a gps_status message into a struct
+ *
+ * @param msg The message to decode
+ * @param gps_status C-struct to decode the message contents into
+ */
+static inline void mavlink_msg_gps_status_decode(const mavlink_message_t* msg, mavlink_gps_status_t* gps_status)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    gps_status->satellites_visible = mavlink_msg_gps_status_get_satellites_visible(msg);
+    mavlink_msg_gps_status_get_satellite_prn(msg, gps_status->satellite_prn);
+    mavlink_msg_gps_status_get_satellite_used(msg, gps_status->satellite_used);
+    mavlink_msg_gps_status_get_satellite_elevation(msg, gps_status->satellite_elevation);
+    mavlink_msg_gps_status_get_satellite_azimuth(msg, gps_status->satellite_azimuth);
+    mavlink_msg_gps_status_get_satellite_snr(msg, gps_status->satellite_snr);
+#else
+        uint8_t len = msg->len < MAVLINK_MSG_ID_GPS_STATUS_LEN? msg->len : MAVLINK_MSG_ID_GPS_STATUS_LEN;
+        memset(gps_status, 0, MAVLINK_MSG_ID_GPS_STATUS_LEN);
+    memcpy(gps_status, _MAV_PAYLOAD(msg), len);
+#endif
+}

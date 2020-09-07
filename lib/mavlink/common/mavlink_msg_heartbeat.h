@@ -167,4 +167,38 @@ static inline uint16_t mavlink_msg_heartbeat_encode_chan(uint8_t system_id, uint
  * @param chan MAVLink channel to send the message
  *
  * @param type Type of the MAV (quadrotor, helicopter, etc., up to 15 types, defined in MAV_TYPE ENUM)
- * @param aut
+ * @param autopilot Autopilot type / class. defined in MAV_AUTOPILOT ENUM
+ * @param base_mode System mode bitfield, see MAV_MODE_FLAG ENUM in mavlink/include/mavlink_types.h
+ * @param custom_mode A bitfield for use for autopilot-specific flags.
+ * @param system_status System status flag, see MAV_STATE ENUM
+ */
+#ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
+
+static inline void mavlink_msg_heartbeat_send(mavlink_channel_t chan, uint8_t type, uint8_t autopilot, uint8_t base_mode, uint32_t custom_mode, uint8_t system_status)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    char buf[MAVLINK_MSG_ID_HEARTBEAT_LEN];
+    _mav_put_uint32_t(buf, 0, custom_mode);
+    _mav_put_uint8_t(buf, 4, type);
+    _mav_put_uint8_t(buf, 5, autopilot);
+    _mav_put_uint8_t(buf, 6, base_mode);
+    _mav_put_uint8_t(buf, 7, system_status);
+    _mav_put_uint8_t(buf, 8, 3);
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_HEARTBEAT, buf, MAVLINK_MSG_ID_HEARTBEAT_MIN_LEN, MAVLINK_MSG_ID_HEARTBEAT_LEN, MAVLINK_MSG_ID_HEARTBEAT_CRC);
+#else
+    mavlink_heartbeat_t packet;
+    packet.custom_mode = custom_mode;
+    packet.type = type;
+    packet.autopilot = autopilot;
+    packet.base_mode = base_mode;
+    packet.system_status = system_status;
+    packet.mavlink_version = 3;
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_HEARTBEAT, (const char *)&packet, MAVLINK_MSG_ID_HEARTBEAT_MIN_LEN, MAVLINK_MSG_ID_HEARTBEAT_LEN, MAVLINK_MSG_ID_HEARTBEAT_CRC);
+#endif
+}
+
+/**
+ * @brief Send a heartbeat message
+ * @param chan MAVLink channel to send th

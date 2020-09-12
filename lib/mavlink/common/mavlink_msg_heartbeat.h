@@ -230,4 +230,57 @@ static inline void mavlink_msg_heartbeat_send_buf(mavlink_message_t *msgbuf, mav
     _mav_put_uint8_t(buf, 5, autopilot);
     _mav_put_uint8_t(buf, 6, base_mode);
     _mav_put_uint8_t(buf, 7, system_status);
-    _mav_put_uint8_t(buf, 8, 3)
+    _mav_put_uint8_t(buf, 8, 3);
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_HEARTBEAT, buf, MAVLINK_MSG_ID_HEARTBEAT_MIN_LEN, MAVLINK_MSG_ID_HEARTBEAT_LEN, MAVLINK_MSG_ID_HEARTBEAT_CRC);
+#else
+    mavlink_heartbeat_t *packet = (mavlink_heartbeat_t *)msgbuf;
+    packet->custom_mode = custom_mode;
+    packet->type = type;
+    packet->autopilot = autopilot;
+    packet->base_mode = base_mode;
+    packet->system_status = system_status;
+    packet->mavlink_version = 3;
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_HEARTBEAT, (const char *)packet, MAVLINK_MSG_ID_HEARTBEAT_MIN_LEN, MAVLINK_MSG_ID_HEARTBEAT_LEN, MAVLINK_MSG_ID_HEARTBEAT_CRC);
+#endif
+}
+#endif
+
+#endif
+
+// MESSAGE HEARTBEAT UNPACKING
+
+
+/**
+ * @brief Get field type from heartbeat message
+ *
+ * @return Type of the MAV (quadrotor, helicopter, etc., up to 15 types, defined in MAV_TYPE ENUM)
+ */
+static inline uint8_t mavlink_msg_heartbeat_get_type(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  4);
+}
+
+/**
+ * @brief Get field autopilot from heartbeat message
+ *
+ * @return Autopilot type / class. defined in MAV_AUTOPILOT ENUM
+ */
+static inline uint8_t mavlink_msg_heartbeat_get_autopilot(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  5);
+}
+
+/**
+ * @brief Get field base_mode from heartbeat message
+ *
+ * @return System mode bitfield, see MAV_MODE_FLAG ENUM in mavlink/include/mavlink_types.h
+ */
+static inline uint8_t mavlink_msg_heartbeat_get_base_mode(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  6);
+}
+
+/**
+ * @brief Get field custom_mode fr

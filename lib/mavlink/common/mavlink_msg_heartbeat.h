@@ -283,4 +283,47 @@ static inline uint8_t mavlink_msg_heartbeat_get_base_mode(const mavlink_message_
 }
 
 /**
- * @brief Get field custom_mode fr
+ * @brief Get field custom_mode from heartbeat message
+ *
+ * @return A bitfield for use for autopilot-specific flags.
+ */
+static inline uint32_t mavlink_msg_heartbeat_get_custom_mode(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint32_t(msg,  0);
+}
+
+/**
+ * @brief Get field system_status from heartbeat message
+ *
+ * @return System status flag, see MAV_STATE ENUM
+ */
+static inline uint8_t mavlink_msg_heartbeat_get_system_status(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  7);
+}
+
+/**
+ * @brief Get field mavlink_version from heartbeat message
+ *
+ * @return MAVLink version, not writable by user, gets added by protocol because of magic data type: uint8_t_mavlink_version
+ */
+static inline uint8_t mavlink_msg_heartbeat_get_mavlink_version(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  8);
+}
+
+/**
+ * @brief Decode a heartbeat message into a struct
+ *
+ * @param msg The message to decode
+ * @param heartbeat C-struct to decode the message contents into
+ */
+static inline void mavlink_msg_heartbeat_decode(const mavlink_message_t* msg, mavlink_heartbeat_t* heartbeat)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    heartbeat->custom_mode = mavlink_msg_heartbeat_get_custom_mode(msg);
+    heartbeat->type = mavlink_msg_heartbeat_get_type(msg);
+    heartbeat->autopilot = mavlink_msg_heartbeat_get_autopilot(msg);
+    heartbeat->base_mode = mavlink_msg_heartbeat_get_base_mode(msg);
+    heartbeat->system_status = mavlink_msg_heartbeat_get_system_status(msg);
+    heartbeat->mavlink_version = mavlink_msg_heartbeat_get_mavlink_v

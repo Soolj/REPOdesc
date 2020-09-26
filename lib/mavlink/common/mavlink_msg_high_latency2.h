@@ -114,4 +114,32 @@ typedef struct __mavlink_high_latency2_t {
 #endif
 
 /**
- * @brief P
+ * @brief Pack a high_latency2 message
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param msg The MAVLink message to compress the data into
+ *
+ * @param timestamp Timestamp (milliseconds since boot or Unix epoch)
+ * @param type Type of the MAV (quadrotor, helicopter, etc., up to 15 types, defined in MAV_TYPE ENUM)
+ * @param autopilot Autopilot type / class. defined in MAV_AUTOPILOT ENUM
+ * @param custom_mode A bitfield for use for autopilot-specific flags (2 byte version).
+ * @param latitude Latitude, expressed as degrees * 1E7
+ * @param longitude Longitude, expressed as degrees * 1E7
+ * @param altitude Altitude above mean sea level
+ * @param target_altitude Altitude setpoint
+ * @param heading Heading (degrees / 2)
+ * @param target_heading Heading setpoint (degrees / 2)
+ * @param target_distance Distance to target waypoint or position (meters / 10)
+ * @param throttle Throttle (percentage)
+ * @param airspeed Airspeed (m/s * 5)
+ * @param airspeed_sp Airspeed setpoint (m/s * 5)
+ * @param groundspeed Groundspeed (m/s * 5)
+ * @param windspeed Windspeed (m/s * 5)
+ * @param wind_heading Wind heading (deg / 2)
+ * @param eph Maximum error horizontal position since last message (m * 10)
+ * @param epv Maximum error vertical position since last message (m * 10)
+ * @param temperature_air Air temperature (degrees C) from airspeed sensor
+ * @param climb_rate Maximum climb rate magnitude since last message (m/s * 10)
+ * @param battery Battery (percentage, -1 for DNU)
+ * @param wp_num Current waypoint number
+ * @pa

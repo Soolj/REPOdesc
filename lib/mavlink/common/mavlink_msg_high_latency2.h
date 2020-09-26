@@ -165,4 +165,47 @@ static inline uint16_t mavlink_msg_high_latency2_pack(uint8_t system_id, uint8_t
     _mav_put_uint8_t(buf, 24, type);
     _mav_put_uint8_t(buf, 25, autopilot);
     _mav_put_uint8_t(buf, 26, heading);
- 
+    _mav_put_uint8_t(buf, 27, target_heading);
+    _mav_put_uint8_t(buf, 28, throttle);
+    _mav_put_uint8_t(buf, 29, airspeed);
+    _mav_put_uint8_t(buf, 30, airspeed_sp);
+    _mav_put_uint8_t(buf, 31, groundspeed);
+    _mav_put_uint8_t(buf, 32, windspeed);
+    _mav_put_uint8_t(buf, 33, wind_heading);
+    _mav_put_uint8_t(buf, 34, eph);
+    _mav_put_uint8_t(buf, 35, epv);
+    _mav_put_int8_t(buf, 36, temperature_air);
+    _mav_put_int8_t(buf, 37, climb_rate);
+    _mav_put_int8_t(buf, 38, battery);
+    _mav_put_int8_t(buf, 39, custom0);
+    _mav_put_int8_t(buf, 40, custom1);
+    _mav_put_int8_t(buf, 41, custom2);
+
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_HIGH_LATENCY2_LEN);
+#else
+    mavlink_high_latency2_t packet;
+    packet.timestamp = timestamp;
+    packet.latitude = latitude;
+    packet.longitude = longitude;
+    packet.custom_mode = custom_mode;
+    packet.altitude = altitude;
+    packet.target_altitude = target_altitude;
+    packet.target_distance = target_distance;
+    packet.wp_num = wp_num;
+    packet.failure_flags = failure_flags;
+    packet.type = type;
+    packet.autopilot = autopilot;
+    packet.heading = heading;
+    packet.target_heading = target_heading;
+    packet.throttle = throttle;
+    packet.airspeed = airspeed;
+    packet.airspeed_sp = airspeed_sp;
+    packet.groundspeed = groundspeed;
+    packet.windspeed = windspeed;
+    packet.wind_heading = wind_heading;
+    packet.eph = eph;
+    packet.epv = epv;
+    packet.temperature_air = temperature_air;
+    packet.climb_rate = climb_rate;
+    packet.battery = battery;
+    packet.cust

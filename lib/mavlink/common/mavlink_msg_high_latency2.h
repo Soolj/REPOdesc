@@ -240,4 +240,24 @@ static inline uint16_t mavlink_msg_high_latency2_pack(uint8_t system_id, uint8_t
  * @param airspeed Airspeed (m/s * 5)
  * @param airspeed_sp Airspeed setpoint (m/s * 5)
  * @param groundspeed Groundspeed (m/s * 5)
- * @param windspeed Windspeed (m/s 
+ * @param windspeed Windspeed (m/s * 5)
+ * @param wind_heading Wind heading (deg / 2)
+ * @param eph Maximum error horizontal position since last message (m * 10)
+ * @param epv Maximum error vertical position since last message (m * 10)
+ * @param temperature_air Air temperature (degrees C) from airspeed sensor
+ * @param climb_rate Maximum climb rate magnitude since last message (m/s * 10)
+ * @param battery Battery (percentage, -1 for DNU)
+ * @param wp_num Current waypoint number
+ * @param failure_flags Indicates failures as defined in HL_FAILURE_FLAG ENUM. 
+ * @param custom0 Field for custom payload.
+ * @param custom1 Field for custom payload.
+ * @param custom2 Field for custom payload.
+ * @return length of the message in bytes (excluding serial stream start sign)
+ */
+static inline uint16_t mavlink_msg_high_latency2_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
+                               mavlink_message_t* msg,
+                                   uint32_t timestamp,uint8_t type,uint8_t autopilot,uint16_t custom_mode,int32_t latitude,int32_t longitude,int16_t altitude,int16_t target_altitude,uint8_t heading,uint8_t target_heading,uint16_t target_distance,uint8_t throttle,uint8_t airspeed,uint8_t airspeed_sp,uint8_t groundspeed,uint8_t windspeed,uint8_t wind_heading,uint8_t eph,uint8_t epv,int8_t temperature_air,int8_t climb_rate,int8_t battery,uint16_t wp_num,uint16_t failure_flags,int8_t custom0,int8_t custom1,int8_t custom2)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    char buf[MAVLINK_MSG_ID_HIGH_LATENCY2_LEN];
+    _mav_put_u

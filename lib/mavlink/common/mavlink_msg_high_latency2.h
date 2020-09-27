@@ -208,4 +208,36 @@ static inline uint16_t mavlink_msg_high_latency2_pack(uint8_t system_id, uint8_t
     packet.temperature_air = temperature_air;
     packet.climb_rate = climb_rate;
     packet.battery = battery;
-    packet.cust
+    packet.custom0 = custom0;
+    packet.custom1 = custom1;
+    packet.custom2 = custom2;
+
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_HIGH_LATENCY2_LEN);
+#endif
+
+    msg->msgid = MAVLINK_MSG_ID_HIGH_LATENCY2;
+    return mavlink_finalize_message(msg, system_id, component_id, MAVLINK_MSG_ID_HIGH_LATENCY2_MIN_LEN, MAVLINK_MSG_ID_HIGH_LATENCY2_LEN, MAVLINK_MSG_ID_HIGH_LATENCY2_CRC);
+}
+
+/**
+ * @brief Pack a high_latency2 message on a channel
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param chan The MAVLink channel this message will be sent over
+ * @param msg The MAVLink message to compress the data into
+ * @param timestamp Timestamp (milliseconds since boot or Unix epoch)
+ * @param type Type of the MAV (quadrotor, helicopter, etc., up to 15 types, defined in MAV_TYPE ENUM)
+ * @param autopilot Autopilot type / class. defined in MAV_AUTOPILOT ENUM
+ * @param custom_mode A bitfield for use for autopilot-specific flags (2 byte version).
+ * @param latitude Latitude, expressed as degrees * 1E7
+ * @param longitude Longitude, expressed as degrees * 1E7
+ * @param altitude Altitude above mean sea level
+ * @param target_altitude Altitude setpoint
+ * @param heading Heading (degrees / 2)
+ * @param target_heading Heading setpoint (degrees / 2)
+ * @param target_distance Distance to target waypoint or position (meters / 10)
+ * @param throttle Throttle (percentage)
+ * @param airspeed Airspeed (m/s * 5)
+ * @param airspeed_sp Airspeed setpoint (m/s * 5)
+ * @param groundspeed Groundspeed (m/s * 5)
+ * @param windspeed Windspeed (m/s 

@@ -299,3 +299,41 @@ static inline uint16_t mavlink_msg_high_latency2_pack_chan(uint8_t system_id, ui
     packet.target_altitude = target_altitude;
     packet.target_distance = target_distance;
     packet.wp_num = wp_num;
+    packet.failure_flags = failure_flags;
+    packet.type = type;
+    packet.autopilot = autopilot;
+    packet.heading = heading;
+    packet.target_heading = target_heading;
+    packet.throttle = throttle;
+    packet.airspeed = airspeed;
+    packet.airspeed_sp = airspeed_sp;
+    packet.groundspeed = groundspeed;
+    packet.windspeed = windspeed;
+    packet.wind_heading = wind_heading;
+    packet.eph = eph;
+    packet.epv = epv;
+    packet.temperature_air = temperature_air;
+    packet.climb_rate = climb_rate;
+    packet.battery = battery;
+    packet.custom0 = custom0;
+    packet.custom1 = custom1;
+    packet.custom2 = custom2;
+
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_HIGH_LATENCY2_LEN);
+#endif
+
+    msg->msgid = MAVLINK_MSG_ID_HIGH_LATENCY2;
+    return mavlink_finalize_message_chan(msg, system_id, component_id, chan, MAVLINK_MSG_ID_HIGH_LATENCY2_MIN_LEN, MAVLINK_MSG_ID_HIGH_LATENCY2_LEN, MAVLINK_MSG_ID_HIGH_LATENCY2_CRC);
+}
+
+/**
+ * @brief Encode a high_latency2 struct
+ *
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param msg The MAVLink message to compress the data into
+ * @param high_latency2 C-struct to read the message contents from
+ */
+static inline uint16_t mavlink_msg_high_latency2_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_high_latency2_t* high_latency2)
+{
+    return mavlink_msg_high_latency2_pack(system_id, component_id, msg, high_latency2->timestamp, high_latency2->type, high_latency

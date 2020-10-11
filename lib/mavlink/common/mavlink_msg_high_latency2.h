@@ -350,4 +350,30 @@ static inline uint16_t mavlink_msg_high_latency2_encode(uint8_t system_id, uint8
  */
 static inline uint16_t mavlink_msg_high_latency2_encode_chan(uint8_t system_id, uint8_t component_id, uint8_t chan, mavlink_message_t* msg, const mavlink_high_latency2_t* high_latency2)
 {
-    return mavlink_msg_high_latency2_pack_chan(system_id, component_id, chan, msg, high_latency2->timestamp, high_latency2->type, high_latency2->autopilot, high_latency2->custom_mode, high_latency2->latitude, high_latency2->longitude, high_latency2->altitude, high_latency2->target_altitude, high_latency2->heading, high_latency2->target_heading, high_latency2->target_distance, 
+    return mavlink_msg_high_latency2_pack_chan(system_id, component_id, chan, msg, high_latency2->timestamp, high_latency2->type, high_latency2->autopilot, high_latency2->custom_mode, high_latency2->latitude, high_latency2->longitude, high_latency2->altitude, high_latency2->target_altitude, high_latency2->heading, high_latency2->target_heading, high_latency2->target_distance, high_latency2->throttle, high_latency2->airspeed, high_latency2->airspeed_sp, high_latency2->groundspeed, high_latency2->windspeed, high_latency2->wind_heading, high_latency2->eph, high_latency2->epv, high_latency2->temperature_air, high_latency2->climb_rate, high_latency2->battery, high_latency2->wp_num, high_latency2->failure_flags, high_latency2->custom0, high_latency2->custom1, high_latency2->custom2);
+}
+
+/**
+ * @brief Send a high_latency2 message
+ * @param chan MAVLink channel to send the message
+ *
+ * @param timestamp Timestamp (milliseconds since boot or Unix epoch)
+ * @param type Type of the MAV (quadrotor, helicopter, etc., up to 15 types, defined in MAV_TYPE ENUM)
+ * @param autopilot Autopilot type / class. defined in MAV_AUTOPILOT ENUM
+ * @param custom_mode A bitfield for use for autopilot-specific flags (2 byte version).
+ * @param latitude Latitude, expressed as degrees * 1E7
+ * @param longitude Longitude, expressed as degrees * 1E7
+ * @param altitude Altitude above mean sea level
+ * @param target_altitude Altitude setpoint
+ * @param heading Heading (degrees / 2)
+ * @param target_heading Heading setpoint (degrees / 2)
+ * @param target_distance Distance to target waypoint or position (meters / 10)
+ * @param throttle Throttle (percentage)
+ * @param airspeed Airspeed (m/s * 5)
+ * @param airspeed_sp Airspeed setpoint (m/s * 5)
+ * @param groundspeed Groundspeed (m/s * 5)
+ * @param windspeed Windspeed (m/s * 5)
+ * @param wind_heading Wind heading (deg / 2)
+ * @param eph Maximum error horizontal position since last message (m * 10)
+ * @param epv Maximum error vertical position since last message (m * 10)
+ * @par

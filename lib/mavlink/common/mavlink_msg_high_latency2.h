@@ -438,4 +438,28 @@ static inline void mavlink_msg_high_latency2_send(mavlink_channel_t chan, uint32
     packet.throttle = throttle;
     packet.airspeed = airspeed;
     packet.airspeed_sp = airspeed_sp;
-    pack
+    packet.groundspeed = groundspeed;
+    packet.windspeed = windspeed;
+    packet.wind_heading = wind_heading;
+    packet.eph = eph;
+    packet.epv = epv;
+    packet.temperature_air = temperature_air;
+    packet.climb_rate = climb_rate;
+    packet.battery = battery;
+    packet.custom0 = custom0;
+    packet.custom1 = custom1;
+    packet.custom2 = custom2;
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_HIGH_LATENCY2, (const char *)&packet, MAVLINK_MSG_ID_HIGH_LATENCY2_MIN_LEN, MAVLINK_MSG_ID_HIGH_LATENCY2_LEN, MAVLINK_MSG_ID_HIGH_LATENCY2_CRC);
+#endif
+}
+
+/**
+ * @brief Send a high_latency2 message
+ * @param chan MAVLink channel to send the message
+ * @param struct The MAVLink struct to serialize
+ */
+static inline void mavlink_msg_high_latency2_send_struct(mavlink_channel_t chan, const mavlink_high_latency2_t* high_latency2)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    mavlink_msg_high_latency2_send(chan, high_latency2->timestamp, high_latency2->type, high_latency2->autopilot, high_latency2->custom_mode, high_latency2->latitude, high_latency2->longitude, high_latency2->altitude, high_latency2->target_altitude, high_latency2->heading, high_latency2->target_heading, high_latency2->target_distance, high_latency2->throttle, high_latency2->airspeed, high_latency2->airspeed_sp, high_latency2->groundspeed, high_latency2->windspeed, high_latency2->wind_heading, high_latency2->eph, high_latency2->epv, high_latency2->temperature_air, high_latency2->climb_rate, high_latency2->battery, high_latency2->wp_num, high_latency2->failure_flags, high_latency2->custom0, high_late

@@ -525,4 +525,59 @@ static inline void mavlink_msg_high_latency2_send_buf(mavlink_message_t *msgbuf,
     packet->heading = heading;
     packet->target_heading = target_heading;
     packet->throttle = throttle;
-    pack
+    packet->airspeed = airspeed;
+    packet->airspeed_sp = airspeed_sp;
+    packet->groundspeed = groundspeed;
+    packet->windspeed = windspeed;
+    packet->wind_heading = wind_heading;
+    packet->eph = eph;
+    packet->epv = epv;
+    packet->temperature_air = temperature_air;
+    packet->climb_rate = climb_rate;
+    packet->battery = battery;
+    packet->custom0 = custom0;
+    packet->custom1 = custom1;
+    packet->custom2 = custom2;
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_HIGH_LATENCY2, (const char *)packet, MAVLINK_MSG_ID_HIGH_LATENCY2_MIN_LEN, MAVLINK_MSG_ID_HIGH_LATENCY2_LEN, MAVLINK_MSG_ID_HIGH_LATENCY2_CRC);
+#endif
+}
+#endif
+
+#endif
+
+// MESSAGE HIGH_LATENCY2 UNPACKING
+
+
+/**
+ * @brief Get field timestamp from high_latency2 message
+ *
+ * @return Timestamp (milliseconds since boot or Unix epoch)
+ */
+static inline uint32_t mavlink_msg_high_latency2_get_timestamp(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint32_t(msg,  0);
+}
+
+/**
+ * @brief Get field type from high_latency2 message
+ *
+ * @return Type of the MAV (quadrotor, helicopter, etc., up to 15 types, defined in MAV_TYPE ENUM)
+ */
+static inline uint8_t mavlink_msg_high_latency2_get_type(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  24);
+}
+
+/**
+ * @brief Get field autopilot from high_latency2 message
+ *
+ * @return Autopilot type / class. defined in MAV_AUTOPILOT ENUM
+ */
+static inline uint8_t mavlink_msg_high_latency2_get_autopilot(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  25);
+}
+
+/**
+ * @brief Get field cus

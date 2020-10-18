@@ -485,4 +485,44 @@ static inline void mavlink_msg_high_latency2_send_buf(mavlink_message_t *msgbuf,
     _mav_put_int32_t(buf, 8, longitude);
     _mav_put_uint16_t(buf, 12, custom_mode);
     _mav_put_int16_t(buf, 14, altitude);
-    _mav_put_int16_t(buf, 16, t
+    _mav_put_int16_t(buf, 16, target_altitude);
+    _mav_put_uint16_t(buf, 18, target_distance);
+    _mav_put_uint16_t(buf, 20, wp_num);
+    _mav_put_uint16_t(buf, 22, failure_flags);
+    _mav_put_uint8_t(buf, 24, type);
+    _mav_put_uint8_t(buf, 25, autopilot);
+    _mav_put_uint8_t(buf, 26, heading);
+    _mav_put_uint8_t(buf, 27, target_heading);
+    _mav_put_uint8_t(buf, 28, throttle);
+    _mav_put_uint8_t(buf, 29, airspeed);
+    _mav_put_uint8_t(buf, 30, airspeed_sp);
+    _mav_put_uint8_t(buf, 31, groundspeed);
+    _mav_put_uint8_t(buf, 32, windspeed);
+    _mav_put_uint8_t(buf, 33, wind_heading);
+    _mav_put_uint8_t(buf, 34, eph);
+    _mav_put_uint8_t(buf, 35, epv);
+    _mav_put_int8_t(buf, 36, temperature_air);
+    _mav_put_int8_t(buf, 37, climb_rate);
+    _mav_put_int8_t(buf, 38, battery);
+    _mav_put_int8_t(buf, 39, custom0);
+    _mav_put_int8_t(buf, 40, custom1);
+    _mav_put_int8_t(buf, 41, custom2);
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_HIGH_LATENCY2, buf, MAVLINK_MSG_ID_HIGH_LATENCY2_MIN_LEN, MAVLINK_MSG_ID_HIGH_LATENCY2_LEN, MAVLINK_MSG_ID_HIGH_LATENCY2_CRC);
+#else
+    mavlink_high_latency2_t *packet = (mavlink_high_latency2_t *)msgbuf;
+    packet->timestamp = timestamp;
+    packet->latitude = latitude;
+    packet->longitude = longitude;
+    packet->custom_mode = custom_mode;
+    packet->altitude = altitude;
+    packet->target_altitude = target_altitude;
+    packet->target_distance = target_distance;
+    packet->wp_num = wp_num;
+    packet->failure_flags = failure_flags;
+    packet->type = type;
+    packet->autopilot = autopilot;
+    packet->heading = heading;
+    packet->target_heading = target_heading;
+    packet->throttle = throttle;
+    pack

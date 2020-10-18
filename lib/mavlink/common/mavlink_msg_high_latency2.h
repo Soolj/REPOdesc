@@ -580,4 +580,66 @@ static inline uint8_t mavlink_msg_high_latency2_get_autopilot(const mavlink_mess
 }
 
 /**
- * @brief Get field cus
+ * @brief Get field custom_mode from high_latency2 message
+ *
+ * @return A bitfield for use for autopilot-specific flags (2 byte version).
+ */
+static inline uint16_t mavlink_msg_high_latency2_get_custom_mode(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint16_t(msg,  12);
+}
+
+/**
+ * @brief Get field latitude from high_latency2 message
+ *
+ * @return Latitude, expressed as degrees * 1E7
+ */
+static inline int32_t mavlink_msg_high_latency2_get_latitude(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int32_t(msg,  4);
+}
+
+/**
+ * @brief Get field longitude from high_latency2 message
+ *
+ * @return Longitude, expressed as degrees * 1E7
+ */
+static inline int32_t mavlink_msg_high_latency2_get_longitude(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int32_t(msg,  8);
+}
+
+/**
+ * @brief Get field altitude from high_latency2 message
+ *
+ * @return Altitude above mean sea level
+ */
+static inline int16_t mavlink_msg_high_latency2_get_altitude(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int16_t(msg,  14);
+}
+
+/**
+ * @brief Get field target_altitude from high_latency2 message
+ *
+ * @return Altitude setpoint
+ */
+static inline int16_t mavlink_msg_high_latency2_get_target_altitude(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int16_t(msg,  16);
+}
+
+/**
+ * @brief Get field heading from high_latency2 message
+ *
+ * @return Heading (degrees / 2)
+ */
+static inline uint8_t mavlink_msg_high_latency2_get_heading(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  26);
+}
+
+/**
+ * @brief Get field target_heading from high_latency2 message
+ *
+ * @return Heading setpoint

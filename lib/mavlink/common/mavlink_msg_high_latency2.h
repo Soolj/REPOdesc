@@ -764,4 +764,65 @@ static inline int8_t mavlink_msg_high_latency2_get_climb_rate(const mavlink_mess
  *
  * @return Battery (percentage, -1 for DNU)
  */
-static inline in
+static inline int8_t mavlink_msg_high_latency2_get_battery(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int8_t(msg,  38);
+}
+
+/**
+ * @brief Get field wp_num from high_latency2 message
+ *
+ * @return Current waypoint number
+ */
+static inline uint16_t mavlink_msg_high_latency2_get_wp_num(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint16_t(msg,  20);
+}
+
+/**
+ * @brief Get field failure_flags from high_latency2 message
+ *
+ * @return Indicates failures as defined in HL_FAILURE_FLAG ENUM. 
+ */
+static inline uint16_t mavlink_msg_high_latency2_get_failure_flags(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint16_t(msg,  22);
+}
+
+/**
+ * @brief Get field custom0 from high_latency2 message
+ *
+ * @return Field for custom payload.
+ */
+static inline int8_t mavlink_msg_high_latency2_get_custom0(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int8_t(msg,  39);
+}
+
+/**
+ * @brief Get field custom1 from high_latency2 message
+ *
+ * @return Field for custom payload.
+ */
+static inline int8_t mavlink_msg_high_latency2_get_custom1(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int8_t(msg,  40);
+}
+
+/**
+ * @brief Get field custom2 from high_latency2 message
+ *
+ * @return Field for custom payload.
+ */
+static inline int8_t mavlink_msg_high_latency2_get_custom2(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int8_t(msg,  41);
+}
+
+/**
+ * @brief Decode a high_latency2 message into a struct
+ *
+ * @param msg The message to decode
+ * @param high_latency2 C-struct to decode the message contents into
+ */
+static inline void mavlink_msg_high_latency2_decode(const mavlink_message_t* m

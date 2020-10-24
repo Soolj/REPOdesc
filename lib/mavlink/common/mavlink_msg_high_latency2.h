@@ -704,4 +704,64 @@ static inline uint8_t mavlink_msg_high_latency2_get_groundspeed(const mavlink_me
  *
  * @return Windspeed (m/s * 5)
  */
-static inline uint8_t mavlink_msg_high_latency2
+static inline uint8_t mavlink_msg_high_latency2_get_windspeed(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  32);
+}
+
+/**
+ * @brief Get field wind_heading from high_latency2 message
+ *
+ * @return Wind heading (deg / 2)
+ */
+static inline uint8_t mavlink_msg_high_latency2_get_wind_heading(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  33);
+}
+
+/**
+ * @brief Get field eph from high_latency2 message
+ *
+ * @return Maximum error horizontal position since last message (m * 10)
+ */
+static inline uint8_t mavlink_msg_high_latency2_get_eph(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  34);
+}
+
+/**
+ * @brief Get field epv from high_latency2 message
+ *
+ * @return Maximum error vertical position since last message (m * 10)
+ */
+static inline uint8_t mavlink_msg_high_latency2_get_epv(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  35);
+}
+
+/**
+ * @brief Get field temperature_air from high_latency2 message
+ *
+ * @return Air temperature (degrees C) from airspeed sensor
+ */
+static inline int8_t mavlink_msg_high_latency2_get_temperature_air(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int8_t(msg,  36);
+}
+
+/**
+ * @brief Get field climb_rate from high_latency2 message
+ *
+ * @return Maximum climb rate magnitude since last message (m/s * 10)
+ */
+static inline int8_t mavlink_msg_high_latency2_get_climb_rate(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int8_t(msg,  37);
+}
+
+/**
+ * @brief Get field battery from high_latency2 message
+ *
+ * @return Battery (percentage, -1 for DNU)
+ */
+static inline in

@@ -642,4 +642,66 @@ static inline uint8_t mavlink_msg_high_latency2_get_heading(const mavlink_messag
 /**
  * @brief Get field target_heading from high_latency2 message
  *
- * @return Heading setpoint
+ * @return Heading setpoint (degrees / 2)
+ */
+static inline uint8_t mavlink_msg_high_latency2_get_target_heading(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  27);
+}
+
+/**
+ * @brief Get field target_distance from high_latency2 message
+ *
+ * @return Distance to target waypoint or position (meters / 10)
+ */
+static inline uint16_t mavlink_msg_high_latency2_get_target_distance(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint16_t(msg,  18);
+}
+
+/**
+ * @brief Get field throttle from high_latency2 message
+ *
+ * @return Throttle (percentage)
+ */
+static inline uint8_t mavlink_msg_high_latency2_get_throttle(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  28);
+}
+
+/**
+ * @brief Get field airspeed from high_latency2 message
+ *
+ * @return Airspeed (m/s * 5)
+ */
+static inline uint8_t mavlink_msg_high_latency2_get_airspeed(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  29);
+}
+
+/**
+ * @brief Get field airspeed_sp from high_latency2 message
+ *
+ * @return Airspeed setpoint (m/s * 5)
+ */
+static inline uint8_t mavlink_msg_high_latency2_get_airspeed_sp(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  30);
+}
+
+/**
+ * @brief Get field groundspeed from high_latency2 message
+ *
+ * @return Groundspeed (m/s * 5)
+ */
+static inline uint8_t mavlink_msg_high_latency2_get_groundspeed(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  31);
+}
+
+/**
+ * @brief Get field windspeed from high_latency2 message
+ *
+ * @return Windspeed (m/s * 5)
+ */
+static inline uint8_t mavlink_msg_high_latency2

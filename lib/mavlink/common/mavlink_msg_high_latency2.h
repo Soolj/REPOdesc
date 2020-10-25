@@ -825,4 +825,26 @@ static inline int8_t mavlink_msg_high_latency2_get_custom2(const mavlink_message
  * @param msg The message to decode
  * @param high_latency2 C-struct to decode the message contents into
  */
-static inline void mavlink_msg_high_latency2_decode(const mavlink_message_t* m
+static inline void mavlink_msg_high_latency2_decode(const mavlink_message_t* msg, mavlink_high_latency2_t* high_latency2)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    high_latency2->timestamp = mavlink_msg_high_latency2_get_timestamp(msg);
+    high_latency2->latitude = mavlink_msg_high_latency2_get_latitude(msg);
+    high_latency2->longitude = mavlink_msg_high_latency2_get_longitude(msg);
+    high_latency2->custom_mode = mavlink_msg_high_latency2_get_custom_mode(msg);
+    high_latency2->altitude = mavlink_msg_high_latency2_get_altitude(msg);
+    high_latency2->target_altitude = mavlink_msg_high_latency2_get_target_altitude(msg);
+    high_latency2->target_distance = mavlink_msg_high_latency2_get_target_distance(msg);
+    high_latency2->wp_num = mavlink_msg_high_latency2_get_wp_num(msg);
+    high_latency2->failure_flags = mavlink_msg_high_latency2_get_failure_flags(msg);
+    high_latency2->type = mavlink_msg_high_latency2_get_type(msg);
+    high_latency2->autopilot = mavlink_msg_high_latency2_get_autopilot(msg);
+    high_latency2->heading = mavlink_msg_high_latency2_get_heading(msg);
+    high_latency2->target_heading = mavlink_msg_high_latency2_get_target_heading(msg);
+    high_latency2->throttle = mavlink_msg_high_latency2_get_throttle(msg);
+    high_latency2->airspeed = mavlink_msg_high_latency2_get_airspeed(msg);
+    high_latency2->airspeed_sp = mavlink_msg_high_latency2_get_airspeed_sp(msg);
+    high_latency2->groundspeed = mavlink_msg_high_latency2_get_groundspeed(msg);
+    high_latency2->windspeed = mavlink_msg_high_latency2_get_windspeed(msg);
+    high_latency2->wind_heading = mavlink_msg_high_latency2_get_wind_heading(msg);
+    high_latency2->eph = mavli

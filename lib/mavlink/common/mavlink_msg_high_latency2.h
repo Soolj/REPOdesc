@@ -847,4 +847,17 @@ static inline void mavlink_msg_high_latency2_decode(const mavlink_message_t* msg
     high_latency2->groundspeed = mavlink_msg_high_latency2_get_groundspeed(msg);
     high_latency2->windspeed = mavlink_msg_high_latency2_get_windspeed(msg);
     high_latency2->wind_heading = mavlink_msg_high_latency2_get_wind_heading(msg);
-    high_latency2->eph = mavli
+    high_latency2->eph = mavlink_msg_high_latency2_get_eph(msg);
+    high_latency2->epv = mavlink_msg_high_latency2_get_epv(msg);
+    high_latency2->temperature_air = mavlink_msg_high_latency2_get_temperature_air(msg);
+    high_latency2->climb_rate = mavlink_msg_high_latency2_get_climb_rate(msg);
+    high_latency2->battery = mavlink_msg_high_latency2_get_battery(msg);
+    high_latency2->custom0 = mavlink_msg_high_latency2_get_custom0(msg);
+    high_latency2->custom1 = mavlink_msg_high_latency2_get_custom1(msg);
+    high_latency2->custom2 = mavlink_msg_high_latency2_get_custom2(msg);
+#else
+        uint8_t len = msg->len < MAVLINK_MSG_ID_HIGH_LATENCY2_LEN? msg->len : MAVLINK_MSG_ID_HIGH_LATENCY2_LEN;
+        memset(high_latency2, 0, MAVLINK_MSG_ID_HIGH_LATENCY2_LEN);
+    memcpy(high_latency2, _MAV_PAYLOAD(msg), len);
+#endif
+}

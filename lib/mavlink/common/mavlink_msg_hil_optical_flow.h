@@ -422,3 +422,68 @@ static inline float mavlink_msg_hil_optical_flow_get_integrated_zgyro(const mavl
 
 /**
  * @brief Get field temperature from hil_optical_flow message
+ *
+ * @return Temperature * 100 in centi-degrees Celsius
+ */
+static inline int16_t mavlink_msg_hil_optical_flow_get_temperature(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int16_t(msg,  40);
+}
+
+/**
+ * @brief Get field quality from hil_optical_flow message
+ *
+ * @return Optical flow quality / confidence. 0: no valid flow, 255: maximum quality
+ */
+static inline uint8_t mavlink_msg_hil_optical_flow_get_quality(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  43);
+}
+
+/**
+ * @brief Get field time_delta_distance_us from hil_optical_flow message
+ *
+ * @return Time in microseconds since the distance was sampled.
+ */
+static inline uint32_t mavlink_msg_hil_optical_flow_get_time_delta_distance_us(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint32_t(msg,  32);
+}
+
+/**
+ * @brief Get field distance from hil_optical_flow message
+ *
+ * @return Distance to the center of the flow field in meters. Positive value (including zero): distance known. Negative value: Unknown distance.
+ */
+static inline float mavlink_msg_hil_optical_flow_get_distance(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  36);
+}
+
+/**
+ * @brief Decode a hil_optical_flow message into a struct
+ *
+ * @param msg The message to decode
+ * @param hil_optical_flow C-struct to decode the message contents into
+ */
+static inline void mavlink_msg_hil_optical_flow_decode(const mavlink_message_t* msg, mavlink_hil_optical_flow_t* hil_optical_flow)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    hil_optical_flow->time_usec = mavlink_msg_hil_optical_flow_get_time_usec(msg);
+    hil_optical_flow->integration_time_us = mavlink_msg_hil_optical_flow_get_integration_time_us(msg);
+    hil_optical_flow->integrated_x = mavlink_msg_hil_optical_flow_get_integrated_x(msg);
+    hil_optical_flow->integrated_y = mavlink_msg_hil_optical_flow_get_integrated_y(msg);
+    hil_optical_flow->integrated_xgyro = mavlink_msg_hil_optical_flow_get_integrated_xgyro(msg);
+    hil_optical_flow->integrated_ygyro = mavlink_msg_hil_optical_flow_get_integrated_ygyro(msg);
+    hil_optical_flow->integrated_zgyro = mavlink_msg_hil_optical_flow_get_integrated_zgyro(msg);
+    hil_optical_flow->time_delta_distance_us = mavlink_msg_hil_optical_flow_get_time_delta_distance_us(msg);
+    hil_optical_flow->distance = mavlink_msg_hil_optical_flow_get_distance(msg);
+    hil_optical_flow->temperature = mavlink_msg_hil_optical_flow_get_temperature(msg);
+    hil_optical_flow->sensor_id = mavlink_msg_hil_optical_flow_get_sensor_id(msg);
+    hil_optical_flow->quality = mavlink_msg_hil_optical_flow_get_quality(msg);
+#else
+        uint8_t len = msg->len < MAVLINK_MSG_ID_HIL_OPTICAL_FLOW_LEN? msg->len : MAVLINK_MSG_ID_HIL_OPTICAL_FLOW_LEN;
+        memset(hil_optical_flow, 0, MAVLINK_MSG_ID_HIL_OPTICAL_FLOW_LEN);
+    memcpy(hil_optical_flow, _MAV_PAYLOAD(msg), len);
+#endif
+}

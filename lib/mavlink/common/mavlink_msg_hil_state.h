@@ -126,4 +126,46 @@ static inline uint16_t mavlink_msg_hil_state_pack(uint8_t system_id, uint8_t com
     _mav_put_int16_t(buf, 52, yacc);
     _mav_put_int16_t(buf, 54, zacc);
 
-        memcpy(_MAV_PAYLOAD_NON_CONST(ms
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_HIL_STATE_LEN);
+#else
+    mavlink_hil_state_t packet;
+    packet.time_usec = time_usec;
+    packet.roll = roll;
+    packet.pitch = pitch;
+    packet.yaw = yaw;
+    packet.rollspeed = rollspeed;
+    packet.pitchspeed = pitchspeed;
+    packet.yawspeed = yawspeed;
+    packet.lat = lat;
+    packet.lon = lon;
+    packet.alt = alt;
+    packet.vx = vx;
+    packet.vy = vy;
+    packet.vz = vz;
+    packet.xacc = xacc;
+    packet.yacc = yacc;
+    packet.zacc = zacc;
+
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_HIL_STATE_LEN);
+#endif
+
+    msg->msgid = MAVLINK_MSG_ID_HIL_STATE;
+    return mavlink_finalize_message(msg, system_id, component_id, MAVLINK_MSG_ID_HIL_STATE_MIN_LEN, MAVLINK_MSG_ID_HIL_STATE_LEN, MAVLINK_MSG_ID_HIL_STATE_CRC);
+}
+
+/**
+ * @brief Pack a hil_state message on a channel
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param chan The MAVLink channel this message will be sent over
+ * @param msg The MAVLink message to compress the data into
+ * @param time_usec Timestamp (microseconds since UNIX epoch or microseconds since system boot)
+ * @param roll Roll angle (rad)
+ * @param pitch Pitch angle (rad)
+ * @param yaw Yaw angle (rad)
+ * @param rollspeed Body frame roll / phi angular speed (rad/s)
+ * @param pitchspeed Body frame pitch / theta angular speed (rad/s)
+ * @param yawspeed Body frame yaw / psi angular speed (rad/s)
+ * @param lat Latitude, expressed as degrees * 1E7
+ * @param lon Longitude, expressed as degrees * 1E7
+ * @param alt Altitude in meters, expressed as *

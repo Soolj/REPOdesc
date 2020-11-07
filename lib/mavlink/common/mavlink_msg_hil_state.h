@@ -370,4 +370,71 @@ static inline void mavlink_msg_hil_state_send_buf(mavlink_message_t *msgbuf, mav
     mavlink_hil_state_t *packet = (mavlink_hil_state_t *)msgbuf;
     packet->time_usec = time_usec;
     packet->roll = roll;
-    packet->pitch = pit
+    packet->pitch = pitch;
+    packet->yaw = yaw;
+    packet->rollspeed = rollspeed;
+    packet->pitchspeed = pitchspeed;
+    packet->yawspeed = yawspeed;
+    packet->lat = lat;
+    packet->lon = lon;
+    packet->alt = alt;
+    packet->vx = vx;
+    packet->vy = vy;
+    packet->vz = vz;
+    packet->xacc = xacc;
+    packet->yacc = yacc;
+    packet->zacc = zacc;
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_HIL_STATE, (const char *)packet, MAVLINK_MSG_ID_HIL_STATE_MIN_LEN, MAVLINK_MSG_ID_HIL_STATE_LEN, MAVLINK_MSG_ID_HIL_STATE_CRC);
+#endif
+}
+#endif
+
+#endif
+
+// MESSAGE HIL_STATE UNPACKING
+
+
+/**
+ * @brief Get field time_usec from hil_state message
+ *
+ * @return Timestamp (microseconds since UNIX epoch or microseconds since system boot)
+ */
+static inline uint64_t mavlink_msg_hil_state_get_time_usec(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint64_t(msg,  0);
+}
+
+/**
+ * @brief Get field roll from hil_state message
+ *
+ * @return Roll angle (rad)
+ */
+static inline float mavlink_msg_hil_state_get_roll(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  8);
+}
+
+/**
+ * @brief Get field pitch from hil_state message
+ *
+ * @return Pitch angle (rad)
+ */
+static inline float mavlink_msg_hil_state_get_pitch(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  12);
+}
+
+/**
+ * @brief Get field yaw from hil_state message
+ *
+ * @return Yaw angle (rad)
+ */
+static inline float mavlink_msg_hil_state_get_yaw(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  16);
+}
+
+/**
+ * @brief Get field rollspeed from hil_state message
+ 

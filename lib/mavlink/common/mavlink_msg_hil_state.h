@@ -437,4 +437,67 @@ static inline float mavlink_msg_hil_state_get_yaw(const mavlink_message_t* msg)
 
 /**
  * @brief Get field rollspeed from hil_state message
- 
+ *
+ * @return Body frame roll / phi angular speed (rad/s)
+ */
+static inline float mavlink_msg_hil_state_get_rollspeed(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  20);
+}
+
+/**
+ * @brief Get field pitchspeed from hil_state message
+ *
+ * @return Body frame pitch / theta angular speed (rad/s)
+ */
+static inline float mavlink_msg_hil_state_get_pitchspeed(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  24);
+}
+
+/**
+ * @brief Get field yawspeed from hil_state message
+ *
+ * @return Body frame yaw / psi angular speed (rad/s)
+ */
+static inline float mavlink_msg_hil_state_get_yawspeed(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  28);
+}
+
+/**
+ * @brief Get field lat from hil_state message
+ *
+ * @return Latitude, expressed as degrees * 1E7
+ */
+static inline int32_t mavlink_msg_hil_state_get_lat(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int32_t(msg,  32);
+}
+
+/**
+ * @brief Get field lon from hil_state message
+ *
+ * @return Longitude, expressed as degrees * 1E7
+ */
+static inline int32_t mavlink_msg_hil_state_get_lon(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int32_t(msg,  36);
+}
+
+/**
+ * @brief Get field alt from hil_state message
+ *
+ * @return Altitude in meters, expressed as * 1000 (millimeters)
+ */
+static inline int32_t mavlink_msg_hil_state_get_alt(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int32_t(msg,  40);
+}
+
+/**
+ * @brief Get field vx from hil_state message
+ *
+ * @return Ground X Speed (Latitude), expressed as m/s * 100
+ */
+static inline int16_t mavlink_msg_hil_state_get_vx(const mavlink_message_t* ms

@@ -500,4 +500,68 @@ static inline int32_t mavlink_msg_hil_state_get_alt(const mavlink_message_t* msg
  *
  * @return Ground X Speed (Latitude), expressed as m/s * 100
  */
-static inline int16_t mavlink_msg_hil_state_get_vx(const mavlink_message_t* ms
+static inline int16_t mavlink_msg_hil_state_get_vx(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int16_t(msg,  44);
+}
+
+/**
+ * @brief Get field vy from hil_state message
+ *
+ * @return Ground Y Speed (Longitude), expressed as m/s * 100
+ */
+static inline int16_t mavlink_msg_hil_state_get_vy(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int16_t(msg,  46);
+}
+
+/**
+ * @brief Get field vz from hil_state message
+ *
+ * @return Ground Z Speed (Altitude), expressed as m/s * 100
+ */
+static inline int16_t mavlink_msg_hil_state_get_vz(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int16_t(msg,  48);
+}
+
+/**
+ * @brief Get field xacc from hil_state message
+ *
+ * @return X acceleration (mg)
+ */
+static inline int16_t mavlink_msg_hil_state_get_xacc(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int16_t(msg,  50);
+}
+
+/**
+ * @brief Get field yacc from hil_state message
+ *
+ * @return Y acceleration (mg)
+ */
+static inline int16_t mavlink_msg_hil_state_get_yacc(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int16_t(msg,  52);
+}
+
+/**
+ * @brief Get field zacc from hil_state message
+ *
+ * @return Z acceleration (mg)
+ */
+static inline int16_t mavlink_msg_hil_state_get_zacc(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int16_t(msg,  54);
+}
+
+/**
+ * @brief Decode a hil_state message into a struct
+ *
+ * @param msg The message to decode
+ * @param hil_state C-struct to decode the message contents into
+ */
+static inline void mavlink_msg_hil_state_decode(const mavlink_message_t* msg, mavlink_hil_state_t* hil_state)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    hil_

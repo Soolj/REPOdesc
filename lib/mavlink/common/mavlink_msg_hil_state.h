@@ -564,4 +564,25 @@ static inline int16_t mavlink_msg_hil_state_get_zacc(const mavlink_message_t* ms
 static inline void mavlink_msg_hil_state_decode(const mavlink_message_t* msg, mavlink_hil_state_t* hil_state)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    hil_
+    hil_state->time_usec = mavlink_msg_hil_state_get_time_usec(msg);
+    hil_state->roll = mavlink_msg_hil_state_get_roll(msg);
+    hil_state->pitch = mavlink_msg_hil_state_get_pitch(msg);
+    hil_state->yaw = mavlink_msg_hil_state_get_yaw(msg);
+    hil_state->rollspeed = mavlink_msg_hil_state_get_rollspeed(msg);
+    hil_state->pitchspeed = mavlink_msg_hil_state_get_pitchspeed(msg);
+    hil_state->yawspeed = mavlink_msg_hil_state_get_yawspeed(msg);
+    hil_state->lat = mavlink_msg_hil_state_get_lat(msg);
+    hil_state->lon = mavlink_msg_hil_state_get_lon(msg);
+    hil_state->alt = mavlink_msg_hil_state_get_alt(msg);
+    hil_state->vx = mavlink_msg_hil_state_get_vx(msg);
+    hil_state->vy = mavlink_msg_hil_state_get_vy(msg);
+    hil_state->vz = mavlink_msg_hil_state_get_vz(msg);
+    hil_state->xacc = mavlink_msg_hil_state_get_xacc(msg);
+    hil_state->yacc = mavlink_msg_hil_state_get_yacc(msg);
+    hil_state->zacc = mavlink_msg_hil_state_get_zacc(msg);
+#else
+        uint8_t len = msg->len < MAVLINK_MSG_ID_HIL_STATE_LEN? msg->len : MAVLINK_MSG_ID_HIL_STATE_LEN;
+        memset(hil_state, 0, MAVLINK_MSG_ID_HIL_STATE_LEN);
+    memcpy(hil_state, _MAV_PAYLOAD(msg), len);
+#endif
+}

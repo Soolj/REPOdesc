@@ -73,4 +73,32 @@ typedef struct __mavlink_hil_state_quaternion_t {
          { "vz", NULL, MAVLINK_TYPE_INT16_T, 0, 52, offsetof(mavlink_hil_state_quaternion_t, vz) }, \
          { "ind_airspeed", NULL, MAVLINK_TYPE_UINT16_T, 0, 54, offsetof(mavlink_hil_state_quaternion_t, ind_airspeed) }, \
          { "true_airspeed", NULL, MAVLINK_TYPE_UINT16_T, 0, 56, offsetof(mavlink_hil_state_quaternion_t, true_airspeed) }, \
-         { "xacc", NULL,
+         { "xacc", NULL, MAVLINK_TYPE_INT16_T, 0, 58, offsetof(mavlink_hil_state_quaternion_t, xacc) }, \
+         { "yacc", NULL, MAVLINK_TYPE_INT16_T, 0, 60, offsetof(mavlink_hil_state_quaternion_t, yacc) }, \
+         { "zacc", NULL, MAVLINK_TYPE_INT16_T, 0, 62, offsetof(mavlink_hil_state_quaternion_t, zacc) }, \
+         } \
+}
+#endif
+
+/**
+ * @brief Pack a hil_state_quaternion message
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param msg The MAVLink message to compress the data into
+ *
+ * @param time_usec Timestamp (microseconds since UNIX epoch or microseconds since system boot)
+ * @param attitude_quaternion Vehicle attitude expressed as normalized quaternion in w, x, y, z order (with 1 0 0 0 being the null-rotation)
+ * @param rollspeed Body frame roll / phi angular speed (rad/s)
+ * @param pitchspeed Body frame pitch / theta angular speed (rad/s)
+ * @param yawspeed Body frame yaw / psi angular speed (rad/s)
+ * @param lat Latitude, expressed as degrees * 1E7
+ * @param lon Longitude, expressed as degrees * 1E7
+ * @param alt Altitude in meters, expressed as * 1000 (millimeters)
+ * @param vx Ground X Speed (Latitude), expressed as cm/s
+ * @param vy Ground Y Speed (Longitude), expressed as cm/s
+ * @param vz Ground Z Speed (Altitude), expressed as cm/s
+ * @param ind_airspeed Indicated airspeed, expressed as cm/s
+ * @param true_airspeed True airspeed, expressed as cm/s
+ * @param xacc X acceleration (mg)
+ * @param yacc Y acceleration (mg)
+ * @param zacc Z acceleration (

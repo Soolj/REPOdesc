@@ -131,4 +131,37 @@ static inline uint16_t mavlink_msg_hil_state_quaternion_pack(uint8_t system_id, 
     packet.time_usec = time_usec;
     packet.rollspeed = rollspeed;
     packet.pitchspeed = pitchspeed;
- 
+    packet.yawspeed = yawspeed;
+    packet.lat = lat;
+    packet.lon = lon;
+    packet.alt = alt;
+    packet.vx = vx;
+    packet.vy = vy;
+    packet.vz = vz;
+    packet.ind_airspeed = ind_airspeed;
+    packet.true_airspeed = true_airspeed;
+    packet.xacc = xacc;
+    packet.yacc = yacc;
+    packet.zacc = zacc;
+    mav_array_memcpy(packet.attitude_quaternion, attitude_quaternion, sizeof(float)*4);
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_HIL_STATE_QUATERNION_LEN);
+#endif
+
+    msg->msgid = MAVLINK_MSG_ID_HIL_STATE_QUATERNION;
+    return mavlink_finalize_message(msg, system_id, component_id, MAVLINK_MSG_ID_HIL_STATE_QUATERNION_MIN_LEN, MAVLINK_MSG_ID_HIL_STATE_QUATERNION_LEN, MAVLINK_MSG_ID_HIL_STATE_QUATERNION_CRC);
+}
+
+/**
+ * @brief Pack a hil_state_quaternion message on a channel
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param chan The MAVLink channel this message will be sent over
+ * @param msg The MAVLink message to compress the data into
+ * @param time_usec Timestamp (microseconds since UNIX epoch or microseconds since system boot)
+ * @param attitude_quaternion Vehicle attitude expressed as normalized quaternion in w, x, y, z order (with 1 0 0 0 being the null-rotation)
+ * @param rollspeed Body frame roll / phi angular speed (rad/s)
+ * @param pitchspeed Body frame pitch / theta angular speed (rad/s)
+ * @param yawspeed Body frame yaw / psi angular speed (rad/s)
+ * @param lat Latitude, expressed as degrees * 1E7
+ * @param lon Longitude, expressed as degrees * 1E7
+ * @param alt Altitude in 

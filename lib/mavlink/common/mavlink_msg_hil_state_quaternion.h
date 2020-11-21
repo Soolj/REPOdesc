@@ -164,4 +164,33 @@ static inline uint16_t mavlink_msg_hil_state_quaternion_pack(uint8_t system_id, 
  * @param yawspeed Body frame yaw / psi angular speed (rad/s)
  * @param lat Latitude, expressed as degrees * 1E7
  * @param lon Longitude, expressed as degrees * 1E7
- * @param alt Altitude in 
+ * @param alt Altitude in meters, expressed as * 1000 (millimeters)
+ * @param vx Ground X Speed (Latitude), expressed as cm/s
+ * @param vy Ground Y Speed (Longitude), expressed as cm/s
+ * @param vz Ground Z Speed (Altitude), expressed as cm/s
+ * @param ind_airspeed Indicated airspeed, expressed as cm/s
+ * @param true_airspeed True airspeed, expressed as cm/s
+ * @param xacc X acceleration (mg)
+ * @param yacc Y acceleration (mg)
+ * @param zacc Z acceleration (mg)
+ * @return length of the message in bytes (excluding serial stream start sign)
+ */
+static inline uint16_t mavlink_msg_hil_state_quaternion_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
+                               mavlink_message_t* msg,
+                                   uint64_t time_usec,const float *attitude_quaternion,float rollspeed,float pitchspeed,float yawspeed,int32_t lat,int32_t lon,int32_t alt,int16_t vx,int16_t vy,int16_t vz,uint16_t ind_airspeed,uint16_t true_airspeed,int16_t xacc,int16_t yacc,int16_t zacc)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    char buf[MAVLINK_MSG_ID_HIL_STATE_QUATERNION_LEN];
+    _mav_put_uint64_t(buf, 0, time_usec);
+    _mav_put_float(buf, 24, rollspeed);
+    _mav_put_float(buf, 28, pitchspeed);
+    _mav_put_float(buf, 32, yawspeed);
+    _mav_put_int32_t(buf, 36, lat);
+    _mav_put_int32_t(buf, 40, lon);
+    _mav_put_int32_t(buf, 44, alt);
+    _mav_put_int16_t(buf, 48, vx);
+    _mav_put_int16_t(buf, 50, vy);
+    _mav_put_int16_t(buf, 52, vz);
+    _mav_put_uint16_t(buf, 54, ind_airspeed);
+    _mav_put_uint16_t(buf, 56, true_airspeed);
+    _mav_put_int16_t(buf, 58, xa

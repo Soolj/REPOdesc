@@ -193,4 +193,42 @@ static inline uint16_t mavlink_msg_hil_state_quaternion_pack_chan(uint8_t system
     _mav_put_int16_t(buf, 52, vz);
     _mav_put_uint16_t(buf, 54, ind_airspeed);
     _mav_put_uint16_t(buf, 56, true_airspeed);
-    _mav_put_int16_t(buf, 58, xa
+    _mav_put_int16_t(buf, 58, xacc);
+    _mav_put_int16_t(buf, 60, yacc);
+    _mav_put_int16_t(buf, 62, zacc);
+    _mav_put_float_array(buf, 8, attitude_quaternion, 4);
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_HIL_STATE_QUATERNION_LEN);
+#else
+    mavlink_hil_state_quaternion_t packet;
+    packet.time_usec = time_usec;
+    packet.rollspeed = rollspeed;
+    packet.pitchspeed = pitchspeed;
+    packet.yawspeed = yawspeed;
+    packet.lat = lat;
+    packet.lon = lon;
+    packet.alt = alt;
+    packet.vx = vx;
+    packet.vy = vy;
+    packet.vz = vz;
+    packet.ind_airspeed = ind_airspeed;
+    packet.true_airspeed = true_airspeed;
+    packet.xacc = xacc;
+    packet.yacc = yacc;
+    packet.zacc = zacc;
+    mav_array_memcpy(packet.attitude_quaternion, attitude_quaternion, sizeof(float)*4);
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_HIL_STATE_QUATERNION_LEN);
+#endif
+
+    msg->msgid = MAVLINK_MSG_ID_HIL_STATE_QUATERNION;
+    return mavlink_finalize_message_chan(msg, system_id, component_id, chan, MAVLINK_MSG_ID_HIL_STATE_QUATERNION_MIN_LEN, MAVLINK_MSG_ID_HIL_STATE_QUATERNION_LEN, MAVLINK_MSG_ID_HIL_STATE_QUATERNION_CRC);
+}
+
+/**
+ * @brief Encode a hil_state_quaternion struct
+ *
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param msg The MAVLink message to compress the data into
+ * @param hil_state_quaternion C-struct to read the message contents from
+ */
+static inline uint16_t mavlink_msg_hil_state_quaternion_encode(uint8_t system_id, uint8_t component

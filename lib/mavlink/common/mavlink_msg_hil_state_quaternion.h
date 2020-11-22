@@ -231,4 +231,20 @@ static inline uint16_t mavlink_msg_hil_state_quaternion_pack_chan(uint8_t system
  * @param msg The MAVLink message to compress the data into
  * @param hil_state_quaternion C-struct to read the message contents from
  */
-static inline uint16_t mavlink_msg_hil_state_quaternion_encode(uint8_t system_id, uint8_t component
+static inline uint16_t mavlink_msg_hil_state_quaternion_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_hil_state_quaternion_t* hil_state_quaternion)
+{
+    return mavlink_msg_hil_state_quaternion_pack(system_id, component_id, msg, hil_state_quaternion->time_usec, hil_state_quaternion->attitude_quaternion, hil_state_quaternion->rollspeed, hil_state_quaternion->pitchspeed, hil_state_quaternion->yawspeed, hil_state_quaternion->lat, hil_state_quaternion->lon, hil_state_quaternion->alt, hil_state_quaternion->vx, hil_state_quaternion->vy, hil_state_quaternion->vz, hil_state_quaternion->ind_airspeed, hil_state_quaternion->true_airspeed, hil_state_quaternion->xacc, hil_state_quaternion->yacc, hil_state_quaternion->zacc);
+}
+
+/**
+ * @brief Encode a hil_state_quaternion struct on a channel
+ *
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param chan The MAVLink channel this message will be sent over
+ * @param msg The MAVLink message to compress the data into
+ * @param hil_state_quaternion C-struct to read the message contents from
+ */
+static inline uint16_t mavlink_msg_hil_state_quaternion_encode_chan(uint8_t system_id, uint8_t component_id, uint8_t chan, mavlink_message_t* msg, const mavlink_hil_state_quaternion_t* hil_state_quaternion)
+{
+    return mavlink_msg_hil_state_quaternion_pack_chan(system_id, component_id, chan, msg, hil_state_quaternion->time_usec, hil_state_quaternion->attitude_quaternion, hil_state_quaternion->rollspeed, hil_state_quaternion->pitchspeed, hil_state_quaternion->yawspeed, hil_state_quaternion->lat, hil_state_quaternion->lon, hil_state_quaternion->alt, hil_state_quaternion->v

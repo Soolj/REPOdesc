@@ -358,4 +358,50 @@ static inline void mavlink_msg_hil_state_quaternion_send_buf(mavlink_message_t *
     _mav_put_int16_t(buf, 60, yacc);
     _mav_put_int16_t(buf, 62, zacc);
     _mav_put_float_array(buf, 8, attitude_quaternion, 4);
-    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_HIL_STATE_QUATERNION, buf, MAVLINK_MSG_ID_HIL_STATE_QUATERNION_MIN_LEN, MAVLINK_MSG_ID_HIL_STATE_QUATERNION_LEN, MAVLINK_MSG_ID_HI
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_HIL_STATE_QUATERNION, buf, MAVLINK_MSG_ID_HIL_STATE_QUATERNION_MIN_LEN, MAVLINK_MSG_ID_HIL_STATE_QUATERNION_LEN, MAVLINK_MSG_ID_HIL_STATE_QUATERNION_CRC);
+#else
+    mavlink_hil_state_quaternion_t *packet = (mavlink_hil_state_quaternion_t *)msgbuf;
+    packet->time_usec = time_usec;
+    packet->rollspeed = rollspeed;
+    packet->pitchspeed = pitchspeed;
+    packet->yawspeed = yawspeed;
+    packet->lat = lat;
+    packet->lon = lon;
+    packet->alt = alt;
+    packet->vx = vx;
+    packet->vy = vy;
+    packet->vz = vz;
+    packet->ind_airspeed = ind_airspeed;
+    packet->true_airspeed = true_airspeed;
+    packet->xacc = xacc;
+    packet->yacc = yacc;
+    packet->zacc = zacc;
+    mav_array_memcpy(packet->attitude_quaternion, attitude_quaternion, sizeof(float)*4);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_HIL_STATE_QUATERNION, (const char *)packet, MAVLINK_MSG_ID_HIL_STATE_QUATERNION_MIN_LEN, MAVLINK_MSG_ID_HIL_STATE_QUATERNION_LEN, MAVLINK_MSG_ID_HIL_STATE_QUATERNION_CRC);
+#endif
+}
+#endif
+
+#endif
+
+// MESSAGE HIL_STATE_QUATERNION UNPACKING
+
+
+/**
+ * @brief Get field time_usec from hil_state_quaternion message
+ *
+ * @return Timestamp (microseconds since UNIX epoch or microseconds since system boot)
+ */
+static inline uint64_t mavlink_msg_hil_state_quaternion_get_time_usec(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint64_t(msg,  0);
+}
+
+/**
+ * @brief Get field attitude_quaternion from hil_state_quaternion message
+ *
+ * @return Vehicle attitude expressed as normalized quaternion in w, x, y, z order (with 1 0 0 0 being the null-rotation)
+ */
+static inline uint16_t mavlink_msg_hil_state_quaternion_get_attitude_quaternion(const mavlink_message_t* msg, float *attitude_quaternion)
+{
+    return _MAV_RETURN_float_

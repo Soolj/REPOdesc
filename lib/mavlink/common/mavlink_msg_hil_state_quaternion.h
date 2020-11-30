@@ -404,4 +404,64 @@ static inline uint64_t mavlink_msg_hil_state_quaternion_get_time_usec(const mavl
  */
 static inline uint16_t mavlink_msg_hil_state_quaternion_get_attitude_quaternion(const mavlink_message_t* msg, float *attitude_quaternion)
 {
-    return _MAV_RETURN_float_
+    return _MAV_RETURN_float_array(msg, attitude_quaternion, 4,  8);
+}
+
+/**
+ * @brief Get field rollspeed from hil_state_quaternion message
+ *
+ * @return Body frame roll / phi angular speed (rad/s)
+ */
+static inline float mavlink_msg_hil_state_quaternion_get_rollspeed(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  24);
+}
+
+/**
+ * @brief Get field pitchspeed from hil_state_quaternion message
+ *
+ * @return Body frame pitch / theta angular speed (rad/s)
+ */
+static inline float mavlink_msg_hil_state_quaternion_get_pitchspeed(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  28);
+}
+
+/**
+ * @brief Get field yawspeed from hil_state_quaternion message
+ *
+ * @return Body frame yaw / psi angular speed (rad/s)
+ */
+static inline float mavlink_msg_hil_state_quaternion_get_yawspeed(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  32);
+}
+
+/**
+ * @brief Get field lat from hil_state_quaternion message
+ *
+ * @return Latitude, expressed as degrees * 1E7
+ */
+static inline int32_t mavlink_msg_hil_state_quaternion_get_lat(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int32_t(msg,  36);
+}
+
+/**
+ * @brief Get field lon from hil_state_quaternion message
+ *
+ * @return Longitude, expressed as degrees * 1E7
+ */
+static inline int32_t mavlink_msg_hil_state_quaternion_get_lon(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int32_t(msg,  40);
+}
+
+/**
+ * @brief Get field alt from hil_state_quaternion message
+ *
+ * @return Altitude in meters, expressed as * 1000 (millimeters)
+ */
+static inline int32_t mavlink_msg_hil_state_quaternion_get_alt(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int

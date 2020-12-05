@@ -528,4 +528,40 @@ static inline int16_t mavlink_msg_hil_state_quaternion_get_xacc(const mavlink_me
 }
 
 /**
- 
+ * @brief Get field yacc from hil_state_quaternion message
+ *
+ * @return Y acceleration (mg)
+ */
+static inline int16_t mavlink_msg_hil_state_quaternion_get_yacc(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int16_t(msg,  60);
+}
+
+/**
+ * @brief Get field zacc from hil_state_quaternion message
+ *
+ * @return Z acceleration (mg)
+ */
+static inline int16_t mavlink_msg_hil_state_quaternion_get_zacc(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int16_t(msg,  62);
+}
+
+/**
+ * @brief Decode a hil_state_quaternion message into a struct
+ *
+ * @param msg The message to decode
+ * @param hil_state_quaternion C-struct to decode the message contents into
+ */
+static inline void mavlink_msg_hil_state_quaternion_decode(const mavlink_message_t* msg, mavlink_hil_state_quaternion_t* hil_state_quaternion)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    hil_state_quaternion->time_usec = mavlink_msg_hil_state_quaternion_get_time_usec(msg);
+    mavlink_msg_hil_state_quaternion_get_attitude_quaternion(msg, hil_state_quaternion->attitude_quaternion);
+    hil_state_quaternion->rollspeed = mavlink_msg_hil_state_quaternion_get_rollspeed(msg);
+    hil_state_quaternion->pitchspeed = mavlink_msg_hil_state_quaternion_get_pitchspeed(msg);
+    hil_state_quaternion->yawspeed = mavlink_msg_hil_state_quaternion_get_yawspeed(msg);
+    hil_state_quaternion->lat = mavlink_msg_hil_state_quaternion_get_lat(msg);
+    hil_state_quaternion->lon = mavlink_msg_hil_state_quaternion_get_lon(msg);
+    hil_state_quaternion->alt = mavlink_msg_hil_state_quaternion_get_alt(msg);
+    hil_state_quaternion->vx = mavlink_msg_hil_state_quate

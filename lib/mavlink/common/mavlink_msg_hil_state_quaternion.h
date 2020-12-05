@@ -464,4 +464,68 @@ static inline int32_t mavlink_msg_hil_state_quaternion_get_lon(const mavlink_mes
  */
 static inline int32_t mavlink_msg_hil_state_quaternion_get_alt(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_int
+    return _MAV_RETURN_int32_t(msg,  44);
+}
+
+/**
+ * @brief Get field vx from hil_state_quaternion message
+ *
+ * @return Ground X Speed (Latitude), expressed as cm/s
+ */
+static inline int16_t mavlink_msg_hil_state_quaternion_get_vx(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int16_t(msg,  48);
+}
+
+/**
+ * @brief Get field vy from hil_state_quaternion message
+ *
+ * @return Ground Y Speed (Longitude), expressed as cm/s
+ */
+static inline int16_t mavlink_msg_hil_state_quaternion_get_vy(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int16_t(msg,  50);
+}
+
+/**
+ * @brief Get field vz from hil_state_quaternion message
+ *
+ * @return Ground Z Speed (Altitude), expressed as cm/s
+ */
+static inline int16_t mavlink_msg_hil_state_quaternion_get_vz(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int16_t(msg,  52);
+}
+
+/**
+ * @brief Get field ind_airspeed from hil_state_quaternion message
+ *
+ * @return Indicated airspeed, expressed as cm/s
+ */
+static inline uint16_t mavlink_msg_hil_state_quaternion_get_ind_airspeed(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint16_t(msg,  54);
+}
+
+/**
+ * @brief Get field true_airspeed from hil_state_quaternion message
+ *
+ * @return True airspeed, expressed as cm/s
+ */
+static inline uint16_t mavlink_msg_hil_state_quaternion_get_true_airspeed(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint16_t(msg,  56);
+}
+
+/**
+ * @brief Get field xacc from hil_state_quaternion message
+ *
+ * @return X acceleration (mg)
+ */
+static inline int16_t mavlink_msg_hil_state_quaternion_get_xacc(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int16_t(msg,  58);
+}
+
+/**
+ 

@@ -564,4 +564,17 @@ static inline void mavlink_msg_hil_state_quaternion_decode(const mavlink_message
     hil_state_quaternion->lat = mavlink_msg_hil_state_quaternion_get_lat(msg);
     hil_state_quaternion->lon = mavlink_msg_hil_state_quaternion_get_lon(msg);
     hil_state_quaternion->alt = mavlink_msg_hil_state_quaternion_get_alt(msg);
-    hil_state_quaternion->vx = mavlink_msg_hil_state_quate
+    hil_state_quaternion->vx = mavlink_msg_hil_state_quaternion_get_vx(msg);
+    hil_state_quaternion->vy = mavlink_msg_hil_state_quaternion_get_vy(msg);
+    hil_state_quaternion->vz = mavlink_msg_hil_state_quaternion_get_vz(msg);
+    hil_state_quaternion->ind_airspeed = mavlink_msg_hil_state_quaternion_get_ind_airspeed(msg);
+    hil_state_quaternion->true_airspeed = mavlink_msg_hil_state_quaternion_get_true_airspeed(msg);
+    hil_state_quaternion->xacc = mavlink_msg_hil_state_quaternion_get_xacc(msg);
+    hil_state_quaternion->yacc = mavlink_msg_hil_state_quaternion_get_yacc(msg);
+    hil_state_quaternion->zacc = mavlink_msg_hil_state_quaternion_get_zacc(msg);
+#else
+        uint8_t len = msg->len < MAVLINK_MSG_ID_HIL_STATE_QUATERNION_LEN? msg->len : MAVLINK_MSG_ID_HIL_STATE_QUATERNION_LEN;
+        memset(hil_state_quaternion, 0, MAVLINK_MSG_ID_HIL_STATE_QUATERNION_LEN);
+    memcpy(hil_state_quaternion, _MAV_PAYLOAD(msg), len);
+#endif
+}

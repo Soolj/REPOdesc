@@ -144,4 +144,39 @@ static inline void mavlink_msg_log_erase_send(mavlink_channel_t chan, uint8_t ta
     _mav_put_uint8_t(buf, 0, target_system);
     _mav_put_uint8_t(buf, 1, target_component);
 
-    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_LOG_ERASE, buf, MAVLINK_MSG_ID_LOG_ERASE_MIN_LEN, MAVLINK_MSG_ID_L
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_LOG_ERASE, buf, MAVLINK_MSG_ID_LOG_ERASE_MIN_LEN, MAVLINK_MSG_ID_LOG_ERASE_LEN, MAVLINK_MSG_ID_LOG_ERASE_CRC);
+#else
+    mavlink_log_erase_t packet;
+    packet.target_system = target_system;
+    packet.target_component = target_component;
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_LOG_ERASE, (const char *)&packet, MAVLINK_MSG_ID_LOG_ERASE_MIN_LEN, MAVLINK_MSG_ID_LOG_ERASE_LEN, MAVLINK_MSG_ID_LOG_ERASE_CRC);
+#endif
+}
+
+/**
+ * @brief Send a log_erase message
+ * @param chan MAVLink channel to send the message
+ * @param struct The MAVLink struct to serialize
+ */
+static inline void mavlink_msg_log_erase_send_struct(mavlink_channel_t chan, const mavlink_log_erase_t* log_erase)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    mavlink_msg_log_erase_send(chan, log_erase->target_system, log_erase->target_component);
+#else
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_LOG_ERASE, (const char *)log_erase, MAVLINK_MSG_ID_LOG_ERASE_MIN_LEN, MAVLINK_MSG_ID_LOG_ERASE_LEN, MAVLINK_MSG_ID_LOG_ERASE_CRC);
+#endif
+}
+
+#if MAVLINK_MSG_ID_LOG_ERASE_LEN <= MAVLINK_MAX_PAYLOAD_LEN
+/*
+  This varient of _send() can be used to save stack space by re-using
+  memory from the receive buffer.  The caller provides a
+  mavlink_message_t which is the size of a full mavlink message. This
+  is usually the receive buffer for the channel, and allows a reply to an
+  incoming message with minimum stack space usage.
+ */
+static inline void mavlink_msg_log_erase_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  uint8_t target_system, uint8_t target_component)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    

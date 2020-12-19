@@ -179,4 +179,54 @@ static inline void mavlink_msg_log_erase_send_struct(mavlink_channel_t chan, con
 static inline void mavlink_msg_log_erase_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  uint8_t target_system, uint8_t target_component)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    
+    char *buf = (char *)msgbuf;
+    _mav_put_uint8_t(buf, 0, target_system);
+    _mav_put_uint8_t(buf, 1, target_component);
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_LOG_ERASE, buf, MAVLINK_MSG_ID_LOG_ERASE_MIN_LEN, MAVLINK_MSG_ID_LOG_ERASE_LEN, MAVLINK_MSG_ID_LOG_ERASE_CRC);
+#else
+    mavlink_log_erase_t *packet = (mavlink_log_erase_t *)msgbuf;
+    packet->target_system = target_system;
+    packet->target_component = target_component;
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_LOG_ERASE, (const char *)packet, MAVLINK_MSG_ID_LOG_ERASE_MIN_LEN, MAVLINK_MSG_ID_LOG_ERASE_LEN, MAVLINK_MSG_ID_LOG_ERASE_CRC);
+#endif
+}
+#endif
+
+#endif
+
+// MESSAGE LOG_ERASE UNPACKING
+
+
+/**
+ * @brief Get field target_system from log_erase message
+ *
+ * @return System ID
+ */
+static inline uint8_t mavlink_msg_log_erase_get_target_system(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  0);
+}
+
+/**
+ * @brief Get field target_component from log_erase message
+ *
+ * @return Component ID
+ */
+static inline uint8_t mavlink_msg_log_erase_get_target_component(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  1);
+}
+
+/**
+ * @brief Decode a log_erase message into a struct
+ *
+ * @param msg The message to decode
+ * @param log_erase C-struct to decode the message contents into
+ */
+static inline void mavlink_msg_log_erase_decode(const mavlink_message_t* msg, mavlink_log_erase_t* log_erase)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    log_erase->target_system = mavlink_msg_log_erase_get_target_system(msg);
+    log_erase->target_

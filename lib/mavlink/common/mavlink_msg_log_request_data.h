@@ -67,4 +67,39 @@ static inline uint16_t mavlink_msg_log_request_data_pack(uint8_t system_id, uint
     char buf[MAVLINK_MSG_ID_LOG_REQUEST_DATA_LEN];
     _mav_put_uint32_t(buf, 0, ofs);
     _mav_put_uint32_t(buf, 4, count);
-    _mav_put_uint16
+    _mav_put_uint16_t(buf, 8, id);
+    _mav_put_uint8_t(buf, 10, target_system);
+    _mav_put_uint8_t(buf, 11, target_component);
+
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_LOG_REQUEST_DATA_LEN);
+#else
+    mavlink_log_request_data_t packet;
+    packet.ofs = ofs;
+    packet.count = count;
+    packet.id = id;
+    packet.target_system = target_system;
+    packet.target_component = target_component;
+
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_LOG_REQUEST_DATA_LEN);
+#endif
+
+    msg->msgid = MAVLINK_MSG_ID_LOG_REQUEST_DATA;
+    return mavlink_finalize_message(msg, system_id, component_id, MAVLINK_MSG_ID_LOG_REQUEST_DATA_MIN_LEN, MAVLINK_MSG_ID_LOG_REQUEST_DATA_LEN, MAVLINK_MSG_ID_LOG_REQUEST_DATA_CRC);
+}
+
+/**
+ * @brief Pack a log_request_data message on a channel
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param chan The MAVLink channel this message will be sent over
+ * @param msg The MAVLink message to compress the data into
+ * @param target_system System ID
+ * @param target_component Component ID
+ * @param id Log id (from LOG_ENTRY reply)
+ * @param ofs Offset into the log
+ * @param count Number of bytes
+ * @return length of the message in bytes (excluding serial stream start sign)
+ */
+static inline uint16_t mavlink_msg_log_request_data_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
+                               mavlink_message_t* msg,
+                                   uint8_t target_system,uint8_t target_component

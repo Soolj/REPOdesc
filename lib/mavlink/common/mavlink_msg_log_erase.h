@@ -229,4 +229,10 @@ static inline void mavlink_msg_log_erase_decode(const mavlink_message_t* msg, ma
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     log_erase->target_system = mavlink_msg_log_erase_get_target_system(msg);
-    log_erase->target_
+    log_erase->target_component = mavlink_msg_log_erase_get_target_component(msg);
+#else
+        uint8_t len = msg->len < MAVLINK_MSG_ID_LOG_ERASE_LEN? msg->len : MAVLINK_MSG_ID_LOG_ERASE_LEN;
+        memset(log_erase, 0, MAVLINK_MSG_ID_LOG_ERASE_LEN);
+    memcpy(log_erase, _MAV_PAYLOAD(msg), len);
+#endif
+}

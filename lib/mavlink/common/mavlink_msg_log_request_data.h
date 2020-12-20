@@ -138,4 +138,40 @@ static inline uint16_t mavlink_msg_log_request_data_pack_chan(uint8_t system_id,
  */
 static inline uint16_t mavlink_msg_log_request_data_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_log_request_data_t* log_request_data)
 {
-    return mavlink_msg_log_request_data_pack(system_id, component_id, msg, log_request_data->target_system, log_request_data->target_component
+    return mavlink_msg_log_request_data_pack(system_id, component_id, msg, log_request_data->target_system, log_request_data->target_component, log_request_data->id, log_request_data->ofs, log_request_data->count);
+}
+
+/**
+ * @brief Encode a log_request_data struct on a channel
+ *
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param chan The MAVLink channel this message will be sent over
+ * @param msg The MAVLink message to compress the data into
+ * @param log_request_data C-struct to read the message contents from
+ */
+static inline uint16_t mavlink_msg_log_request_data_encode_chan(uint8_t system_id, uint8_t component_id, uint8_t chan, mavlink_message_t* msg, const mavlink_log_request_data_t* log_request_data)
+{
+    return mavlink_msg_log_request_data_pack_chan(system_id, component_id, chan, msg, log_request_data->target_system, log_request_data->target_component, log_request_data->id, log_request_data->ofs, log_request_data->count);
+}
+
+/**
+ * @brief Send a log_request_data message
+ * @param chan MAVLink channel to send the message
+ *
+ * @param target_system System ID
+ * @param target_component Component ID
+ * @param id Log id (from LOG_ENTRY reply)
+ * @param ofs Offset into the log
+ * @param count Number of bytes
+ */
+#ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
+
+static inline void mavlink_msg_log_request_data_send(mavlink_channel_t chan, uint8_t target_system, uint8_t target_component, uint16_t id, uint32_t ofs, uint32_t count)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    char buf[MAVLINK_MSG_ID_LOG_REQUEST_DATA_LEN];
+    _mav_put_uint32_t(buf, 0, ofs);
+    _mav_put_uint32_t(buf, 4, count);
+    _mav_put_uint16_t(buf, 8, id);
+    _mav_p

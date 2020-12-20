@@ -102,4 +102,40 @@ static inline uint16_t mavlink_msg_log_request_data_pack(uint8_t system_id, uint
  */
 static inline uint16_t mavlink_msg_log_request_data_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
                                mavlink_message_t* msg,
-                                   uint8_t target_system,uint8_t target_component
+                                   uint8_t target_system,uint8_t target_component,uint16_t id,uint32_t ofs,uint32_t count)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    char buf[MAVLINK_MSG_ID_LOG_REQUEST_DATA_LEN];
+    _mav_put_uint32_t(buf, 0, ofs);
+    _mav_put_uint32_t(buf, 4, count);
+    _mav_put_uint16_t(buf, 8, id);
+    _mav_put_uint8_t(buf, 10, target_system);
+    _mav_put_uint8_t(buf, 11, target_component);
+
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_LOG_REQUEST_DATA_LEN);
+#else
+    mavlink_log_request_data_t packet;
+    packet.ofs = ofs;
+    packet.count = count;
+    packet.id = id;
+    packet.target_system = target_system;
+    packet.target_component = target_component;
+
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_LOG_REQUEST_DATA_LEN);
+#endif
+
+    msg->msgid = MAVLINK_MSG_ID_LOG_REQUEST_DATA;
+    return mavlink_finalize_message_chan(msg, system_id, component_id, chan, MAVLINK_MSG_ID_LOG_REQUEST_DATA_MIN_LEN, MAVLINK_MSG_ID_LOG_REQUEST_DATA_LEN, MAVLINK_MSG_ID_LOG_REQUEST_DATA_CRC);
+}
+
+/**
+ * @brief Encode a log_request_data struct
+ *
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param msg The MAVLink message to compress the data into
+ * @param log_request_data C-struct to read the message contents from
+ */
+static inline uint16_t mavlink_msg_log_request_data_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_log_request_data_t* log_request_data)
+{
+    return mavlink_msg_log_request_data_pack(system_id, component_id, msg, log_request_data->target_system, log_request_data->target_component

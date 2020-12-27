@@ -238,4 +238,66 @@ static inline void mavlink_msg_log_request_data_send_buf(mavlink_message_t *msgb
 
 #endif
 
-// MESSAGE LOG_REQUEST_DATA UNPA
+// MESSAGE LOG_REQUEST_DATA UNPACKING
+
+
+/**
+ * @brief Get field target_system from log_request_data message
+ *
+ * @return System ID
+ */
+static inline uint8_t mavlink_msg_log_request_data_get_target_system(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  10);
+}
+
+/**
+ * @brief Get field target_component from log_request_data message
+ *
+ * @return Component ID
+ */
+static inline uint8_t mavlink_msg_log_request_data_get_target_component(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  11);
+}
+
+/**
+ * @brief Get field id from log_request_data message
+ *
+ * @return Log id (from LOG_ENTRY reply)
+ */
+static inline uint16_t mavlink_msg_log_request_data_get_id(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint16_t(msg,  8);
+}
+
+/**
+ * @brief Get field ofs from log_request_data message
+ *
+ * @return Offset into the log
+ */
+static inline uint32_t mavlink_msg_log_request_data_get_ofs(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint32_t(msg,  0);
+}
+
+/**
+ * @brief Get field count from log_request_data message
+ *
+ * @return Number of bytes
+ */
+static inline uint32_t mavlink_msg_log_request_data_get_count(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint32_t(msg,  4);
+}
+
+/**
+ * @brief Decode a log_request_data message into a struct
+ *
+ * @param msg The message to decode
+ * @param log_request_data C-struct to decode the message contents into
+ */
+static inline void mavlink_msg_log_request_data_decode(const mavlink_message_t* msg, mavlink_log_request_data_t* log_request_data)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    log_request_data->ofs = mavlink_ms

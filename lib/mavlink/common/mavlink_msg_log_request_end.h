@@ -98,4 +98,43 @@ static inline uint16_t mavlink_msg_log_request_end_pack_chan(uint8_t system_id, 
 #endif
 
     msg->msgid = MAVLINK_MSG_ID_LOG_REQUEST_END;
-    return mavlink_finalize_message_chan(msg, system_id, component_id, chan, MAVLINK_MSG_ID_LOG_REQUEST_END_MIN_LEN, MAVLINK_MSG_ID_LOG_REQUEST_END_LEN, MAVLINK_MSG_ID_LOG_REQUEST_END_CR
+    return mavlink_finalize_message_chan(msg, system_id, component_id, chan, MAVLINK_MSG_ID_LOG_REQUEST_END_MIN_LEN, MAVLINK_MSG_ID_LOG_REQUEST_END_LEN, MAVLINK_MSG_ID_LOG_REQUEST_END_CRC);
+}
+
+/**
+ * @brief Encode a log_request_end struct
+ *
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param msg The MAVLink message to compress the data into
+ * @param log_request_end C-struct to read the message contents from
+ */
+static inline uint16_t mavlink_msg_log_request_end_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_log_request_end_t* log_request_end)
+{
+    return mavlink_msg_log_request_end_pack(system_id, component_id, msg, log_request_end->target_system, log_request_end->target_component);
+}
+
+/**
+ * @brief Encode a log_request_end struct on a channel
+ *
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param chan The MAVLink channel this message will be sent over
+ * @param msg The MAVLink message to compress the data into
+ * @param log_request_end C-struct to read the message contents from
+ */
+static inline uint16_t mavlink_msg_log_request_end_encode_chan(uint8_t system_id, uint8_t component_id, uint8_t chan, mavlink_message_t* msg, const mavlink_log_request_end_t* log_request_end)
+{
+    return mavlink_msg_log_request_end_pack_chan(system_id, component_id, chan, msg, log_request_end->target_system, log_request_end->target_component);
+}
+
+/**
+ * @brief Send a log_request_end message
+ * @param chan MAVLink channel to send the message
+ *
+ * @param target_system System ID
+ * @param target_component Component ID
+ */
+#ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
+
+static inline void mavlink_msg

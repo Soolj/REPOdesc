@@ -137,4 +137,35 @@ static inline uint16_t mavlink_msg_log_request_end_encode_chan(uint8_t system_id
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg
+static inline void mavlink_msg_log_request_end_send(mavlink_channel_t chan, uint8_t target_system, uint8_t target_component)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    char buf[MAVLINK_MSG_ID_LOG_REQUEST_END_LEN];
+    _mav_put_uint8_t(buf, 0, target_system);
+    _mav_put_uint8_t(buf, 1, target_component);
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_LOG_REQUEST_END, buf, MAVLINK_MSG_ID_LOG_REQUEST_END_MIN_LEN, MAVLINK_MSG_ID_LOG_REQUEST_END_LEN, MAVLINK_MSG_ID_LOG_REQUEST_END_CRC);
+#else
+    mavlink_log_request_end_t packet;
+    packet.target_system = target_system;
+    packet.target_component = target_component;
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_LOG_REQUEST_END, (const char *)&packet, MAVLINK_MSG_ID_LOG_REQUEST_END_MIN_LEN, MAVLINK_MSG_ID_LOG_REQUEST_END_LEN, MAVLINK_MSG_ID_LOG_REQUEST_END_CRC);
+#endif
+}
+
+/**
+ * @brief Send a log_request_end message
+ * @param chan MAVLink channel to send the message
+ * @param struct The MAVLink struct to serialize
+ */
+static inline void mavlink_msg_log_request_end_send_struct(mavlink_channel_t chan, const mavlink_log_request_end_t* log_request_end)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    mavlink_msg_log_request_end_send(chan, log_request_end->target_system, log_request_end->target_component);
+#else
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_LOG_REQUEST_END, (const char *)log_request_end, MAVLINK_MSG_ID_LOG_REQUEST_END_MIN_LEN, MAVLINK_MSG_ID_LOG_REQUEST_END_LEN, MAVLINK_MSG_ID_LOG_REQUEST_END_CRC);
+#endif
+}
+
+#if MAVLINK_MSG_ID_LOG_REQUEST_END

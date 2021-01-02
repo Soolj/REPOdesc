@@ -300,4 +300,14 @@ static inline uint32_t mavlink_msg_log_request_data_get_count(const mavlink_mess
 static inline void mavlink_msg_log_request_data_decode(const mavlink_message_t* msg, mavlink_log_request_data_t* log_request_data)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    log_request_data->ofs = mavlink_ms
+    log_request_data->ofs = mavlink_msg_log_request_data_get_ofs(msg);
+    log_request_data->count = mavlink_msg_log_request_data_get_count(msg);
+    log_request_data->id = mavlink_msg_log_request_data_get_id(msg);
+    log_request_data->target_system = mavlink_msg_log_request_data_get_target_system(msg);
+    log_request_data->target_component = mavlink_msg_log_request_data_get_target_component(msg);
+#else
+        uint8_t len = msg->len < MAVLINK_MSG_ID_LOG_REQUEST_DATA_LEN? msg->len : MAVLINK_MSG_ID_LOG_REQUEST_DATA_LEN;
+        memset(log_request_data, 0, MAVLINK_MSG_ID_LOG_REQUEST_DATA_LEN);
+    memcpy(log_request_data, _MAV_PAYLOAD(msg), len);
+#endif
+}

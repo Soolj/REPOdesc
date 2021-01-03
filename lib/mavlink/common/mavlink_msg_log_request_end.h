@@ -168,4 +168,44 @@ static inline void mavlink_msg_log_request_end_send_struct(mavlink_channel_t cha
 #endif
 }
 
-#if MAVLINK_MSG_ID_LOG_REQUEST_END
+#if MAVLINK_MSG_ID_LOG_REQUEST_END_LEN <= MAVLINK_MAX_PAYLOAD_LEN
+/*
+  This varient of _send() can be used to save stack space by re-using
+  memory from the receive buffer.  The caller provides a
+  mavlink_message_t which is the size of a full mavlink message. This
+  is usually the receive buffer for the channel, and allows a reply to an
+  incoming message with minimum stack space usage.
+ */
+static inline void mavlink_msg_log_request_end_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  uint8_t target_system, uint8_t target_component)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    char *buf = (char *)msgbuf;
+    _mav_put_uint8_t(buf, 0, target_system);
+    _mav_put_uint8_t(buf, 1, target_component);
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_LOG_REQUEST_END, buf, MAVLINK_MSG_ID_LOG_REQUEST_END_MIN_LEN, MAVLINK_MSG_ID_LOG_REQUEST_END_LEN, MAVLINK_MSG_ID_LOG_REQUEST_END_CRC);
+#else
+    mavlink_log_request_end_t *packet = (mavlink_log_request_end_t *)msgbuf;
+    packet->target_system = target_system;
+    packet->target_component = target_component;
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_LOG_REQUEST_END, (const char *)packet, MAVLINK_MSG_ID_LOG_REQUEST_END_MIN_LEN, MAVLINK_MSG_ID_LOG_REQUEST_END_LEN, MAVLINK_MSG_ID_LOG_REQUEST_END_CRC);
+#endif
+}
+#endif
+
+#endif
+
+// MESSAGE LOG_REQUEST_END UNPACKING
+
+
+/**
+ * @brief Get field target_system from log_request_end message
+ *
+ * @return System ID
+ */
+static inline uint8_t mavlink_msg_log_request_end_get_target_system(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  0);
+}
+

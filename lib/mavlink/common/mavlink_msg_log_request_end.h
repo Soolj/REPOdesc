@@ -209,3 +209,30 @@ static inline uint8_t mavlink_msg_log_request_end_get_target_system(const mavlin
     return _MAV_RETURN_uint8_t(msg,  0);
 }
 
+/**
+ * @brief Get field target_component from log_request_end message
+ *
+ * @return Component ID
+ */
+static inline uint8_t mavlink_msg_log_request_end_get_target_component(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  1);
+}
+
+/**
+ * @brief Decode a log_request_end message into a struct
+ *
+ * @param msg The message to decode
+ * @param log_request_end C-struct to decode the message contents into
+ */
+static inline void mavlink_msg_log_request_end_decode(const mavlink_message_t* msg, mavlink_log_request_end_t* log_request_end)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    log_request_end->target_system = mavlink_msg_log_request_end_get_target_system(msg);
+    log_request_end->target_component = mavlink_msg_log_request_end_get_target_component(msg);
+#else
+        uint8_t len = msg->len < MAVLINK_MSG_ID_LOG_REQUEST_END_LEN? msg->len : MAVLINK_MSG_ID_LOG_REQUEST_END_LEN;
+        memset(log_request_end, 0, MAVLINK_MSG_ID_LOG_REQUEST_END_LEN);
+    memcpy(log_request_end, _MAV_PAYLOAD(msg), len);
+#endif
+}

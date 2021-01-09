@@ -123,4 +123,38 @@ static inline uint16_t mavlink_msg_log_request_list_pack_chan(uint8_t system_id,
  * @brief Encode a log_request_list struct
  *
  * @param system_id ID of this system
- * @param component_id ID of this component (e.g. 200 f
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param msg The MAVLink message to compress the data into
+ * @param log_request_list C-struct to read the message contents from
+ */
+static inline uint16_t mavlink_msg_log_request_list_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_log_request_list_t* log_request_list)
+{
+    return mavlink_msg_log_request_list_pack(system_id, component_id, msg, log_request_list->target_system, log_request_list->target_component, log_request_list->start, log_request_list->end);
+}
+
+/**
+ * @brief Encode a log_request_list struct on a channel
+ *
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param chan The MAVLink channel this message will be sent over
+ * @param msg The MAVLink message to compress the data into
+ * @param log_request_list C-struct to read the message contents from
+ */
+static inline uint16_t mavlink_msg_log_request_list_encode_chan(uint8_t system_id, uint8_t component_id, uint8_t chan, mavlink_message_t* msg, const mavlink_log_request_list_t* log_request_list)
+{
+    return mavlink_msg_log_request_list_pack_chan(system_id, component_id, chan, msg, log_request_list->target_system, log_request_list->target_component, log_request_list->start, log_request_list->end);
+}
+
+/**
+ * @brief Send a log_request_list message
+ * @param chan MAVLink channel to send the message
+ *
+ * @param target_system System ID
+ * @param target_component Component ID
+ * @param start First log id (0 for first available)
+ * @param end Last log id (0xffff for last available)
+ */
+#ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
+
+static in

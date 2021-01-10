@@ -157,4 +157,35 @@ static inline uint16_t mavlink_msg_log_request_list_encode_chan(uint8_t system_i
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static in
+static inline void mavlink_msg_log_request_list_send(mavlink_channel_t chan, uint8_t target_system, uint8_t target_component, uint16_t start, uint16_t end)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    char buf[MAVLINK_MSG_ID_LOG_REQUEST_LIST_LEN];
+    _mav_put_uint16_t(buf, 0, start);
+    _mav_put_uint16_t(buf, 2, end);
+    _mav_put_uint8_t(buf, 4, target_system);
+    _mav_put_uint8_t(buf, 5, target_component);
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_LOG_REQUEST_LIST, buf, MAVLINK_MSG_ID_LOG_REQUEST_LIST_MIN_LEN, MAVLINK_MSG_ID_LOG_REQUEST_LIST_LEN, MAVLINK_MSG_ID_LOG_REQUEST_LIST_CRC);
+#else
+    mavlink_log_request_list_t packet;
+    packet.start = start;
+    packet.end = end;
+    packet.target_system = target_system;
+    packet.target_component = target_component;
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_LOG_REQUEST_LIST, (const char *)&packet, MAVLINK_MSG_ID_LOG_REQUEST_LIST_MIN_LEN, MAVLINK_MSG_ID_LOG_REQUEST_LIST_LEN, MAVLINK_MSG_ID_LOG_REQUEST_LIST_CRC);
+#endif
+}
+
+/**
+ * @brief Send a log_request_list message
+ * @param chan MAVLink channel to send the message
+ * @param struct The MAVLink struct to serialize
+ */
+static inline void mavlink_msg_log_request_list_send_struct(mavlink_channel_t chan, const mavlink_log_request_list_t* log_request_list)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    mavlink_msg_log_request_list_send(chan, log_request_list->target_system, log_request_list->target_component, log_request_list->start, log_request_list->end);
+#else
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_LOG_

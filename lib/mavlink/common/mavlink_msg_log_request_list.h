@@ -217,4 +217,64 @@ static inline void mavlink_msg_log_request_list_send_buf(mavlink_message_t *msgb
     packet->target_system = target_system;
     packet->target_component = target_component;
 
-    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_LOG_REQUEST_LIST, (const char *)packet, MAVLINK_MSG_ID_LOG_REQUEST_LIST_MIN_LEN, 
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_LOG_REQUEST_LIST, (const char *)packet, MAVLINK_MSG_ID_LOG_REQUEST_LIST_MIN_LEN, MAVLINK_MSG_ID_LOG_REQUEST_LIST_LEN, MAVLINK_MSG_ID_LOG_REQUEST_LIST_CRC);
+#endif
+}
+#endif
+
+#endif
+
+// MESSAGE LOG_REQUEST_LIST UNPACKING
+
+
+/**
+ * @brief Get field target_system from log_request_list message
+ *
+ * @return System ID
+ */
+static inline uint8_t mavlink_msg_log_request_list_get_target_system(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  4);
+}
+
+/**
+ * @brief Get field target_component from log_request_list message
+ *
+ * @return Component ID
+ */
+static inline uint8_t mavlink_msg_log_request_list_get_target_component(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  5);
+}
+
+/**
+ * @brief Get field start from log_request_list message
+ *
+ * @return First log id (0 for first available)
+ */
+static inline uint16_t mavlink_msg_log_request_list_get_start(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint16_t(msg,  0);
+}
+
+/**
+ * @brief Get field end from log_request_list message
+ *
+ * @return Last log id (0xffff for last available)
+ */
+static inline uint16_t mavlink_msg_log_request_list_get_end(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint16_t(msg,  2);
+}
+
+/**
+ * @brief Decode a log_request_list message into a struct
+ *
+ * @param msg The message to decode
+ * @param log_request_list C-struct to decode the message contents into
+ */
+static inline void mavlink_msg_log_request_list_decode(const mavlink_message_t* msg, mavlink_log_request_list_t* log_request_list)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    log_request_list->start = mavlink_msg_log_request_list_get_start(msg);
+    log_

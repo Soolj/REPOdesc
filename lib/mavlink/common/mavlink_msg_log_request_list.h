@@ -277,4 +277,12 @@ static inline void mavlink_msg_log_request_list_decode(const mavlink_message_t* 
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     log_request_list->start = mavlink_msg_log_request_list_get_start(msg);
-    log_
+    log_request_list->end = mavlink_msg_log_request_list_get_end(msg);
+    log_request_list->target_system = mavlink_msg_log_request_list_get_target_system(msg);
+    log_request_list->target_component = mavlink_msg_log_request_list_get_target_component(msg);
+#else
+        uint8_t len = msg->len < MAVLINK_MSG_ID_LOG_REQUEST_LIST_LEN? msg->len : MAVLINK_MSG_ID_LOG_REQUEST_LIST_LEN;
+        memset(log_request_list, 0, MAVLINK_MSG_ID_LOG_REQUEST_LIST_LEN);
+    memcpy(log_request_list, _MAV_PAYLOAD(msg), len);
+#endif
+}

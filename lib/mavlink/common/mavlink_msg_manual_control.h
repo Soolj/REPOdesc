@@ -67,4 +67,38 @@ typedef struct __mavlink_manual_control_t {
 static inline uint16_t mavlink_msg_manual_control_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
                                uint8_t target, int16_t x, int16_t y, int16_t z, int16_t r, uint16_t buttons)
 {
-#if MAVLINK_NEED
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    char buf[MAVLINK_MSG_ID_MANUAL_CONTROL_LEN];
+    _mav_put_int16_t(buf, 0, x);
+    _mav_put_int16_t(buf, 2, y);
+    _mav_put_int16_t(buf, 4, z);
+    _mav_put_int16_t(buf, 6, r);
+    _mav_put_uint16_t(buf, 8, buttons);
+    _mav_put_uint8_t(buf, 10, target);
+
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_MANUAL_CONTROL_LEN);
+#else
+    mavlink_manual_control_t packet;
+    packet.x = x;
+    packet.y = y;
+    packet.z = z;
+    packet.r = r;
+    packet.buttons = buttons;
+    packet.target = target;
+
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_MANUAL_CONTROL_LEN);
+#endif
+
+    msg->msgid = MAVLINK_MSG_ID_MANUAL_CONTROL;
+    return mavlink_finalize_message(msg, system_id, component_id, MAVLINK_MSG_ID_MANUAL_CONTROL_MIN_LEN, MAVLINK_MSG_ID_MANUAL_CONTROL_LEN, MAVLINK_MSG_ID_MANUAL_CONTROL_CRC);
+}
+
+/**
+ * @brief Pack a manual_control message on a channel
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param chan The MAVLink channel this message will be sent over
+ * @param msg The MAVLink message to compress the data into
+ * @param target The system to be controlled.
+ * @param x X-axis, normalized to the range [-1000,1000]. A value of INT16_MAX indicates that this axis is invalid. Generally corresponds to forward(1000)-backward(-1000) movement on a joystick and the pitch of a vehicle.
+ * @param y Y-axis, normalized to the range [-1000,1000]. A value of INT16_MAX indicates that this axis is invalid. Generally corresponds to l

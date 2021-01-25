@@ -122,4 +122,41 @@ static inline uint16_t mavlink_msg_manual_control_pack_chan(uint8_t system_id, u
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_MANUAL_CONTROL_LEN);
 #else
-    mavlink_ma
+    mavlink_manual_control_t packet;
+    packet.x = x;
+    packet.y = y;
+    packet.z = z;
+    packet.r = r;
+    packet.buttons = buttons;
+    packet.target = target;
+
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_MANUAL_CONTROL_LEN);
+#endif
+
+    msg->msgid = MAVLINK_MSG_ID_MANUAL_CONTROL;
+    return mavlink_finalize_message_chan(msg, system_id, component_id, chan, MAVLINK_MSG_ID_MANUAL_CONTROL_MIN_LEN, MAVLINK_MSG_ID_MANUAL_CONTROL_LEN, MAVLINK_MSG_ID_MANUAL_CONTROL_CRC);
+}
+
+/**
+ * @brief Encode a manual_control struct
+ *
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param msg The MAVLink message to compress the data into
+ * @param manual_control C-struct to read the message contents from
+ */
+static inline uint16_t mavlink_msg_manual_control_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_manual_control_t* manual_control)
+{
+    return mavlink_msg_manual_control_pack(system_id, component_id, msg, manual_control->target, manual_control->x, manual_control->y, manual_control->z, manual_control->r, manual_control->buttons);
+}
+
+/**
+ * @brief Encode a manual_control struct on a channel
+ *
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param chan The MAVLink channel this message will be sent over
+ * @param msg The MAVLink message to compress the data into
+ * @param manual_control C-struct to read the message contents from
+ */
+static inline uint16_t mavlink_msg_manual_control_encode_chan(uint8_t system_id, uint8_t 

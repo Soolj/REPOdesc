@@ -159,4 +159,18 @@ static inline uint16_t mavlink_msg_manual_control_encode(uint8_t system_id, uint
  * @param msg The MAVLink message to compress the data into
  * @param manual_control C-struct to read the message contents from
  */
-static inline uint16_t mavlink_msg_manual_control_encode_chan(uint8_t system_id, uint8_t 
+static inline uint16_t mavlink_msg_manual_control_encode_chan(uint8_t system_id, uint8_t component_id, uint8_t chan, mavlink_message_t* msg, const mavlink_manual_control_t* manual_control)
+{
+    return mavlink_msg_manual_control_pack_chan(system_id, component_id, chan, msg, manual_control->target, manual_control->x, manual_control->y, manual_control->z, manual_control->r, manual_control->buttons);
+}
+
+/**
+ * @brief Send a manual_control message
+ * @param chan MAVLink channel to send the message
+ *
+ * @param target The system to be controlled.
+ * @param x X-axis, normalized to the range [-1000,1000]. A value of INT16_MAX indicates that this axis is invalid. Generally corresponds to forward(1000)-backward(-1000) movement on a joystick and the pitch of a vehicle.
+ * @param y Y-axis, normalized to the range [-1000,1000]. A value of INT16_MAX indicates that this axis is invalid. Generally corresponds to left(-1000)-right(1000) movement on a joystick and the roll of a vehicle.
+ * @param z Z-axis, normalized to the range [-1000,1000]. A value of INT16_MAX indicates that this axis is invalid. Generally corresponds to a separate slider movement with maximum being 1000 and minimum being -1000 on a joystick and the thrust of a vehicle. Positive values are positive thrust, negative values are negative thrust.
+ * @param r R-axis, normalized to the range [-1000,1000]. A value of INT16_MAX indicates that this axis is invalid. Generally corresponds to a twisting of the joystick, with counter-clockwise being 1000 and clockwise being -1000, and the yaw of a vehicle.
+ * @param buttons A bitfield corresponding to the joystick buttons' current state, 1 for pressed, 0 fo

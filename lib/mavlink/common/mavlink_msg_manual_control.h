@@ -243,4 +243,49 @@ static inline void mavlink_msg_manual_control_send_buf(mavlink_message_t *msgbuf
     packet->z = z;
     packet->r = r;
     packet->buttons = buttons;
-    p
+    packet->target = target;
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_MANUAL_CONTROL, (const char *)packet, MAVLINK_MSG_ID_MANUAL_CONTROL_MIN_LEN, MAVLINK_MSG_ID_MANUAL_CONTROL_LEN, MAVLINK_MSG_ID_MANUAL_CONTROL_CRC);
+#endif
+}
+#endif
+
+#endif
+
+// MESSAGE MANUAL_CONTROL UNPACKING
+
+
+/**
+ * @brief Get field target from manual_control message
+ *
+ * @return The system to be controlled.
+ */
+static inline uint8_t mavlink_msg_manual_control_get_target(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  10);
+}
+
+/**
+ * @brief Get field x from manual_control message
+ *
+ * @return X-axis, normalized to the range [-1000,1000]. A value of INT16_MAX indicates that this axis is invalid. Generally corresponds to forward(1000)-backward(-1000) movement on a joystick and the pitch of a vehicle.
+ */
+static inline int16_t mavlink_msg_manual_control_get_x(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int16_t(msg,  0);
+}
+
+/**
+ * @brief Get field y from manual_control message
+ *
+ * @return Y-axis, normalized to the range [-1000,1000]. A value of INT16_MAX indicates that this axis is invalid. Generally corresponds to left(-1000)-right(1000) movement on a joystick and the roll of a vehicle.
+ */
+static inline int16_t mavlink_msg_manual_control_get_y(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int16_t(msg,  2);
+}
+
+/**
+ * @brief Get field z from manual_control message
+ *
+ * @return Z-axis, normalized to the range [-1000,1000]. A value of INT16_MAX indicates that this axis is invalid. Generally corresponds to a sepa

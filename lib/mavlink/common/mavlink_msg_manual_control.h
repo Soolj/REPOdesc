@@ -288,4 +288,41 @@ static inline int16_t mavlink_msg_manual_control_get_y(const mavlink_message_t* 
 /**
  * @brief Get field z from manual_control message
  *
- * @return Z-axis, normalized to the range [-1000,1000]. A value of INT16_MAX indicates that this axis is invalid. Generally corresponds to a sepa
+ * @return Z-axis, normalized to the range [-1000,1000]. A value of INT16_MAX indicates that this axis is invalid. Generally corresponds to a separate slider movement with maximum being 1000 and minimum being -1000 on a joystick and the thrust of a vehicle. Positive values are positive thrust, negative values are negative thrust.
+ */
+static inline int16_t mavlink_msg_manual_control_get_z(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int16_t(msg,  4);
+}
+
+/**
+ * @brief Get field r from manual_control message
+ *
+ * @return R-axis, normalized to the range [-1000,1000]. A value of INT16_MAX indicates that this axis is invalid. Generally corresponds to a twisting of the joystick, with counter-clockwise being 1000 and clockwise being -1000, and the yaw of a vehicle.
+ */
+static inline int16_t mavlink_msg_manual_control_get_r(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int16_t(msg,  6);
+}
+
+/**
+ * @brief Get field buttons from manual_control message
+ *
+ * @return A bitfield corresponding to the joystick buttons' current state, 1 for pressed, 0 for released. The lowest bit corresponds to Button 1.
+ */
+static inline uint16_t mavlink_msg_manual_control_get_buttons(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint16_t(msg,  8);
+}
+
+/**
+ * @brief Decode a manual_control message into a struct
+ *
+ * @param msg The message to decode
+ * @param manual_control C-struct to decode the message contents into
+ */
+static inline void mavlink_msg_manual_control_decode(const mavlink_message_t* msg, mavlink_manual_control_t* manual_control)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    manual_control->x = mavlink_msg_manual_control_get_x(msg);
+    manual_contr

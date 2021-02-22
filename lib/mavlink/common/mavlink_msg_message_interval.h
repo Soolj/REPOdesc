@@ -140,4 +140,36 @@ static inline uint16_t mavlink_msg_message_interval_encode_chan(uint8_t system_i
 static inline void mavlink_msg_message_interval_send(mavlink_channel_t chan, uint16_t message_id, int32_t interval_us)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    char buf[MAVLINK_
+    char buf[MAVLINK_MSG_ID_MESSAGE_INTERVAL_LEN];
+    _mav_put_int32_t(buf, 0, interval_us);
+    _mav_put_uint16_t(buf, 4, message_id);
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_MESSAGE_INTERVAL, buf, MAVLINK_MSG_ID_MESSAGE_INTERVAL_MIN_LEN, MAVLINK_MSG_ID_MESSAGE_INTERVAL_LEN, MAVLINK_MSG_ID_MESSAGE_INTERVAL_CRC);
+#else
+    mavlink_message_interval_t packet;
+    packet.interval_us = interval_us;
+    packet.message_id = message_id;
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_MESSAGE_INTERVAL, (const char *)&packet, MAVLINK_MSG_ID_MESSAGE_INTERVAL_MIN_LEN, MAVLINK_MSG_ID_MESSAGE_INTERVAL_LEN, MAVLINK_MSG_ID_MESSAGE_INTERVAL_CRC);
+#endif
+}
+
+/**
+ * @brief Send a message_interval message
+ * @param chan MAVLink channel to send the message
+ * @param struct The MAVLink struct to serialize
+ */
+static inline void mavlink_msg_message_interval_send_struct(mavlink_channel_t chan, const mavlink_message_interval_t* message_interval)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    mavlink_msg_message_interval_send(chan, message_interval->message_id, message_interval->interval_us);
+#else
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_MESSAGE_INTERVAL, (const char *)message_interval, MAVLINK_MSG_ID_MESSAGE_INTERVAL_MIN_LEN, MAVLINK_MSG_ID_MESSAGE_INTERVAL_LEN, MAVLINK_MSG_ID_MESSAGE_INTERVAL_CRC);
+#endif
+}
+
+#if MAVLINK_MSG_ID_MESSAGE_INTERVAL_LEN <= MAVLINK_MAX_PAYLOAD_LEN
+/*
+  This varient of _send() can be used to save stack space by re-using
+  memory from the receive buffer.  The caller provides a
+  mavlink_message_

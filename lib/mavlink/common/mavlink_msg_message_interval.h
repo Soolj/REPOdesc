@@ -172,4 +172,44 @@ static inline void mavlink_msg_message_interval_send_struct(mavlink_channel_t ch
 /*
   This varient of _send() can be used to save stack space by re-using
   memory from the receive buffer.  The caller provides a
-  mavlink_message_
+  mavlink_message_t which is the size of a full mavlink message. This
+  is usually the receive buffer for the channel, and allows a reply to an
+  incoming message with minimum stack space usage.
+ */
+static inline void mavlink_msg_message_interval_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  uint16_t message_id, int32_t interval_us)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    char *buf = (char *)msgbuf;
+    _mav_put_int32_t(buf, 0, interval_us);
+    _mav_put_uint16_t(buf, 4, message_id);
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_MESSAGE_INTERVAL, buf, MAVLINK_MSG_ID_MESSAGE_INTERVAL_MIN_LEN, MAVLINK_MSG_ID_MESSAGE_INTERVAL_LEN, MAVLINK_MSG_ID_MESSAGE_INTERVAL_CRC);
+#else
+    mavlink_message_interval_t *packet = (mavlink_message_interval_t *)msgbuf;
+    packet->interval_us = interval_us;
+    packet->message_id = message_id;
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_MESSAGE_INTERVAL, (const char *)packet, MAVLINK_MSG_ID_MESSAGE_INTERVAL_MIN_LEN, MAVLINK_MSG_ID_MESSAGE_INTERVAL_LEN, MAVLINK_MSG_ID_MESSAGE_INTERVAL_CRC);
+#endif
+}
+#endif
+
+#endif
+
+// MESSAGE MESSAGE_INTERVAL UNPACKING
+
+
+/**
+ * @brief Get field message_id from message_interval message
+ *
+ * @return The ID of the requested MAVLink message. v1.0 is limited to 254 messages.
+ */
+static inline uint16_t mavlink_msg_message_interval_get_message_id(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint16_t(msg,  4);
+}
+
+/**
+ * @brief Get field interval_us from message_interval message
+ *
+ * @return The interval between two messages, in microseconds. A value of -1 indicates this stream is

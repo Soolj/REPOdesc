@@ -212,4 +212,27 @@ static inline uint16_t mavlink_msg_message_interval_get_message_id(const mavlink
 /**
  * @brief Get field interval_us from message_interval message
  *
- * @return The interval between two messages, in microseconds. A value of -1 indicates this stream is
+ * @return The interval between two messages, in microseconds. A value of -1 indicates this stream is disabled, 0 indicates it is not available, > 0 indicates the interval at which it is sent.
+ */
+static inline int32_t mavlink_msg_message_interval_get_interval_us(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int32_t(msg,  0);
+}
+
+/**
+ * @brief Decode a message_interval message into a struct
+ *
+ * @param msg The message to decode
+ * @param message_interval C-struct to decode the message contents into
+ */
+static inline void mavlink_msg_message_interval_decode(const mavlink_message_t* msg, mavlink_message_interval_t* message_interval)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    message_interval->interval_us = mavlink_msg_message_interval_get_interval_us(msg);
+    message_interval->message_id = mavlink_msg_message_interval_get_message_id(msg);
+#else
+        uint8_t len = msg->len < MAVLINK_MSG_ID_MESSAGE_INTERVAL_LEN? msg->len : MAVLINK_MSG_ID_MESSAGE_INTERVAL_LEN;
+        memset(message_interval, 0, MAVLINK_MSG_ID_MESSAGE_INTERVAL_LEN);
+    memcpy(message_interval, _MAV_PAYLOAD(msg), len);
+#endif
+}

@@ -159,4 +159,37 @@ static inline uint16_t mavlink_msg_mission_ack_encode_chan(uint8_t system_id, ui
 
 static inline void mavlink_msg_mission_ack_send(mavlink_channel_t chan, uint8_t target_system, uint8_t target_component, uint8_t type, uint8_t mission_type)
 {
-#if MAVLINK_NEED_BY
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    char buf[MAVLINK_MSG_ID_MISSION_ACK_LEN];
+    _mav_put_uint8_t(buf, 0, target_system);
+    _mav_put_uint8_t(buf, 1, target_component);
+    _mav_put_uint8_t(buf, 2, type);
+    _mav_put_uint8_t(buf, 3, mission_type);
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_MISSION_ACK, buf, MAVLINK_MSG_ID_MISSION_ACK_MIN_LEN, MAVLINK_MSG_ID_MISSION_ACK_LEN, MAVLINK_MSG_ID_MISSION_ACK_CRC);
+#else
+    mavlink_mission_ack_t packet;
+    packet.target_system = target_system;
+    packet.target_component = target_component;
+    packet.type = type;
+    packet.mission_type = mission_type;
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_MISSION_ACK, (const char *)&packet, MAVLINK_MSG_ID_MISSION_ACK_MIN_LEN, MAVLINK_MSG_ID_MISSION_ACK_LEN, MAVLINK_MSG_ID_MISSION_ACK_CRC);
+#endif
+}
+
+/**
+ * @brief Send a mission_ack message
+ * @param chan MAVLink channel to send the message
+ * @param struct The MAVLink struct to serialize
+ */
+static inline void mavlink_msg_mission_ack_send_struct(mavlink_channel_t chan, const mavlink_mission_ack_t* mission_ack)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    mavlink_msg_mission_ack_send(chan, mission_ack->target_system, mission_ack->target_component, mission_ack->type, mission_ack->mission_type);
+#else
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_MISSION_ACK, (const char *)mission_ack, MAVLINK_MSG_ID_MISSION_ACK_MIN_LEN, MAVLINK_MSG_ID_MISSION_ACK_LEN, MAVLINK_MSG_ID_MISSION_ACK_CRC);
+#endif
+}
+
+#if MAVLINK_MSG_ID_MISSION_ACK_LEN <= MAVLINK_MA

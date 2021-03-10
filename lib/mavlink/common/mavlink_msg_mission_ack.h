@@ -232,4 +232,53 @@ static inline void mavlink_msg_mission_ack_send_buf(mavlink_message_t *msgbuf, m
  *
  * @return System ID
  */
-static inline uint8
+static inline uint8_t mavlink_msg_mission_ack_get_target_system(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  0);
+}
+
+/**
+ * @brief Get field target_component from mission_ack message
+ *
+ * @return Component ID
+ */
+static inline uint8_t mavlink_msg_mission_ack_get_target_component(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  1);
+}
+
+/**
+ * @brief Get field type from mission_ack message
+ *
+ * @return See MAV_MISSION_RESULT enum
+ */
+static inline uint8_t mavlink_msg_mission_ack_get_type(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  2);
+}
+
+/**
+ * @brief Get field mission_type from mission_ack message
+ *
+ * @return Mission type, see MAV_MISSION_TYPE
+ */
+static inline uint8_t mavlink_msg_mission_ack_get_mission_type(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  3);
+}
+
+/**
+ * @brief Decode a mission_ack message into a struct
+ *
+ * @param msg The message to decode
+ * @param mission_ack C-struct to decode the message contents into
+ */
+static inline void mavlink_msg_mission_ack_decode(const mavlink_message_t* msg, mavlink_mission_ack_t* mission_ack)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    mission_ack->target_system = mavlink_msg_mission_ack_get_target_system(msg);
+    mission_ack->target_component = mavlink_msg_mission_ack_get_target_component(msg);
+    mission_ack->type = mavlink_msg_mission_ack_get_type(msg);
+    mission_ack->mission_type = mavlink_msg_mission_ack_get_mission_type(msg);
+#else
+        uint8_t len = msg

@@ -38,4 +38,39 @@ typedef struct __mavlink_mission_item_reached_t {
 /**
  * @brief Pack a mission_item_reached message
  * @param system_id ID of this system
- * @param c
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param msg The MAVLink message to compress the data into
+ *
+ * @param seq Sequence
+ * @return length of the message in bytes (excluding serial stream start sign)
+ */
+static inline uint16_t mavlink_msg_mission_item_reached_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
+                               uint16_t seq)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    char buf[MAVLINK_MSG_ID_MISSION_ITEM_REACHED_LEN];
+    _mav_put_uint16_t(buf, 0, seq);
+
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_MISSION_ITEM_REACHED_LEN);
+#else
+    mavlink_mission_item_reached_t packet;
+    packet.seq = seq;
+
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_MISSION_ITEM_REACHED_LEN);
+#endif
+
+    msg->msgid = MAVLINK_MSG_ID_MISSION_ITEM_REACHED;
+    return mavlink_finalize_message(msg, system_id, component_id, MAVLINK_MSG_ID_MISSION_ITEM_REACHED_MIN_LEN, MAVLINK_MSG_ID_MISSION_ITEM_REACHED_LEN, MAVLINK_MSG_ID_MISSION_ITEM_REACHED_CRC);
+}
+
+/**
+ * @brief Pack a mission_item_reached message on a channel
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param chan The MAVLink channel this message will be sent over
+ * @param msg The MAVLink message to compress the data into
+ * @param seq Sequence
+ * @return length of the message in bytes (excluding serial stream start sign)
+ */
+static inline uint16_t mavlink_msg_mission_item_reached_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
+                            

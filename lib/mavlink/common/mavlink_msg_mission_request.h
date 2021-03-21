@@ -241,3 +241,49 @@ static inline uint8_t mavlink_msg_mission_request_get_target_system(const mavlin
 /**
  * @brief Get field target_component from mission_request message
  *
+ * @return Component ID
+ */
+static inline uint8_t mavlink_msg_mission_request_get_target_component(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  3);
+}
+
+/**
+ * @brief Get field seq from mission_request message
+ *
+ * @return Sequence
+ */
+static inline uint16_t mavlink_msg_mission_request_get_seq(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint16_t(msg,  0);
+}
+
+/**
+ * @brief Get field mission_type from mission_request message
+ *
+ * @return Mission type, see MAV_MISSION_TYPE
+ */
+static inline uint8_t mavlink_msg_mission_request_get_mission_type(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  4);
+}
+
+/**
+ * @brief Decode a mission_request message into a struct
+ *
+ * @param msg The message to decode
+ * @param mission_request C-struct to decode the message contents into
+ */
+static inline void mavlink_msg_mission_request_decode(const mavlink_message_t* msg, mavlink_mission_request_t* mission_request)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    mission_request->seq = mavlink_msg_mission_request_get_seq(msg);
+    mission_request->target_system = mavlink_msg_mission_request_get_target_system(msg);
+    mission_request->target_component = mavlink_msg_mission_request_get_target_component(msg);
+    mission_request->mission_type = mavlink_msg_mission_request_get_mission_type(msg);
+#else
+        uint8_t len = msg->len < MAVLINK_MSG_ID_MISSION_REQUEST_LEN? msg->len : MAVLINK_MSG_ID_MISSION_REQUEST_LEN;
+        memset(mission_request, 0, MAVLINK_MSG_ID_MISSION_REQUEST_LEN);
+    memcpy(mission_request, _MAV_PAYLOAD(msg), len);
+#endif
+}

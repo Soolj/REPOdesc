@@ -173,4 +173,41 @@ static inline void mavlink_msg_mission_item_reached_send_buf(mavlink_message_t *
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_MISSION_ITEM_REACHED, buf, MAVLINK_MSG_ID_MISSION_ITEM_REACHED_MIN_LEN, MAVLINK_MSG_ID_MISSION_ITEM_REACHED_LEN, MAVLINK_MSG_ID_MISSION_ITEM_REACHED_CRC);
 #else
     mavlink_mission_item_reached_t *packet = (mavlink_mission_item_reached_t *)msgbuf;
-  
+    packet->seq = seq;
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_MISSION_ITEM_REACHED, (const char *)packet, MAVLINK_MSG_ID_MISSION_ITEM_REACHED_MIN_LEN, MAVLINK_MSG_ID_MISSION_ITEM_REACHED_LEN, MAVLINK_MSG_ID_MISSION_ITEM_REACHED_CRC);
+#endif
+}
+#endif
+
+#endif
+
+// MESSAGE MISSION_ITEM_REACHED UNPACKING
+
+
+/**
+ * @brief Get field seq from mission_item_reached message
+ *
+ * @return Sequence
+ */
+static inline uint16_t mavlink_msg_mission_item_reached_get_seq(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint16_t(msg,  0);
+}
+
+/**
+ * @brief Decode a mission_item_reached message into a struct
+ *
+ * @param msg The message to decode
+ * @param mission_item_reached C-struct to decode the message contents into
+ */
+static inline void mavlink_msg_mission_item_reached_decode(const mavlink_message_t* msg, mavlink_mission_item_reached_t* mission_item_reached)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    mission_item_reached->seq = mavlink_msg_mission_item_reached_get_seq(msg);
+#else
+        uint8_t len = msg->len < MAVLINK_MSG_ID_MISSION_ITEM_REACHED_LEN? msg->len : MAVLINK_MSG_ID_MISSION_ITEM_REACHED_LEN;
+        memset(mission_item_reached, 0, MAVLINK_MSG_ID_MISSION_ITEM_REACHED_LEN);
+    memcpy(mission_item_reached, _MAV_PAYLOAD(msg), len);
+#endif
+}

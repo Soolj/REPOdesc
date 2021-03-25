@@ -127,4 +127,37 @@ static inline uint16_t mavlink_msg_mission_set_current_encode(uint8_t system_id,
  * @brief Encode a mission_set_current struct on a channel
  *
  * @param system_id ID of this system
- * @param component_id ID of this component (e.g.
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param chan The MAVLink channel this message will be sent over
+ * @param msg The MAVLink message to compress the data into
+ * @param mission_set_current C-struct to read the message contents from
+ */
+static inline uint16_t mavlink_msg_mission_set_current_encode_chan(uint8_t system_id, uint8_t component_id, uint8_t chan, mavlink_message_t* msg, const mavlink_mission_set_current_t* mission_set_current)
+{
+    return mavlink_msg_mission_set_current_pack_chan(system_id, component_id, chan, msg, mission_set_current->target_system, mission_set_current->target_component, mission_set_current->seq);
+}
+
+/**
+ * @brief Send a mission_set_current message
+ * @param chan MAVLink channel to send the message
+ *
+ * @param target_system System ID
+ * @param target_component Component ID
+ * @param seq Sequence
+ */
+#ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
+
+static inline void mavlink_msg_mission_set_current_send(mavlink_channel_t chan, uint8_t target_system, uint8_t target_component, uint16_t seq)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    char buf[MAVLINK_MSG_ID_MISSION_SET_CURRENT_LEN];
+    _mav_put_uint16_t(buf, 0, seq);
+    _mav_put_uint8_t(buf, 2, target_system);
+    _mav_put_uint8_t(buf, 3, target_component);
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_MISSION_SET_CURRENT, buf, MAVLINK_MSG_ID_MISSION_SET_CURRENT_MIN_LEN, MAVLINK_MSG_ID_MISSION_SET_CURRENT_LEN, MAVLINK_MSG_ID_MISSION_SET_CURRENT_CRC);
+#else
+    mavlink_mission_set_current_t packet;
+    packet.seq = seq;
+    packet.target_system = target_system;
+    packet.target_component = ta

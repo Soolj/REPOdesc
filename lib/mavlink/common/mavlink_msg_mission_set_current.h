@@ -238,4 +238,26 @@ static inline uint8_t mavlink_msg_mission_set_current_get_target_component(const
  *
  * @return Sequence
  */
-static inline uint16
+static inline uint16_t mavlink_msg_mission_set_current_get_seq(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint16_t(msg,  0);
+}
+
+/**
+ * @brief Decode a mission_set_current message into a struct
+ *
+ * @param msg The message to decode
+ * @param mission_set_current C-struct to decode the message contents into
+ */
+static inline void mavlink_msg_mission_set_current_decode(const mavlink_message_t* msg, mavlink_mission_set_current_t* mission_set_current)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    mission_set_current->seq = mavlink_msg_mission_set_current_get_seq(msg);
+    mission_set_current->target_system = mavlink_msg_mission_set_current_get_target_system(msg);
+    mission_set_current->target_component = mavlink_msg_mission_set_current_get_target_component(msg);
+#else
+        uint8_t len = msg->len < MAVLINK_MSG_ID_MISSION_SET_CURRENT_LEN? msg->len : MAVLINK_MSG_ID_MISSION_SET_CURRENT_LEN;
+        memset(mission_set_current, 0, MAVLINK_MSG_ID_MISSION_SET_CURRENT_LEN);
+    memcpy(mission_set_current, _MAV_PAYLOAD(msg), len);
+#endif
+}

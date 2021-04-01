@@ -72,4 +72,34 @@ static inline uint16_t mavlink_msg_mission_write_partial_list_pack(uint8_t syste
     _mav_put_uint8_t(buf, 6, mission_type);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_MISSION_WRITE_PARTIAL_LIST_LEN);
-#e
+#else
+    mavlink_mission_write_partial_list_t packet;
+    packet.start_index = start_index;
+    packet.end_index = end_index;
+    packet.target_system = target_system;
+    packet.target_component = target_component;
+    packet.mission_type = mission_type;
+
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_MISSION_WRITE_PARTIAL_LIST_LEN);
+#endif
+
+    msg->msgid = MAVLINK_MSG_ID_MISSION_WRITE_PARTIAL_LIST;
+    return mavlink_finalize_message(msg, system_id, component_id, MAVLINK_MSG_ID_MISSION_WRITE_PARTIAL_LIST_MIN_LEN, MAVLINK_MSG_ID_MISSION_WRITE_PARTIAL_LIST_LEN, MAVLINK_MSG_ID_MISSION_WRITE_PARTIAL_LIST_CRC);
+}
+
+/**
+ * @brief Pack a mission_write_partial_list message on a channel
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param chan The MAVLink channel this message will be sent over
+ * @param msg The MAVLink message to compress the data into
+ * @param target_system System ID
+ * @param target_component Component ID
+ * @param start_index Start index, 0 by default and smaller / equal to the largest index of the current onboard list.
+ * @param end_index End index, equal or greater than start index.
+ * @param mission_type Mission type, see MAV_MISSION_TYPE
+ * @return length of the message in bytes (excluding serial stream start sign)
+ */
+static inline uint16_t mavlink_msg_mission_write_partial_list_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
+                               mavlink_message_t* msg,
+                               

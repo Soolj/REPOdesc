@@ -258,4 +258,47 @@ static inline uint8_t mavlink_msg_mission_write_partial_list_get_target_system(c
  */
 static inline uint8_t mavlink_msg_mission_write_partial_list_get_target_component(const mavlink_message_t* msg)
 {
-    retu
+    return _MAV_RETURN_uint8_t(msg,  5);
+}
+
+/**
+ * @brief Get field start_index from mission_write_partial_list message
+ *
+ * @return Start index, 0 by default and smaller / equal to the largest index of the current onboard list.
+ */
+static inline int16_t mavlink_msg_mission_write_partial_list_get_start_index(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int16_t(msg,  0);
+}
+
+/**
+ * @brief Get field end_index from mission_write_partial_list message
+ *
+ * @return End index, equal or greater than start index.
+ */
+static inline int16_t mavlink_msg_mission_write_partial_list_get_end_index(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int16_t(msg,  2);
+}
+
+/**
+ * @brief Get field mission_type from mission_write_partial_list message
+ *
+ * @return Mission type, see MAV_MISSION_TYPE
+ */
+static inline uint8_t mavlink_msg_mission_write_partial_list_get_mission_type(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  6);
+}
+
+/**
+ * @brief Decode a mission_write_partial_list message into a struct
+ *
+ * @param msg The message to decode
+ * @param mission_write_partial_list C-struct to decode the message contents into
+ */
+static inline void mavlink_msg_mission_write_partial_list_decode(const mavlink_message_t* msg, mavlink_mission_write_partial_list_t* mission_write_partial_list)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    mission_write_partial_list->start_index = mavlink_msg_mission_write_partial_list_get_start_index(msg);
+    mission_write_partial_list->end_index = mavlink_msg_mission_write_partial_list_ge

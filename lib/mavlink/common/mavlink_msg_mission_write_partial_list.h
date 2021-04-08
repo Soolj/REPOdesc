@@ -301,4 +301,13 @@ static inline void mavlink_msg_mission_write_partial_list_decode(const mavlink_m
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     mission_write_partial_list->start_index = mavlink_msg_mission_write_partial_list_get_start_index(msg);
-    mission_write_partial_list->end_index = mavlink_msg_mission_write_partial_list_ge
+    mission_write_partial_list->end_index = mavlink_msg_mission_write_partial_list_get_end_index(msg);
+    mission_write_partial_list->target_system = mavlink_msg_mission_write_partial_list_get_target_system(msg);
+    mission_write_partial_list->target_component = mavlink_msg_mission_write_partial_list_get_target_component(msg);
+    mission_write_partial_list->mission_type = mavlink_msg_mission_write_partial_list_get_mission_type(msg);
+#else
+        uint8_t len = msg->len < MAVLINK_MSG_ID_MISSION_WRITE_PARTIAL_LIST_LEN? msg->len : MAVLINK_MSG_ID_MISSION_WRITE_PARTIAL_LIST_LEN;
+        memset(mission_write_partial_list, 0, MAVLINK_MSG_ID_MISSION_WRITE_PARTIAL_LIST_LEN);
+    memcpy(mission_write_partial_list, _MAV_PAYLOAD(msg), len);
+#endif
+}

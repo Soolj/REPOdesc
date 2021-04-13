@@ -74,4 +74,30 @@ static inline uint16_t mavlink_msg_obstacle_distance_pack(uint8_t system_id, uin
     _mav_put_uint16_t(buf, 154, max_distance);
     _mav_put_uint8_t(buf, 156, sensor_type);
     _mav_put_uint8_t(buf, 157, increment);
-    _mav_put_uint16_t_arr
+    _mav_put_uint16_t_array(buf, 8, distances, 72);
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_OBSTACLE_DISTANCE_LEN);
+#else
+    mavlink_obstacle_distance_t packet;
+    packet.time_usec = time_usec;
+    packet.min_distance = min_distance;
+    packet.max_distance = max_distance;
+    packet.sensor_type = sensor_type;
+    packet.increment = increment;
+    mav_array_memcpy(packet.distances, distances, sizeof(uint16_t)*72);
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_OBSTACLE_DISTANCE_LEN);
+#endif
+
+    msg->msgid = MAVLINK_MSG_ID_OBSTACLE_DISTANCE;
+    return mavlink_finalize_message(msg, system_id, component_id, MAVLINK_MSG_ID_OBSTACLE_DISTANCE_MIN_LEN, MAVLINK_MSG_ID_OBSTACLE_DISTANCE_LEN, MAVLINK_MSG_ID_OBSTACLE_DISTANCE_CRC);
+}
+
+/**
+ * @brief Pack a obstacle_distance message on a channel
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param chan The MAVLink channel this message will be sent over
+ * @param msg The MAVLink message to compress the data into
+ * @param time_usec Timestamp (microseconds since system boot or since UNIX epoch)
+ * @param sensor_type Class id of the distance sensor type.
+ * @param distances Distance of obstacles in front of the sensor starting on the left side. A value of 0 means that the obstacle is right in front of the sensor. A value of max_distance +1 means no obstace is present. A value of UINT16_MAX for unknown/not used. In a array element, each unit corresponds to 1cm.
+ * @param increment Angular width in degrees

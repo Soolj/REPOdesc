@@ -155,4 +155,28 @@ static inline uint16_t mavlink_msg_obstacle_distance_encode(uint8_t system_id, u
  * @param msg The MAVLink message to compress the data into
  * @param obstacle_distance C-struct to read the message contents from
  */
-static inline uint16_t mavlink_msg_obstacle_distance_encode_chan(uint8_t system_id, uint8_t component_id, uint8_t chan, mavlink_message_t* msg, const mavlink_obstacle_distance_t* obst
+static inline uint16_t mavlink_msg_obstacle_distance_encode_chan(uint8_t system_id, uint8_t component_id, uint8_t chan, mavlink_message_t* msg, const mavlink_obstacle_distance_t* obstacle_distance)
+{
+    return mavlink_msg_obstacle_distance_pack_chan(system_id, component_id, chan, msg, obstacle_distance->time_usec, obstacle_distance->sensor_type, obstacle_distance->distances, obstacle_distance->increment, obstacle_distance->min_distance, obstacle_distance->max_distance);
+}
+
+/**
+ * @brief Send a obstacle_distance message
+ * @param chan MAVLink channel to send the message
+ *
+ * @param time_usec Timestamp (microseconds since system boot or since UNIX epoch)
+ * @param sensor_type Class id of the distance sensor type.
+ * @param distances Distance of obstacles in front of the sensor starting on the left side. A value of 0 means that the obstacle is right in front of the sensor. A value of max_distance +1 means no obstace is present. A value of UINT16_MAX for unknown/not used. In a array element, each unit corresponds to 1cm.
+ * @param increment Angular width in degrees of each array element.
+ * @param min_distance Minimum distance the sensor can measure in centimeters
+ * @param max_distance Maximum distance the sensor can measure in centimeters
+ */
+#ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
+
+static inline void mavlink_msg_obstacle_distance_send(mavlink_channel_t chan, uint64_t time_usec, uint8_t sensor_type, const uint16_t *distances, uint8_t increment, uint16_t min_distance, uint16_t max_distance)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    char buf[MAVLINK_MSG_ID_OBSTACLE_DISTANCE_LEN];
+    _mav_put_uint64_t(buf, 0, time_usec);
+    _mav_put_uint16_t(buf, 152, min_distance);
+    _mav_put_uint16_t(buf, 154

@@ -179,4 +179,31 @@ static inline void mavlink_msg_obstacle_distance_send(mavlink_channel_t chan, ui
     char buf[MAVLINK_MSG_ID_OBSTACLE_DISTANCE_LEN];
     _mav_put_uint64_t(buf, 0, time_usec);
     _mav_put_uint16_t(buf, 152, min_distance);
-    _mav_put_uint16_t(buf, 154
+    _mav_put_uint16_t(buf, 154, max_distance);
+    _mav_put_uint8_t(buf, 156, sensor_type);
+    _mav_put_uint8_t(buf, 157, increment);
+    _mav_put_uint16_t_array(buf, 8, distances, 72);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_OBSTACLE_DISTANCE, buf, MAVLINK_MSG_ID_OBSTACLE_DISTANCE_MIN_LEN, MAVLINK_MSG_ID_OBSTACLE_DISTANCE_LEN, MAVLINK_MSG_ID_OBSTACLE_DISTANCE_CRC);
+#else
+    mavlink_obstacle_distance_t packet;
+    packet.time_usec = time_usec;
+    packet.min_distance = min_distance;
+    packet.max_distance = max_distance;
+    packet.sensor_type = sensor_type;
+    packet.increment = increment;
+    mav_array_memcpy(packet.distances, distances, sizeof(uint16_t)*72);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_OBSTACLE_DISTANCE, (const char *)&packet, MAVLINK_MSG_ID_OBSTACLE_DISTANCE_MIN_LEN, MAVLINK_MSG_ID_OBSTACLE_DISTANCE_LEN, MAVLINK_MSG_ID_OBSTACLE_DISTANCE_CRC);
+#endif
+}
+
+/**
+ * @brief Send a obstacle_distance message
+ * @param chan MAVLink channel to send the message
+ * @param struct The MAVLink struct to serialize
+ */
+static inline void mavlink_msg_obstacle_distance_send_struct(mavlink_channel_t chan, const mavlink_obstacle_distance_t* obstacle_distance)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    mavlink_msg_obstacle_distance_send(chan, obstacle_distance->time_usec, obstacle_distance->sensor_type, obstacle_distance->distances, obstacle_distance->increment, obstacle_distance->min_distance, obstacle_distance->max_distance);
+#else
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_OBSTACLE_DISTANCE, (const char *)o

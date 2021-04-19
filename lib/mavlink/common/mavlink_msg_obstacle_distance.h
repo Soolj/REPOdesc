@@ -282,4 +282,43 @@ static inline uint16_t mavlink_msg_obstacle_distance_get_distances(const mavlink
  *
  * @return Angular width in degrees of each array element.
  */
-static
+static inline uint8_t mavlink_msg_obstacle_distance_get_increment(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  157);
+}
+
+/**
+ * @brief Get field min_distance from obstacle_distance message
+ *
+ * @return Minimum distance the sensor can measure in centimeters
+ */
+static inline uint16_t mavlink_msg_obstacle_distance_get_min_distance(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint16_t(msg,  152);
+}
+
+/**
+ * @brief Get field max_distance from obstacle_distance message
+ *
+ * @return Maximum distance the sensor can measure in centimeters
+ */
+static inline uint16_t mavlink_msg_obstacle_distance_get_max_distance(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint16_t(msg,  154);
+}
+
+/**
+ * @brief Decode a obstacle_distance message into a struct
+ *
+ * @param msg The message to decode
+ * @param obstacle_distance C-struct to decode the message contents into
+ */
+static inline void mavlink_msg_obstacle_distance_decode(const mavlink_message_t* msg, mavlink_obstacle_distance_t* obstacle_distance)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    obstacle_distance->time_usec = mavlink_msg_obstacle_distance_get_time_usec(msg);
+    mavlink_msg_obstacle_distance_get_distances(msg, obstacle_distance->distances);
+    obstacle_distance->min_distance = mavlink_msg_obstacle_distance_get_min_distance(msg);
+    obstacle_distance->max_distance = mavlink_msg_obstacle_distance_get_max_distance(msg);
+    obstacle_distance->sensor_type = mavlink_msg_obstacle_distance_get_sensor_type(msg);
+ 

@@ -235,4 +235,51 @@ static inline void mavlink_msg_obstacle_distance_send_buf(mavlink_message_t *msg
     packet->min_distance = min_distance;
     packet->max_distance = max_distance;
     packet->sensor_type = sensor_type;
-    packet->incre
+    packet->increment = increment;
+    mav_array_memcpy(packet->distances, distances, sizeof(uint16_t)*72);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_OBSTACLE_DISTANCE, (const char *)packet, MAVLINK_MSG_ID_OBSTACLE_DISTANCE_MIN_LEN, MAVLINK_MSG_ID_OBSTACLE_DISTANCE_LEN, MAVLINK_MSG_ID_OBSTACLE_DISTANCE_CRC);
+#endif
+}
+#endif
+
+#endif
+
+// MESSAGE OBSTACLE_DISTANCE UNPACKING
+
+
+/**
+ * @brief Get field time_usec from obstacle_distance message
+ *
+ * @return Timestamp (microseconds since system boot or since UNIX epoch)
+ */
+static inline uint64_t mavlink_msg_obstacle_distance_get_time_usec(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint64_t(msg,  0);
+}
+
+/**
+ * @brief Get field sensor_type from obstacle_distance message
+ *
+ * @return Class id of the distance sensor type.
+ */
+static inline uint8_t mavlink_msg_obstacle_distance_get_sensor_type(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  156);
+}
+
+/**
+ * @brief Get field distances from obstacle_distance message
+ *
+ * @return Distance of obstacles in front of the sensor starting on the left side. A value of 0 means that the obstacle is right in front of the sensor. A value of max_distance +1 means no obstace is present. A value of UINT16_MAX for unknown/not used. In a array element, each unit corresponds to 1cm.
+ */
+static inline uint16_t mavlink_msg_obstacle_distance_get_distances(const mavlink_message_t* msg, uint16_t *distances)
+{
+    return _MAV_RETURN_uint16_t_array(msg, distances, 72,  8);
+}
+
+/**
+ * @brief Get field increment from obstacle_distance message
+ *
+ * @return Angular width in degrees of each array element.
+ */
+static

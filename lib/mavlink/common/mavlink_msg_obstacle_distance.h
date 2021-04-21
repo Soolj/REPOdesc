@@ -321,4 +321,10 @@ static inline void mavlink_msg_obstacle_distance_decode(const mavlink_message_t*
     obstacle_distance->min_distance = mavlink_msg_obstacle_distance_get_min_distance(msg);
     obstacle_distance->max_distance = mavlink_msg_obstacle_distance_get_max_distance(msg);
     obstacle_distance->sensor_type = mavlink_msg_obstacle_distance_get_sensor_type(msg);
- 
+    obstacle_distance->increment = mavlink_msg_obstacle_distance_get_increment(msg);
+#else
+        uint8_t len = msg->len < MAVLINK_MSG_ID_OBSTACLE_DISTANCE_LEN? msg->len : MAVLINK_MSG_ID_OBSTACLE_DISTANCE_LEN;
+        memset(obstacle_distance, 0, MAVLINK_MSG_ID_OBSTACLE_DISTANCE_LEN);
+    memcpy(obstacle_distance, _MAV_PAYLOAD(msg), len);
+#endif
+}

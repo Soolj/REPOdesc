@@ -134,4 +134,21 @@ static inline uint16_t mavlink_msg_optical_flow_rad_pack(uint8_t system_id, uint
  * @param system_id ID of this system
  * @param component_id ID of this component (e.g. 200 for IMU)
  * @param chan The MAVLink channel this message will be sent over
- * @para
+ * @param msg The MAVLink message to compress the data into
+ * @param time_usec Timestamp (microseconds, synced to UNIX time or since system boot)
+ * @param sensor_id Sensor ID
+ * @param integration_time_us Integration time in microseconds. Divide integrated_x and integrated_y by the integration time to obtain average flow. The integration time also indicates the.
+ * @param integrated_x Flow in radians around X axis (Sensor RH rotation about the X axis induces a positive flow. Sensor linear motion along the positive Y axis induces a negative flow.)
+ * @param integrated_y Flow in radians around Y axis (Sensor RH rotation about the Y axis induces a positive flow. Sensor linear motion along the positive X axis induces a positive flow.)
+ * @param integrated_xgyro RH rotation around X axis (rad)
+ * @param integrated_ygyro RH rotation around Y axis (rad)
+ * @param integrated_zgyro RH rotation around Z axis (rad)
+ * @param temperature Temperature * 100 in centi-degrees Celsius
+ * @param quality Optical flow quality / confidence. 0: no valid flow, 255: maximum quality
+ * @param time_delta_distance_us Time in microseconds since the distance was sampled.
+ * @param distance Distance to the center of the flow field in meters. Positive value (including zero): distance known. Negative value: Unknown distance.
+ * @return length of the message in bytes (excluding serial stream start sign)
+ */
+static inline uint16_t mavlink_msg_optical_flow_rad_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
+                               mavlink_message_t* msg,
+                                   uint64_t ti

@@ -213,4 +213,20 @@ static inline uint16_t mavlink_msg_optical_flow_rad_encode(uint8_t system_id, ui
  * @param msg The MAVLink message to compress the data into
  * @param optical_flow_rad C-struct to read the message contents from
  */
-static inline uint16_t mavlink_msg_o
+static inline uint16_t mavlink_msg_optical_flow_rad_encode_chan(uint8_t system_id, uint8_t component_id, uint8_t chan, mavlink_message_t* msg, const mavlink_optical_flow_rad_t* optical_flow_rad)
+{
+    return mavlink_msg_optical_flow_rad_pack_chan(system_id, component_id, chan, msg, optical_flow_rad->time_usec, optical_flow_rad->sensor_id, optical_flow_rad->integration_time_us, optical_flow_rad->integrated_x, optical_flow_rad->integrated_y, optical_flow_rad->integrated_xgyro, optical_flow_rad->integrated_ygyro, optical_flow_rad->integrated_zgyro, optical_flow_rad->temperature, optical_flow_rad->quality, optical_flow_rad->time_delta_distance_us, optical_flow_rad->distance);
+}
+
+/**
+ * @brief Send a optical_flow_rad message
+ * @param chan MAVLink channel to send the message
+ *
+ * @param time_usec Timestamp (microseconds, synced to UNIX time or since system boot)
+ * @param sensor_id Sensor ID
+ * @param integration_time_us Integration time in microseconds. Divide integrated_x and integrated_y by the integration time to obtain average flow. The integration time also indicates the.
+ * @param integrated_x Flow in radians around X axis (Sensor RH rotation about the X axis induces a positive flow. Sensor linear motion along the positive Y axis induces a negative flow.)
+ * @param integrated_y Flow in radians around Y axis (Sensor RH rotation about the Y axis induces a positive flow. Sensor linear motion along the positive X axis induces a positive flow.)
+ * @param integrated_xgyro RH rotation around X axis (rad)
+ * @param integrated_ygyro RH rotation around Y axis (rad)
+ * @param integrated_zgyro RH rotation 

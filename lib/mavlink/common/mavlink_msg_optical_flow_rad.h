@@ -229,4 +229,29 @@ static inline uint16_t mavlink_msg_optical_flow_rad_encode_chan(uint8_t system_i
  * @param integrated_y Flow in radians around Y axis (Sensor RH rotation about the Y axis induces a positive flow. Sensor linear motion along the positive X axis induces a positive flow.)
  * @param integrated_xgyro RH rotation around X axis (rad)
  * @param integrated_ygyro RH rotation around Y axis (rad)
- * @param integrated_zgyro RH rotation 
+ * @param integrated_zgyro RH rotation around Z axis (rad)
+ * @param temperature Temperature * 100 in centi-degrees Celsius
+ * @param quality Optical flow quality / confidence. 0: no valid flow, 255: maximum quality
+ * @param time_delta_distance_us Time in microseconds since the distance was sampled.
+ * @param distance Distance to the center of the flow field in meters. Positive value (including zero): distance known. Negative value: Unknown distance.
+ */
+#ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
+
+static inline void mavlink_msg_optical_flow_rad_send(mavlink_channel_t chan, uint64_t time_usec, uint8_t sensor_id, uint32_t integration_time_us, float integrated_x, float integrated_y, float integrated_xgyro, float integrated_ygyro, float integrated_zgyro, int16_t temperature, uint8_t quality, uint32_t time_delta_distance_us, float distance)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    char buf[MAVLINK_MSG_ID_OPTICAL_FLOW_RAD_LEN];
+    _mav_put_uint64_t(buf, 0, time_usec);
+    _mav_put_uint32_t(buf, 8, integration_time_us);
+    _mav_put_float(buf, 12, integrated_x);
+    _mav_put_float(buf, 16, integrated_y);
+    _mav_put_float(buf, 20, integrated_xgyro);
+    _mav_put_float(buf, 24, integrated_ygyro);
+    _mav_put_float(buf, 28, integrated_zgyro);
+    _mav_put_uint32_t(buf, 32, time_delta_distance_us);
+    _mav_put_float(buf, 36, distance);
+    _mav_put_int16_t(buf, 40, temperature);
+    _mav_put_uint8_t(buf, 42, sensor_id);
+    _mav_put_uint8_t(buf, 43, quality);
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_OPTICAL_FLOW_RAD, buf, MAVLINK_MSG_ID_OPTICAL_FLOW

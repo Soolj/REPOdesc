@@ -254,4 +254,32 @@ static inline void mavlink_msg_optical_flow_rad_send(mavlink_channel_t chan, uin
     _mav_put_uint8_t(buf, 42, sensor_id);
     _mav_put_uint8_t(buf, 43, quality);
 
-    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_OPTICAL_FLOW_RAD, buf, MAVLINK_MSG_ID_OPTICAL_FLOW
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_OPTICAL_FLOW_RAD, buf, MAVLINK_MSG_ID_OPTICAL_FLOW_RAD_MIN_LEN, MAVLINK_MSG_ID_OPTICAL_FLOW_RAD_LEN, MAVLINK_MSG_ID_OPTICAL_FLOW_RAD_CRC);
+#else
+    mavlink_optical_flow_rad_t packet;
+    packet.time_usec = time_usec;
+    packet.integration_time_us = integration_time_us;
+    packet.integrated_x = integrated_x;
+    packet.integrated_y = integrated_y;
+    packet.integrated_xgyro = integrated_xgyro;
+    packet.integrated_ygyro = integrated_ygyro;
+    packet.integrated_zgyro = integrated_zgyro;
+    packet.time_delta_distance_us = time_delta_distance_us;
+    packet.distance = distance;
+    packet.temperature = temperature;
+    packet.sensor_id = sensor_id;
+    packet.quality = quality;
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_OPTICAL_FLOW_RAD, (const char *)&packet, MAVLINK_MSG_ID_OPTICAL_FLOW_RAD_MIN_LEN, MAVLINK_MSG_ID_OPTICAL_FLOW_RAD_LEN, MAVLINK_MSG_ID_OPTICAL_FLOW_RAD_CRC);
+#endif
+}
+
+/**
+ * @brief Send a optical_flow_rad message
+ * @param chan MAVLink channel to send the message
+ * @param struct The MAVLink struct to serialize
+ */
+static inline void mavlink_msg_optical_flow_rad_send_struct(mavlink_channel_t chan, const mavlink_optical_flow_rad_t* optical_flow_rad)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    mavlink_msg_optical_flow_rad_send(chan, optical_flow_rad->time_usec, optical_flow_rad->sensor_id, optical_flow_rad->integration_time_us, optical_flow_rad->integrated_x, optical_flow_rad->integrated_y, optical_flow_rad->integrated_xgyro, optical_flow_rad->integrated_ygyro, optical_flow_rad->integrated_zgyro, optical_flow_rad->temperature, opt

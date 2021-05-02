@@ -308,4 +308,43 @@ static inline void mavlink_msg_optical_flow_rad_send_buf(mavlink_message_t *msgb
     _mav_put_float(buf, 24, integrated_ygyro);
     _mav_put_float(buf, 28, integrated_zgyro);
     _mav_put_uint32_t(buf, 32, time_delta_distance_us);
-    _m
+    _mav_put_float(buf, 36, distance);
+    _mav_put_int16_t(buf, 40, temperature);
+    _mav_put_uint8_t(buf, 42, sensor_id);
+    _mav_put_uint8_t(buf, 43, quality);
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_OPTICAL_FLOW_RAD, buf, MAVLINK_MSG_ID_OPTICAL_FLOW_RAD_MIN_LEN, MAVLINK_MSG_ID_OPTICAL_FLOW_RAD_LEN, MAVLINK_MSG_ID_OPTICAL_FLOW_RAD_CRC);
+#else
+    mavlink_optical_flow_rad_t *packet = (mavlink_optical_flow_rad_t *)msgbuf;
+    packet->time_usec = time_usec;
+    packet->integration_time_us = integration_time_us;
+    packet->integrated_x = integrated_x;
+    packet->integrated_y = integrated_y;
+    packet->integrated_xgyro = integrated_xgyro;
+    packet->integrated_ygyro = integrated_ygyro;
+    packet->integrated_zgyro = integrated_zgyro;
+    packet->time_delta_distance_us = time_delta_distance_us;
+    packet->distance = distance;
+    packet->temperature = temperature;
+    packet->sensor_id = sensor_id;
+    packet->quality = quality;
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_OPTICAL_FLOW_RAD, (const char *)packet, MAVLINK_MSG_ID_OPTICAL_FLOW_RAD_MIN_LEN, MAVLINK_MSG_ID_OPTICAL_FLOW_RAD_LEN, MAVLINK_MSG_ID_OPTICAL_FLOW_RAD_CRC);
+#endif
+}
+#endif
+
+#endif
+
+// MESSAGE OPTICAL_FLOW_RAD UNPACKING
+
+
+/**
+ * @brief Get field time_usec from optical_flow_rad message
+ *
+ * @return Timestamp (microseconds, synced to UNIX time or since system boot)
+ */
+static inline uint64_t mavlink_msg_optical_flow_rad_get_time_usec(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint64_t(msg,  0);
+}

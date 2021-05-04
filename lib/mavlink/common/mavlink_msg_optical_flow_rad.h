@@ -348,3 +348,52 @@ static inline uint64_t mavlink_msg_optical_flow_rad_get_time_usec(const mavlink_
 {
     return _MAV_RETURN_uint64_t(msg,  0);
 }
+
+/**
+ * @brief Get field sensor_id from optical_flow_rad message
+ *
+ * @return Sensor ID
+ */
+static inline uint8_t mavlink_msg_optical_flow_rad_get_sensor_id(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  42);
+}
+
+/**
+ * @brief Get field integration_time_us from optical_flow_rad message
+ *
+ * @return Integration time in microseconds. Divide integrated_x and integrated_y by the integration time to obtain average flow. The integration time also indicates the.
+ */
+static inline uint32_t mavlink_msg_optical_flow_rad_get_integration_time_us(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint32_t(msg,  8);
+}
+
+/**
+ * @brief Get field integrated_x from optical_flow_rad message
+ *
+ * @return Flow in radians around X axis (Sensor RH rotation about the X axis induces a positive flow. Sensor linear motion along the positive Y axis induces a negative flow.)
+ */
+static inline float mavlink_msg_optical_flow_rad_get_integrated_x(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  12);
+}
+
+/**
+ * @brief Get field integrated_y from optical_flow_rad message
+ *
+ * @return Flow in radians around Y axis (Sensor RH rotation about the Y axis induces a positive flow. Sensor linear motion along the positive X axis induces a positive flow.)
+ */
+static inline float mavlink_msg_optical_flow_rad_get_integrated_y(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  16);
+}
+
+/**
+ * @brief Get field integrated_xgyro from optical_flow_rad message
+ *
+ * @return RH rotation around X axis (rad)
+ */
+static inline float mavlink_msg_optical_flow_rad_get_integrated_xgyro(const mavlink_message_t* msg)
+{
+    retu

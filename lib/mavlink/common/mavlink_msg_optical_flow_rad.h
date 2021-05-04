@@ -396,4 +396,60 @@ static inline float mavlink_msg_optical_flow_rad_get_integrated_y(const mavlink_
  */
 static inline float mavlink_msg_optical_flow_rad_get_integrated_xgyro(const mavlink_message_t* msg)
 {
-    retu
+    return _MAV_RETURN_float(msg,  20);
+}
+
+/**
+ * @brief Get field integrated_ygyro from optical_flow_rad message
+ *
+ * @return RH rotation around Y axis (rad)
+ */
+static inline float mavlink_msg_optical_flow_rad_get_integrated_ygyro(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  24);
+}
+
+/**
+ * @brief Get field integrated_zgyro from optical_flow_rad message
+ *
+ * @return RH rotation around Z axis (rad)
+ */
+static inline float mavlink_msg_optical_flow_rad_get_integrated_zgyro(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  28);
+}
+
+/**
+ * @brief Get field temperature from optical_flow_rad message
+ *
+ * @return Temperature * 100 in centi-degrees Celsius
+ */
+static inline int16_t mavlink_msg_optical_flow_rad_get_temperature(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int16_t(msg,  40);
+}
+
+/**
+ * @brief Get field quality from optical_flow_rad message
+ *
+ * @return Optical flow quality / confidence. 0: no valid flow, 255: maximum quality
+ */
+static inline uint8_t mavlink_msg_optical_flow_rad_get_quality(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  43);
+}
+
+/**
+ * @brief Get field time_delta_distance_us from optical_flow_rad message
+ *
+ * @return Time in microseconds since the distance was sampled.
+ */
+static inline uint32_t mavlink_msg_optical_flow_rad_get_time_delta_distance_us(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint32_t(msg,  32);
+}
+
+/**
+ * @brief Get field distance from optical_flow_rad message
+ *
+ * @return Distance to the center of the flow field in meters. Positive value (including zero): distance known. Negativ

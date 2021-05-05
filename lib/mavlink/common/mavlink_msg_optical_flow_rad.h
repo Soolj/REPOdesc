@@ -452,4 +452,31 @@ static inline uint32_t mavlink_msg_optical_flow_rad_get_time_delta_distance_us(c
 /**
  * @brief Get field distance from optical_flow_rad message
  *
- * @return Distance to the center of the flow field in meters. Positive value (including zero): distance known. Negativ
+ * @return Distance to the center of the flow field in meters. Positive value (including zero): distance known. Negative value: Unknown distance.
+ */
+static inline float mavlink_msg_optical_flow_rad_get_distance(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  36);
+}
+
+/**
+ * @brief Decode a optical_flow_rad message into a struct
+ *
+ * @param msg The message to decode
+ * @param optical_flow_rad C-struct to decode the message contents into
+ */
+static inline void mavlink_msg_optical_flow_rad_decode(const mavlink_message_t* msg, mavlink_optical_flow_rad_t* optical_flow_rad)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    optical_flow_rad->time_usec = mavlink_msg_optical_flow_rad_get_time_usec(msg);
+    optical_flow_rad->integration_time_us = mavlink_msg_optical_flow_rad_get_integration_time_us(msg);
+    optical_flow_rad->integrated_x = mavlink_msg_optical_flow_rad_get_integrated_x(msg);
+    optical_flow_rad->integrated_y = mavlink_msg_optical_flow_rad_get_integrated_y(msg);
+    optical_flow_rad->integrated_xgyro = mavlink_msg_optical_flow_rad_get_integrated_xgyro(msg);
+    optical_flow_rad->integrated_ygyro = mavlink_msg_optical_flow_rad_get_integrated_ygyro(msg);
+    optical_flow_rad->integrated_zgyro = mavlink_msg_optical_flow_rad_get_integrated_zgyro(msg);
+    optical_flow_rad->time_delta_distance_us = mavlink_msg_optical_flow_rad_get_time_delta_distance_us(msg);
+    optical_flow_rad->distance = mavlink_msg_optical_flow_rad_get_distance(msg);
+    optical_flow_rad->temperature = mavlink_msg_optical_flow_rad_get_temperature(msg);
+    optical_flow_rad->sensor_id = mavlink_msg_optical_flow_rad_get_sensor_id(msg);
+    optical_flow_rad->quality = mavlink_msg_optical_flow_rad_get_quality(ms

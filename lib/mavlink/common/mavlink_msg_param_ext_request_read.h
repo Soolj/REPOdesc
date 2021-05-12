@@ -98,4 +98,35 @@ static inline uint16_t mavlink_msg_param_ext_request_read_pack_chan(uint8_t syst
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_PARAM_EXT_REQUEST_READ_LEN];
     _mav_put_int16_t(buf, 0, param_index);
-    _mav_put_uin
+    _mav_put_uint8_t(buf, 2, target_system);
+    _mav_put_uint8_t(buf, 3, target_component);
+    _mav_put_char_array(buf, 4, param_id, 16);
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_PARAM_EXT_REQUEST_READ_LEN);
+#else
+    mavlink_param_ext_request_read_t packet;
+    packet.param_index = param_index;
+    packet.target_system = target_system;
+    packet.target_component = target_component;
+    mav_array_memcpy(packet.param_id, param_id, sizeof(char)*16);
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_PARAM_EXT_REQUEST_READ_LEN);
+#endif
+
+    msg->msgid = MAVLINK_MSG_ID_PARAM_EXT_REQUEST_READ;
+    return mavlink_finalize_message_chan(msg, system_id, component_id, chan, MAVLINK_MSG_ID_PARAM_EXT_REQUEST_READ_MIN_LEN, MAVLINK_MSG_ID_PARAM_EXT_REQUEST_READ_LEN, MAVLINK_MSG_ID_PARAM_EXT_REQUEST_READ_CRC);
+}
+
+/**
+ * @brief Encode a param_ext_request_read struct
+ *
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param msg The MAVLink message to compress the data into
+ * @param param_ext_request_read C-struct to read the message contents from
+ */
+static inline uint16_t mavlink_msg_param_ext_request_read_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_param_ext_request_read_t* param_ext_request_read)
+{
+    return mavlink_msg_param_ext_request_read_pack(system_id, component_id, msg, param_ext_request_read->target_system, param_ext_request_read->target_component, param_ext_request_read->param_id, param_ext_request_read->param_index);
+}
+
+/**
+ * @brief Encode a param_ext_request_read

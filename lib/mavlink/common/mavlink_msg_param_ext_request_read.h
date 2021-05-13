@@ -153,4 +153,33 @@ static inline uint16_t mavlink_msg_param_ext_request_read_encode_chan(uint8_t sy
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_param_ext_request_read_send(mavlink_channel_t chan, uint8_t target_system, uint8_t target_component, const char *param_id, int16_t param_
+static inline void mavlink_msg_param_ext_request_read_send(mavlink_channel_t chan, uint8_t target_system, uint8_t target_component, const char *param_id, int16_t param_index)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    char buf[MAVLINK_MSG_ID_PARAM_EXT_REQUEST_READ_LEN];
+    _mav_put_int16_t(buf, 0, param_index);
+    _mav_put_uint8_t(buf, 2, target_system);
+    _mav_put_uint8_t(buf, 3, target_component);
+    _mav_put_char_array(buf, 4, param_id, 16);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_PARAM_EXT_REQUEST_READ, buf, MAVLINK_MSG_ID_PARAM_EXT_REQUEST_READ_MIN_LEN, MAVLINK_MSG_ID_PARAM_EXT_REQUEST_READ_LEN, MAVLINK_MSG_ID_PARAM_EXT_REQUEST_READ_CRC);
+#else
+    mavlink_param_ext_request_read_t packet;
+    packet.param_index = param_index;
+    packet.target_system = target_system;
+    packet.target_component = target_component;
+    mav_array_memcpy(packet.param_id, param_id, sizeof(char)*16);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_PARAM_EXT_REQUEST_READ, (const char *)&packet, MAVLINK_MSG_ID_PARAM_EXT_REQUEST_READ_MIN_LEN, MAVLINK_MSG_ID_PARAM_EXT_REQUEST_READ_LEN, MAVLINK_MSG_ID_PARAM_EXT_REQUEST_READ_CRC);
+#endif
+}
+
+/**
+ * @brief Send a param_ext_request_read message
+ * @param chan MAVLink channel to send the message
+ * @param struct The MAVLink struct to serialize
+ */
+static inline void mavlink_msg_param_ext_request_read_send_struct(mavlink_channel_t chan, const mavlink_param_ext_request_read_t* param_ext_request_read)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    mavlink_msg_param_ext_request_read_send(chan, param_ext_request_read->target_system, param_ext_request_read->target_component, param_ext_request_read->param_id, param_ext_request_read->param_index);
+#else
+    _mav_finalize_messa

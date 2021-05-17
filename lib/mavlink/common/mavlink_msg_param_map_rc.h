@@ -17,4 +17,33 @@ typedef struct __mavlink_param_map_rc_t {
 }) mavlink_param_map_rc_t;
 
 #define MAVLINK_MSG_ID_PARAM_MAP_RC_LEN 37
-#define MAVLINK_MSG_ID_PARAM_MAP_RC_MIN_L
+#define MAVLINK_MSG_ID_PARAM_MAP_RC_MIN_LEN 37
+#define MAVLINK_MSG_ID_50_LEN 37
+#define MAVLINK_MSG_ID_50_MIN_LEN 37
+
+#define MAVLINK_MSG_ID_PARAM_MAP_RC_CRC 78
+#define MAVLINK_MSG_ID_50_CRC 78
+
+#define MAVLINK_MSG_PARAM_MAP_RC_FIELD_PARAM_ID_LEN 16
+
+#if MAVLINK_COMMAND_24BIT
+#define MAVLINK_MESSAGE_INFO_PARAM_MAP_RC { \
+    50, \
+    "PARAM_MAP_RC", \
+    9, \
+    {  { "target_system", NULL, MAVLINK_TYPE_UINT8_T, 0, 18, offsetof(mavlink_param_map_rc_t, target_system) }, \
+         { "target_component", NULL, MAVLINK_TYPE_UINT8_T, 0, 19, offsetof(mavlink_param_map_rc_t, target_component) }, \
+         { "param_id", NULL, MAVLINK_TYPE_CHAR, 16, 20, offsetof(mavlink_param_map_rc_t, param_id) }, \
+         { "param_index", NULL, MAVLINK_TYPE_INT16_T, 0, 16, offsetof(mavlink_param_map_rc_t, param_index) }, \
+         { "parameter_rc_channel_index", NULL, MAVLINK_TYPE_UINT8_T, 0, 36, offsetof(mavlink_param_map_rc_t, parameter_rc_channel_index) }, \
+         { "param_value0", NULL, MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_param_map_rc_t, param_value0) }, \
+         { "scale", NULL, MAVLINK_TYPE_FLOAT, 0, 4, offsetof(mavlink_param_map_rc_t, scale) }, \
+         { "param_value_min", NULL, MAVLINK_TYPE_FLOAT, 0, 8, offsetof(mavlink_param_map_rc_t, param_value_min) }, \
+         { "param_value_max", NULL, MAVLINK_TYPE_FLOAT, 0, 12, offsetof(mavlink_param_map_rc_t, param_value_max) }, \
+         } \
+}
+#else
+#define MAVLINK_MESSAGE_INFO_PARAM_MAP_RC { \
+    "PARAM_MAP_RC", \
+    9, \
+    {  { "target_system", NULL, MAVLINK_TYPE_UINT8_T, 0, 18, offsetof(mavlink_param_map_rc_t, target_sy

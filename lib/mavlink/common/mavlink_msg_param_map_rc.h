@@ -89,4 +89,33 @@ static inline uint16_t mavlink_msg_param_map_rc_pack(uint8_t system_id, uint8_t 
     _mav_put_uint8_t(buf, 18, target_system);
     _mav_put_uint8_t(buf, 19, target_component);
     _mav_put_uint8_t(buf, 36, parameter_rc_channel_index);
-    _mav_p
+    _mav_put_char_array(buf, 20, param_id, 16);
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_PARAM_MAP_RC_LEN);
+#else
+    mavlink_param_map_rc_t packet;
+    packet.param_value0 = param_value0;
+    packet.scale = scale;
+    packet.param_value_min = param_value_min;
+    packet.param_value_max = param_value_max;
+    packet.param_index = param_index;
+    packet.target_system = target_system;
+    packet.target_component = target_component;
+    packet.parameter_rc_channel_index = parameter_rc_channel_index;
+    mav_array_memcpy(packet.param_id, param_id, sizeof(char)*16);
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_PARAM_MAP_RC_LEN);
+#endif
+
+    msg->msgid = MAVLINK_MSG_ID_PARAM_MAP_RC;
+    return mavlink_finalize_message(msg, system_id, component_id, MAVLINK_MSG_ID_PARAM_MAP_RC_MIN_LEN, MAVLINK_MSG_ID_PARAM_MAP_RC_LEN, MAVLINK_MSG_ID_PARAM_MAP_RC_CRC);
+}
+
+/**
+ * @brief Pack a param_map_rc message on a channel
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param chan The MAVLink channel this message will be sent over
+ * @param msg The MAVLink message to compress the data into
+ * @param target_system System ID
+ * @param target_component Component ID
+ * @param param_id Onboard parameter id, terminated by NULL if the length is less than 16 human-readable chars and WITHOUT null termination (NULL) byte if the length is exactly 16 chars - applications have to provide 16+1 bytes storage if the ID is stored as string
+ * @param param_index Parameter index. Send -1 to

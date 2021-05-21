@@ -138,4 +138,36 @@ static inline uint16_t mavlink_msg_param_map_rc_pack_chan(uint8_t system_id, uin
     _mav_put_float(buf, 12, param_value_max);
     _mav_put_int16_t(buf, 16, param_index);
     _mav_put_uint8_t(buf, 18, target_system);
-    _mav_put_uint8_t(buf, 19, 
+    _mav_put_uint8_t(buf, 19, target_component);
+    _mav_put_uint8_t(buf, 36, parameter_rc_channel_index);
+    _mav_put_char_array(buf, 20, param_id, 16);
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_PARAM_MAP_RC_LEN);
+#else
+    mavlink_param_map_rc_t packet;
+    packet.param_value0 = param_value0;
+    packet.scale = scale;
+    packet.param_value_min = param_value_min;
+    packet.param_value_max = param_value_max;
+    packet.param_index = param_index;
+    packet.target_system = target_system;
+    packet.target_component = target_component;
+    packet.parameter_rc_channel_index = parameter_rc_channel_index;
+    mav_array_memcpy(packet.param_id, param_id, sizeof(char)*16);
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_PARAM_MAP_RC_LEN);
+#endif
+
+    msg->msgid = MAVLINK_MSG_ID_PARAM_MAP_RC;
+    return mavlink_finalize_message_chan(msg, system_id, component_id, chan, MAVLINK_MSG_ID_PARAM_MAP_RC_MIN_LEN, MAVLINK_MSG_ID_PARAM_MAP_RC_LEN, MAVLINK_MSG_ID_PARAM_MAP_RC_CRC);
+}
+
+/**
+ * @brief Encode a param_map_rc struct
+ *
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param msg The MAVLink message to compress the data into
+ * @param param_map_rc C-struct to read the message contents from
+ */
+static inline uint16_t mavlink_msg_param_map_rc_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_param_map_rc_t* param_map_rc)
+{
+    return mavlink_msg_param_map_rc_pack(system_id, component_id, msg, param_map_rc->target_system, param_map_rc->target_component, param_map_rc->param_id, par

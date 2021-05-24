@@ -242,4 +242,31 @@ static inline void mavlink_msg_param_map_rc_send_struct(mavlink_channel_t chan, 
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     mavlink_msg_param_map_rc_send(chan, param_map_rc->target_system, param_map_rc->target_component, param_map_rc->param_id, param_map_rc->param_index, param_map_rc->parameter_rc_channel_index, param_map_rc->param_value0, param_map_rc->scale, param_map_rc->param_value_min, param_map_rc->param_value_max);
 #else
-    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_PARAM_MAP_RC
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_PARAM_MAP_RC, (const char *)param_map_rc, MAVLINK_MSG_ID_PARAM_MAP_RC_MIN_LEN, MAVLINK_MSG_ID_PARAM_MAP_RC_LEN, MAVLINK_MSG_ID_PARAM_MAP_RC_CRC);
+#endif
+}
+
+#if MAVLINK_MSG_ID_PARAM_MAP_RC_LEN <= MAVLINK_MAX_PAYLOAD_LEN
+/*
+  This varient of _send() can be used to save stack space by re-using
+  memory from the receive buffer.  The caller provides a
+  mavlink_message_t which is the size of a full mavlink message. This
+  is usually the receive buffer for the channel, and allows a reply to an
+  incoming message with minimum stack space usage.
+ */
+static inline void mavlink_msg_param_map_rc_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  uint8_t target_system, uint8_t target_component, const char *param_id, int16_t param_index, uint8_t parameter_rc_channel_index, float param_value0, float scale, float param_value_min, float param_value_max)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    char *buf = (char *)msgbuf;
+    _mav_put_float(buf, 0, param_value0);
+    _mav_put_float(buf, 4, scale);
+    _mav_put_float(buf, 8, param_value_min);
+    _mav_put_float(buf, 12, param_value_max);
+    _mav_put_int16_t(buf, 16, param_index);
+    _mav_put_uint8_t(buf, 18, target_system);
+    _mav_put_uint8_t(buf, 19, target_component);
+    _mav_put_uint8_t(buf, 36, parameter_rc_channel_index);
+    _mav_put_char_array(buf, 20, param_id, 16);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_PARAM_MAP_RC, buf, MAVLINK_MSG_ID_PARAM_MAP_RC_MIN_LEN, MAVLINK_MSG_ID_PARAM_MAP_RC_LEN, MAVLINK_MSG_ID_PARAM_MAP_RC_CRC);
+#else
+    mavlink_param_map_rc_t *packet

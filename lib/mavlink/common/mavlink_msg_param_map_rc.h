@@ -269,4 +269,49 @@ static inline void mavlink_msg_param_map_rc_send_buf(mavlink_message_t *msgbuf, 
     _mav_put_char_array(buf, 20, param_id, 16);
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_PARAM_MAP_RC, buf, MAVLINK_MSG_ID_PARAM_MAP_RC_MIN_LEN, MAVLINK_MSG_ID_PARAM_MAP_RC_LEN, MAVLINK_MSG_ID_PARAM_MAP_RC_CRC);
 #else
-    mavlink_param_map_rc_t *packet
+    mavlink_param_map_rc_t *packet = (mavlink_param_map_rc_t *)msgbuf;
+    packet->param_value0 = param_value0;
+    packet->scale = scale;
+    packet->param_value_min = param_value_min;
+    packet->param_value_max = param_value_max;
+    packet->param_index = param_index;
+    packet->target_system = target_system;
+    packet->target_component = target_component;
+    packet->parameter_rc_channel_index = parameter_rc_channel_index;
+    mav_array_memcpy(packet->param_id, param_id, sizeof(char)*16);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_PARAM_MAP_RC, (const char *)packet, MAVLINK_MSG_ID_PARAM_MAP_RC_MIN_LEN, MAVLINK_MSG_ID_PARAM_MAP_RC_LEN, MAVLINK_MSG_ID_PARAM_MAP_RC_CRC);
+#endif
+}
+#endif
+
+#endif
+
+// MESSAGE PARAM_MAP_RC UNPACKING
+
+
+/**
+ * @brief Get field target_system from param_map_rc message
+ *
+ * @return System ID
+ */
+static inline uint8_t mavlink_msg_param_map_rc_get_target_system(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  18);
+}
+
+/**
+ * @brief Get field target_component from param_map_rc message
+ *
+ * @return Component ID
+ */
+static inline uint8_t mavlink_msg_param_map_rc_get_target_component(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  19);
+}
+
+/**
+ * @brief Get field param_id from param_map_rc message
+ *
+ * @return Onboard parameter id, terminated by NULL if the length is less than 16 human-readable chars and WITHOUT null termination (NULL) byte if the length is exactly 16 chars - applications have to provide 16+1 bytes storage if the ID is stored as string
+ */
+static inline uint16_t mavlink_msg_param_map_rc_g

@@ -314,4 +314,52 @@ static inline uint8_t mavlink_msg_param_map_rc_get_target_component(const mavlin
  *
  * @return Onboard parameter id, terminated by NULL if the length is less than 16 human-readable chars and WITHOUT null termination (NULL) byte if the length is exactly 16 chars - applications have to provide 16+1 bytes storage if the ID is stored as string
  */
-static inline uint16_t mavlink_msg_param_map_rc_g
+static inline uint16_t mavlink_msg_param_map_rc_get_param_id(const mavlink_message_t* msg, char *param_id)
+{
+    return _MAV_RETURN_char_array(msg, param_id, 16,  20);
+}
+
+/**
+ * @brief Get field param_index from param_map_rc message
+ *
+ * @return Parameter index. Send -1 to use the param ID field as identifier (else the param id will be ignored), send -2 to disable any existing map for this rc_channel_index.
+ */
+static inline int16_t mavlink_msg_param_map_rc_get_param_index(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int16_t(msg,  16);
+}
+
+/**
+ * @brief Get field parameter_rc_channel_index from param_map_rc message
+ *
+ * @return Index of parameter RC channel. Not equal to the RC channel id. Typically correpsonds to a potentiometer-knob on the RC.
+ */
+static inline uint8_t mavlink_msg_param_map_rc_get_parameter_rc_channel_index(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  36);
+}
+
+/**
+ * @brief Get field param_value0 from param_map_rc message
+ *
+ * @return Initial parameter value
+ */
+static inline float mavlink_msg_param_map_rc_get_param_value0(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  0);
+}
+
+/**
+ * @brief Get field scale from param_map_rc message
+ *
+ * @return Scale, maps the RC range [-1, 1] to a parameter value
+ */
+static inline float mavlink_msg_param_map_rc_get_scale(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  4);
+}
+
+/**
+ * @brief Get field param_value_min from param_map_rc message
+ *
+ * @return Minimum param value. The protocol does not define if this overwrites an onboard minimum value. (Depends on implementa

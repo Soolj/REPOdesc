@@ -362,4 +362,40 @@ static inline float mavlink_msg_param_map_rc_get_scale(const mavlink_message_t* 
 /**
  * @brief Get field param_value_min from param_map_rc message
  *
- * @return Minimum param value. The protocol does not define if this overwrites an onboard minimum value. (Depends on implementa
+ * @return Minimum param value. The protocol does not define if this overwrites an onboard minimum value. (Depends on implementation)
+ */
+static inline float mavlink_msg_param_map_rc_get_param_value_min(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  8);
+}
+
+/**
+ * @brief Get field param_value_max from param_map_rc message
+ *
+ * @return Maximum param value. The protocol does not define if this overwrites an onboard maximum value. (Depends on implementation)
+ */
+static inline float mavlink_msg_param_map_rc_get_param_value_max(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  12);
+}
+
+/**
+ * @brief Decode a param_map_rc message into a struct
+ *
+ * @param msg The message to decode
+ * @param param_map_rc C-struct to decode the message contents into
+ */
+static inline void mavlink_msg_param_map_rc_decode(const mavlink_message_t* msg, mavlink_param_map_rc_t* param_map_rc)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    param_map_rc->param_value0 = mavlink_msg_param_map_rc_get_param_value0(msg);
+    param_map_rc->scale = mavlink_msg_param_map_rc_get_scale(msg);
+    param_map_rc->param_value_min = mavlink_msg_param_map_rc_get_param_value_min(msg);
+    param_map_rc->param_value_max = mavlink_msg_param_map_rc_get_param_value_max(msg);
+    param_map_rc->param_index = mavlink_msg_param_map_rc_get_param_index(msg);
+    param_map_rc->target_system = mavlink_msg_param_map_rc_get_target_system(msg);
+    param_map_rc->target_component = mavlink_msg_param_map_rc_get_target_component(msg);
+    mavlink_msg_param_map_rc_get_param_id(msg, param_map_rc->param_id);
+    param_map_rc->parameter_rc_channel_index = mavlink_msg_param_map_rc_get_parameter_rc_channel_index(msg);
+#else
+  

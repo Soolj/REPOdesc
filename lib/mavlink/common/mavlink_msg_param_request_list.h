@@ -214,4 +214,25 @@ static inline uint8_t mavlink_msg_param_request_list_get_target_system(const mav
  *
  * @return Component ID
  */
-static inline uint8_t ma
+static inline uint8_t mavlink_msg_param_request_list_get_target_component(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  1);
+}
+
+/**
+ * @brief Decode a param_request_list message into a struct
+ *
+ * @param msg The message to decode
+ * @param param_request_list C-struct to decode the message contents into
+ */
+static inline void mavlink_msg_param_request_list_decode(const mavlink_message_t* msg, mavlink_param_request_list_t* param_request_list)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    param_request_list->target_system = mavlink_msg_param_request_list_get_target_system(msg);
+    param_request_list->target_component = mavlink_msg_param_request_list_get_target_component(msg);
+#else
+        uint8_t len = msg->len < MAVLINK_MSG_ID_PARAM_REQUEST_LIST_LEN? msg->len : MAVLINK_MSG_ID_PARAM_REQUEST_LIST_LEN;
+        memset(param_request_list, 0, MAVLINK_MSG_ID_PARAM_REQUEST_LIST_LEN);
+    memcpy(param_request_list, _MAV_PAYLOAD(msg), len);
+#endif
+}

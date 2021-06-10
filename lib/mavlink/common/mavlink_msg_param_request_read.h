@@ -123,4 +123,30 @@ static inline uint16_t mavlink_msg_param_request_read_pack_chan(uint8_t system_i
  * @param msg The MAVLink message to compress the data into
  * @param param_request_read C-struct to read the message contents from
  */
-static inline uint16_t mavlink_msg_param_request_read_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mav
+static inline uint16_t mavlink_msg_param_request_read_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_param_request_read_t* param_request_read)
+{
+    return mavlink_msg_param_request_read_pack(system_id, component_id, msg, param_request_read->target_system, param_request_read->target_component, param_request_read->param_id, param_request_read->param_index);
+}
+
+/**
+ * @brief Encode a param_request_read struct on a channel
+ *
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param chan The MAVLink channel this message will be sent over
+ * @param msg The MAVLink message to compress the data into
+ * @param param_request_read C-struct to read the message contents from
+ */
+static inline uint16_t mavlink_msg_param_request_read_encode_chan(uint8_t system_id, uint8_t component_id, uint8_t chan, mavlink_message_t* msg, const mavlink_param_request_read_t* param_request_read)
+{
+    return mavlink_msg_param_request_read_pack_chan(system_id, component_id, chan, msg, param_request_read->target_system, param_request_read->target_component, param_request_read->param_id, param_request_read->param_index);
+}
+
+/**
+ * @brief Send a param_request_read message
+ * @param chan MAVLink channel to send the message
+ *
+ * @param target_system System ID
+ * @param target_component Component ID
+ * @param param_id Onboard parameter id, terminated by NULL if the length is less than 16 human-readable chars and WITHOUT null termination (NULL) byte if the length is exactly 16 chars - applications have to provide 16+1 bytes storage if the ID is stored as string
+ * @param param_index Parameter index. Send -1 to use the param ID field as identifier

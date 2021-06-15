@@ -251,3 +251,30 @@ static inline uint16_t mavlink_msg_param_request_read_get_param_id(const mavlink
 
 /**
  * @brief Get field param_index from param_request_read message
+ *
+ * @return Parameter index. Send -1 to use the param ID field as identifier (else the param id will be ignored)
+ */
+static inline int16_t mavlink_msg_param_request_read_get_param_index(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int16_t(msg,  0);
+}
+
+/**
+ * @brief Decode a param_request_read message into a struct
+ *
+ * @param msg The message to decode
+ * @param param_request_read C-struct to decode the message contents into
+ */
+static inline void mavlink_msg_param_request_read_decode(const mavlink_message_t* msg, mavlink_param_request_read_t* param_request_read)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    param_request_read->param_index = mavlink_msg_param_request_read_get_param_index(msg);
+    param_request_read->target_system = mavlink_msg_param_request_read_get_target_system(msg);
+    param_request_read->target_component = mavlink_msg_param_request_read_get_target_component(msg);
+    mavlink_msg_param_request_read_get_param_id(msg, param_request_read->param_id);
+#else
+        uint8_t len = msg->len < MAVLINK_MSG_ID_PARAM_REQUEST_READ_LEN? msg->len : MAVLINK_MSG_ID_PARAM_REQUEST_READ_LEN;
+        memset(param_request_read, 0, MAVLINK_MSG_ID_PARAM_REQUEST_READ_LEN);
+    memcpy(param_request_read, _MAV_PAYLOAD(msg), len);
+#endif
+}

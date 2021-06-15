@@ -204,4 +204,50 @@ static inline void mavlink_msg_param_request_read_send_buf(mavlink_message_t *ms
     _mav_put_char_array(buf, 4, param_id, 16);
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_PARAM_REQUEST_READ, buf, MAVLINK_MSG_ID_PARAM_REQUEST_READ_MIN_LEN, MAVLINK_MSG_ID_PARAM_REQUEST_READ_LEN, MAVLINK_MSG_ID_PARAM_REQUEST_READ_CRC);
 #else
-    mavlink_param_request_read_t *packet = (mavlink_param_request_
+    mavlink_param_request_read_t *packet = (mavlink_param_request_read_t *)msgbuf;
+    packet->param_index = param_index;
+    packet->target_system = target_system;
+    packet->target_component = target_component;
+    mav_array_memcpy(packet->param_id, param_id, sizeof(char)*16);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_PARAM_REQUEST_READ, (const char *)packet, MAVLINK_MSG_ID_PARAM_REQUEST_READ_MIN_LEN, MAVLINK_MSG_ID_PARAM_REQUEST_READ_LEN, MAVLINK_MSG_ID_PARAM_REQUEST_READ_CRC);
+#endif
+}
+#endif
+
+#endif
+
+// MESSAGE PARAM_REQUEST_READ UNPACKING
+
+
+/**
+ * @brief Get field target_system from param_request_read message
+ *
+ * @return System ID
+ */
+static inline uint8_t mavlink_msg_param_request_read_get_target_system(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  2);
+}
+
+/**
+ * @brief Get field target_component from param_request_read message
+ *
+ * @return Component ID
+ */
+static inline uint8_t mavlink_msg_param_request_read_get_target_component(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  3);
+}
+
+/**
+ * @brief Get field param_id from param_request_read message
+ *
+ * @return Onboard parameter id, terminated by NULL if the length is less than 16 human-readable chars and WITHOUT null termination (NULL) byte if the length is exactly 16 chars - applications have to provide 16+1 bytes storage if the ID is stored as string
+ */
+static inline uint16_t mavlink_msg_param_request_read_get_param_id(const mavlink_message_t* msg, char *param_id)
+{
+    return _MAV_RETURN_char_array(msg, param_id, 16,  4);
+}
+
+/**
+ * @brief Get field param_index from param_request_read message

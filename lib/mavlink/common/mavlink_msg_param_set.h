@@ -157,4 +157,36 @@ static inline uint16_t mavlink_msg_param_set_encode_chan(uint8_t system_id, uint
  *
  * @param target_system System ID
  * @param target_component Component ID
- * @param param_id Onboard parameter id, terminated by NULL if the length is less than 16 human-readable chars and WITHOUT null termination (NULL) byte if the length is exactly 16 chars - 
+ * @param param_id Onboard parameter id, terminated by NULL if the length is less than 16 human-readable chars and WITHOUT null termination (NULL) byte if the length is exactly 16 chars - applications have to provide 16+1 bytes storage if the ID is stored as string
+ * @param param_value Onboard parameter value
+ * @param param_type Onboard parameter type: see the MAV_PARAM_TYPE enum for supported data types.
+ */
+#ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
+
+static inline void mavlink_msg_param_set_send(mavlink_channel_t chan, uint8_t target_system, uint8_t target_component, const char *param_id, float param_value, uint8_t param_type)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    char buf[MAVLINK_MSG_ID_PARAM_SET_LEN];
+    _mav_put_float(buf, 0, param_value);
+    _mav_put_uint8_t(buf, 4, target_system);
+    _mav_put_uint8_t(buf, 5, target_component);
+    _mav_put_uint8_t(buf, 22, param_type);
+    _mav_put_char_array(buf, 6, param_id, 16);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_PARAM_SET, buf, MAVLINK_MSG_ID_PARAM_SET_MIN_LEN, MAVLINK_MSG_ID_PARAM_SET_LEN, MAVLINK_MSG_ID_PARAM_SET_CRC);
+#else
+    mavlink_param_set_t packet;
+    packet.param_value = param_value;
+    packet.target_system = target_system;
+    packet.target_component = target_component;
+    packet.param_type = param_type;
+    mav_array_memcpy(packet.param_id, param_id, sizeof(char)*16);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_PARAM_SET, (const char *)&packet, MAVLINK_MSG_ID_PARAM_SET_MIN_LEN, MAVLINK_MSG_ID_PARAM_SET_LEN, MAVLINK_MSG_ID_PARAM_SET_CRC);
+#endif
+}
+
+/**
+ * @brief Send a param_set message
+ * @param chan MAVLink channel to send the message
+ * @param struct The MAVLink struct to serialize
+ */
+static inline void mavlink_msg_param_set_send_str

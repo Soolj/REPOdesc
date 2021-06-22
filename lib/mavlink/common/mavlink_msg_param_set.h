@@ -215,4 +215,53 @@ static inline void mavlink_msg_param_set_send_buf(mavlink_message_t *msgbuf, mav
     _mav_put_uint8_t(buf, 5, target_component);
     _mav_put_uint8_t(buf, 22, param_type);
     _mav_put_char_array(buf, 6, param_id, 16);
-    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_PARAM_SET, buf, MAVLINK_MSG_ID_PARAM_SET_MIN_LEN, MAVLINK_MSG_ID_PARAM_SET_LEN, MAVLINK_MSG_ID_PARAM_SET_CRC
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_PARAM_SET, buf, MAVLINK_MSG_ID_PARAM_SET_MIN_LEN, MAVLINK_MSG_ID_PARAM_SET_LEN, MAVLINK_MSG_ID_PARAM_SET_CRC);
+#else
+    mavlink_param_set_t *packet = (mavlink_param_set_t *)msgbuf;
+    packet->param_value = param_value;
+    packet->target_system = target_system;
+    packet->target_component = target_component;
+    packet->param_type = param_type;
+    mav_array_memcpy(packet->param_id, param_id, sizeof(char)*16);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_PARAM_SET, (const char *)packet, MAVLINK_MSG_ID_PARAM_SET_MIN_LEN, MAVLINK_MSG_ID_PARAM_SET_LEN, MAVLINK_MSG_ID_PARAM_SET_CRC);
+#endif
+}
+#endif
+
+#endif
+
+// MESSAGE PARAM_SET UNPACKING
+
+
+/**
+ * @brief Get field target_system from param_set message
+ *
+ * @return System ID
+ */
+static inline uint8_t mavlink_msg_param_set_get_target_system(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  4);
+}
+
+/**
+ * @brief Get field target_component from param_set message
+ *
+ * @return Component ID
+ */
+static inline uint8_t mavlink_msg_param_set_get_target_component(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  5);
+}
+
+/**
+ * @brief Get field param_id from param_set message
+ *
+ * @return Onboard parameter id, terminated by NULL if the length is less than 16 human-readable chars and WITHOUT null termination (NULL) byte if the length is exactly 16 chars - applications have to provide 16+1 bytes storage if the ID is stored as string
+ */
+static inline uint16_t mavlink_msg_param_set_get_param_id(const mavlink_message_t* msg, char *param_id)
+{
+    return _MAV_RETURN_char_array(msg, param_id, 16,  6);
+}
+
+/**
+ * @brief Get field param_va

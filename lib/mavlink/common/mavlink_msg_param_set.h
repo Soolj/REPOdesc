@@ -264,4 +264,42 @@ static inline uint16_t mavlink_msg_param_set_get_param_id(const mavlink_message_
 }
 
 /**
- * @brief Get field param_va
+ * @brief Get field param_value from param_set message
+ *
+ * @return Onboard parameter value
+ */
+static inline float mavlink_msg_param_set_get_param_value(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  0);
+}
+
+/**
+ * @brief Get field param_type from param_set message
+ *
+ * @return Onboard parameter type: see the MAV_PARAM_TYPE enum for supported data types.
+ */
+static inline uint8_t mavlink_msg_param_set_get_param_type(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  22);
+}
+
+/**
+ * @brief Decode a param_set message into a struct
+ *
+ * @param msg The message to decode
+ * @param param_set C-struct to decode the message contents into
+ */
+static inline void mavlink_msg_param_set_decode(const mavlink_message_t* msg, mavlink_param_set_t* param_set)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    param_set->param_value = mavlink_msg_param_set_get_param_value(msg);
+    param_set->target_system = mavlink_msg_param_set_get_target_system(msg);
+    param_set->target_component = mavlink_msg_param_set_get_target_component(msg);
+    mavlink_msg_param_set_get_param_id(msg, param_set->param_id);
+    param_set->param_type = mavlink_msg_param_set_get_param_type(msg);
+#else
+        uint8_t len = msg->len < MAVLINK_MSG_ID_PARAM_SET_LEN? msg->len : MAVLINK_MSG_ID_PARAM_SET_LEN;
+        memset(param_set, 0, MAVLINK_MSG_ID_PARAM_SET_LEN);
+    memcpy(param_set, _MAV_PAYLOAD(msg), len);
+#endif
+}

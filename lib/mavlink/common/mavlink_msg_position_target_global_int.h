@@ -87,4 +87,33 @@ typedef struct __mavlink_position_target_global_int_t {
  * @param lon_int Y Position in WGS84 frame in 1e7 * degrees
  * @param alt Altitude in meters in AMSL altitude, not WGS84 if absolute or relative, above terrain if GLOBAL_TERRAIN_ALT_INT
  * @param vx X velocity in NED frame in meter / s
- * @param vy Y velocity in NED frame in 
+ * @param vy Y velocity in NED frame in meter / s
+ * @param vz Z velocity in NED frame in meter / s
+ * @param afx X acceleration or force (if bit 10 of type_mask is set) in NED frame in meter / s^2 or N
+ * @param afy Y acceleration or force (if bit 10 of type_mask is set) in NED frame in meter / s^2 or N
+ * @param afz Z acceleration or force (if bit 10 of type_mask is set) in NED frame in meter / s^2 or N
+ * @param yaw yaw setpoint in rad
+ * @param yaw_rate yaw rate setpoint in rad/s
+ * @return length of the message in bytes (excluding serial stream start sign)
+ */
+static inline uint16_t mavlink_msg_position_target_global_int_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
+                               uint32_t time_boot_ms, uint8_t coordinate_frame, uint16_t type_mask, int32_t lat_int, int32_t lon_int, float alt, float vx, float vy, float vz, float afx, float afy, float afz, float yaw, float yaw_rate)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    char buf[MAVLINK_MSG_ID_POSITION_TARGET_GLOBAL_INT_LEN];
+    _mav_put_uint32_t(buf, 0, time_boot_ms);
+    _mav_put_int32_t(buf, 4, lat_int);
+    _mav_put_int32_t(buf, 8, lon_int);
+    _mav_put_float(buf, 12, alt);
+    _mav_put_float(buf, 16, vx);
+    _mav_put_float(buf, 20, vy);
+    _mav_put_float(buf, 24, vz);
+    _mav_put_float(buf, 28, afx);
+    _mav_put_float(buf, 32, afy);
+    _mav_put_float(buf, 36, afz);
+    _mav_put_float(buf, 40, yaw);
+    _mav_put_float(buf, 44, yaw_rate);
+    _mav_put_uint16_t(buf, 48, type_mask);
+    _mav_put_uint8_t(buf, 50, coordinate_frame);
+
+     

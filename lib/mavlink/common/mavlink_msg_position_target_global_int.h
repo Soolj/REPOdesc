@@ -148,4 +148,21 @@ static inline uint16_t mavlink_msg_position_target_global_int_pack(uint8_t syste
  * @param chan The MAVLink channel this message will be sent over
  * @param msg The MAVLink message to compress the data into
  * @param time_boot_ms Timestamp in milliseconds since system boot. The rationale for the timestamp in the setpoint is to allow the system to compensate for the transport delay of the setpoint. This allows the system to compensate processing latency.
- * @param coordinate_frame Valid options are: MAV_FRAME_GLOBAL_INT = 5, MAV_FRAME_GLOBAL_RELATIVE_ALT_INT = 6, MAV_FRAME_GLOBAL_TERRAI
+ * @param coordinate_frame Valid options are: MAV_FRAME_GLOBAL_INT = 5, MAV_FRAME_GLOBAL_RELATIVE_ALT_INT = 6, MAV_FRAME_GLOBAL_TERRAIN_ALT_INT = 11
+ * @param type_mask Bitmask to indicate which dimensions should be ignored by the vehicle: a value of 0b0000000000000000 or 0b0000001000000000 indicates that none of the setpoint dimensions should be ignored. If bit 10 is set the floats afx afy afz should be interpreted as force instead of acceleration. Mapping: bit 1: x, bit 2: y, bit 3: z, bit 4: vx, bit 5: vy, bit 6: vz, bit 7: ax, bit 8: ay, bit 9: az, bit 10: is force setpoint, bit 11: yaw, bit 12: yaw rate
+ * @param lat_int X Position in WGS84 frame in 1e7 * degrees
+ * @param lon_int Y Position in WGS84 frame in 1e7 * degrees
+ * @param alt Altitude in meters in AMSL altitude, not WGS84 if absolute or relative, above terrain if GLOBAL_TERRAIN_ALT_INT
+ * @param vx X velocity in NED frame in meter / s
+ * @param vy Y velocity in NED frame in meter / s
+ * @param vz Z velocity in NED frame in meter / s
+ * @param afx X acceleration or force (if bit 10 of type_mask is set) in NED frame in meter / s^2 or N
+ * @param afy Y acceleration or force (if bit 10 of type_mask is set) in NED frame in meter / s^2 or N
+ * @param afz Z acceleration or force (if bit 10 of type_mask is set) in NED frame in meter / s^2 or N
+ * @param yaw yaw setpoint in rad
+ * @param yaw_rate yaw rate setpoint in rad/s
+ * @return length of the message in bytes (excluding serial stream start sign)
+ */
+static inline uint16_t mavlink_msg_position_target_global_int_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
+                               mavlink_message_t* msg,
+                                   uint32_t time_boot_ms,uint8_t coordinate_frame,uint16

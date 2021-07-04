@@ -116,4 +116,36 @@ static inline uint16_t mavlink_msg_position_target_global_int_pack(uint8_t syste
     _mav_put_uint16_t(buf, 48, type_mask);
     _mav_put_uint8_t(buf, 50, coordinate_frame);
 
-     
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_POSITION_TARGET_GLOBAL_INT_LEN);
+#else
+    mavlink_position_target_global_int_t packet;
+    packet.time_boot_ms = time_boot_ms;
+    packet.lat_int = lat_int;
+    packet.lon_int = lon_int;
+    packet.alt = alt;
+    packet.vx = vx;
+    packet.vy = vy;
+    packet.vz = vz;
+    packet.afx = afx;
+    packet.afy = afy;
+    packet.afz = afz;
+    packet.yaw = yaw;
+    packet.yaw_rate = yaw_rate;
+    packet.type_mask = type_mask;
+    packet.coordinate_frame = coordinate_frame;
+
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_POSITION_TARGET_GLOBAL_INT_LEN);
+#endif
+
+    msg->msgid = MAVLINK_MSG_ID_POSITION_TARGET_GLOBAL_INT;
+    return mavlink_finalize_message(msg, system_id, component_id, MAVLINK_MSG_ID_POSITION_TARGET_GLOBAL_INT_MIN_LEN, MAVLINK_MSG_ID_POSITION_TARGET_GLOBAL_INT_LEN, MAVLINK_MSG_ID_POSITION_TARGET_GLOBAL_INT_CRC);
+}
+
+/**
+ * @brief Pack a position_target_global_int message on a channel
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param chan The MAVLink channel this message will be sent over
+ * @param msg The MAVLink message to compress the data into
+ * @param time_boot_ms Timestamp in milliseconds since system boot. The rationale for the timestamp in the setpoint is to allow the system to compensate for the transport delay of the setpoint. This allows the system to compensate processing latency.
+ * @param coordinate_frame Valid options are: MAV_FRAME_GLOBAL_INT = 5, MAV_FRAME_GLOBAL_RELATIVE_ALT_INT = 6, MAV_FRAME_GLOBAL_TERRAI

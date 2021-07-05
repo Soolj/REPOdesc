@@ -165,4 +165,45 @@ static inline uint16_t mavlink_msg_position_target_global_int_pack(uint8_t syste
  */
 static inline uint16_t mavlink_msg_position_target_global_int_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
                                mavlink_message_t* msg,
-                                   uint32_t time_boot_ms,uint8_t coordinate_frame,uint16
+                                   uint32_t time_boot_ms,uint8_t coordinate_frame,uint16_t type_mask,int32_t lat_int,int32_t lon_int,float alt,float vx,float vy,float vz,float afx,float afy,float afz,float yaw,float yaw_rate)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    char buf[MAVLINK_MSG_ID_POSITION_TARGET_GLOBAL_INT_LEN];
+    _mav_put_uint32_t(buf, 0, time_boot_ms);
+    _mav_put_int32_t(buf, 4, lat_int);
+    _mav_put_int32_t(buf, 8, lon_int);
+    _mav_put_float(buf, 12, alt);
+    _mav_put_float(buf, 16, vx);
+    _mav_put_float(buf, 20, vy);
+    _mav_put_float(buf, 24, vz);
+    _mav_put_float(buf, 28, afx);
+    _mav_put_float(buf, 32, afy);
+    _mav_put_float(buf, 36, afz);
+    _mav_put_float(buf, 40, yaw);
+    _mav_put_float(buf, 44, yaw_rate);
+    _mav_put_uint16_t(buf, 48, type_mask);
+    _mav_put_uint8_t(buf, 50, coordinate_frame);
+
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_POSITION_TARGET_GLOBAL_INT_LEN);
+#else
+    mavlink_position_target_global_int_t packet;
+    packet.time_boot_ms = time_boot_ms;
+    packet.lat_int = lat_int;
+    packet.lon_int = lon_int;
+    packet.alt = alt;
+    packet.vx = vx;
+    packet.vy = vy;
+    packet.vz = vz;
+    packet.afx = afx;
+    packet.afy = afy;
+    packet.afz = afz;
+    packet.yaw = yaw;
+    packet.yaw_rate = yaw_rate;
+    packet.type_mask = type_mask;
+    packet.coordinate_frame = coordinate_frame;
+
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_POSITION_TARGET_GLOBAL_INT_LEN);
+#endif
+
+    msg->msgid = MAVLINK_MSG_ID_POSITION_TARGET_GLOBAL_INT;
+    return mavlink_finalize_message_chan(msg, system_id, component_id, chan, MAVLINK_MSG_ID_POSITION_TARGET_GLOBAL_INT_

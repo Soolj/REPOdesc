@@ -230,4 +230,16 @@ static inline uint16_t mavlink_msg_position_target_global_int_encode(uint8_t sys
  * @param chan The MAVLink channel this message will be sent over
  * @param msg The MAVLink message to compress the data into
  * @param position_target_global_int C-struct to read the message contents from
- 
+ */
+static inline uint16_t mavlink_msg_position_target_global_int_encode_chan(uint8_t system_id, uint8_t component_id, uint8_t chan, mavlink_message_t* msg, const mavlink_position_target_global_int_t* position_target_global_int)
+{
+    return mavlink_msg_position_target_global_int_pack_chan(system_id, component_id, chan, msg, position_target_global_int->time_boot_ms, position_target_global_int->coordinate_frame, position_target_global_int->type_mask, position_target_global_int->lat_int, position_target_global_int->lon_int, position_target_global_int->alt, position_target_global_int->vx, position_target_global_int->vy, position_target_global_int->vz, position_target_global_int->afx, position_target_global_int->afy, position_target_global_int->afz, position_target_global_int->yaw, position_target_global_int->yaw_rate);
+}
+
+/**
+ * @brief Send a position_target_global_int message
+ * @param chan MAVLink channel to send the message
+ *
+ * @param time_boot_ms Timestamp in milliseconds since system boot. The rationale for the timestamp in the setpoint is to allow the system to compensate for the transport delay of the setpoint. This allows the system to compensate processing latency.
+ * @param coordinate_frame Valid options are: MAV_FRAME_GLOBAL_INT = 5, MAV_FRAME_GLOBAL_RELATIVE_ALT_INT = 6, MAV_FRAME_GLOBAL_TERRAIN_ALT_INT = 11
+ * @param type_mask Bitmask to indicate which dimensions should be ignored by the vehicle: a value of 0b0000000000000000 or 0b0000001000000000 indicates that none of the setpoint 

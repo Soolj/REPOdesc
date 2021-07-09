@@ -320,4 +320,39 @@ static inline void mavlink_msg_position_target_global_int_send_struct(mavlink_ch
   is usually the receive buffer for the channel, and allows a reply to an
   incoming message with minimum stack space usage.
  */
-static inline void mavlink_msg_position_target_global_int_send_buf(ma
+static inline void mavlink_msg_position_target_global_int_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  uint32_t time_boot_ms, uint8_t coordinate_frame, uint16_t type_mask, int32_t lat_int, int32_t lon_int, float alt, float vx, float vy, float vz, float afx, float afy, float afz, float yaw, float yaw_rate)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    char *buf = (char *)msgbuf;
+    _mav_put_uint32_t(buf, 0, time_boot_ms);
+    _mav_put_int32_t(buf, 4, lat_int);
+    _mav_put_int32_t(buf, 8, lon_int);
+    _mav_put_float(buf, 12, alt);
+    _mav_put_float(buf, 16, vx);
+    _mav_put_float(buf, 20, vy);
+    _mav_put_float(buf, 24, vz);
+    _mav_put_float(buf, 28, afx);
+    _mav_put_float(buf, 32, afy);
+    _mav_put_float(buf, 36, afz);
+    _mav_put_float(buf, 40, yaw);
+    _mav_put_float(buf, 44, yaw_rate);
+    _mav_put_uint16_t(buf, 48, type_mask);
+    _mav_put_uint8_t(buf, 50, coordinate_frame);
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_POSITION_TARGET_GLOBAL_INT, buf, MAVLINK_MSG_ID_POSITION_TARGET_GLOBAL_INT_MIN_LEN, MAVLINK_MSG_ID_POSITION_TARGET_GLOBAL_INT_LEN, MAVLINK_MSG_ID_POSITION_TARGET_GLOBAL_INT_CRC);
+#else
+    mavlink_position_target_global_int_t *packet = (mavlink_position_target_global_int_t *)msgbuf;
+    packet->time_boot_ms = time_boot_ms;
+    packet->lat_int = lat_int;
+    packet->lon_int = lon_int;
+    packet->alt = alt;
+    packet->vx = vx;
+    packet->vy = vy;
+    packet->vz = vz;
+    packet->afx = afx;
+    packet->afy = afy;
+    packet->afz = afz;
+    packet->yaw = yaw;
+    packet->yaw_rate = yaw_rate;
+    packet->type_mask = type_mask;
+    packet->coordinate_frame = co

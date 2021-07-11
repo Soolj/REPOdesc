@@ -390,4 +390,56 @@ static inline uint8_t mavlink_msg_position_target_global_int_get_coordinate_fram
 /**
  * @brief Get field type_mask from position_target_global_int message
  *
- * @return Bitmask to indicate which dimensions should be ignored by the vehicle: a value of 0b0000000000000000 or 0b0000001000000000 indicates that none of the setpoint dimensions should be ignored. If bit 10 is set the floats afx afy afz should be interpreted as force instead of acceleration. Mapping: bit 1: x, bit 2: y, bit 3: z, bit 4: vx, bit 5: vy, bit 6: vz, 
+ * @return Bitmask to indicate which dimensions should be ignored by the vehicle: a value of 0b0000000000000000 or 0b0000001000000000 indicates that none of the setpoint dimensions should be ignored. If bit 10 is set the floats afx afy afz should be interpreted as force instead of acceleration. Mapping: bit 1: x, bit 2: y, bit 3: z, bit 4: vx, bit 5: vy, bit 6: vz, bit 7: ax, bit 8: ay, bit 9: az, bit 10: is force setpoint, bit 11: yaw, bit 12: yaw rate
+ */
+static inline uint16_t mavlink_msg_position_target_global_int_get_type_mask(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint16_t(msg,  48);
+}
+
+/**
+ * @brief Get field lat_int from position_target_global_int message
+ *
+ * @return X Position in WGS84 frame in 1e7 * degrees
+ */
+static inline int32_t mavlink_msg_position_target_global_int_get_lat_int(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int32_t(msg,  4);
+}
+
+/**
+ * @brief Get field lon_int from position_target_global_int message
+ *
+ * @return Y Position in WGS84 frame in 1e7 * degrees
+ */
+static inline int32_t mavlink_msg_position_target_global_int_get_lon_int(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int32_t(msg,  8);
+}
+
+/**
+ * @brief Get field alt from position_target_global_int message
+ *
+ * @return Altitude in meters in AMSL altitude, not WGS84 if absolute or relative, above terrain if GLOBAL_TERRAIN_ALT_INT
+ */
+static inline float mavlink_msg_position_target_global_int_get_alt(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  12);
+}
+
+/**
+ * @brief Get field vx from position_target_global_int message
+ *
+ * @return X velocity in NED frame in meter / s
+ */
+static inline float mavlink_msg_position_target_global_int_get_vx(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  16);
+}
+
+/**
+ * @brief Get field vy from position_target_global_int message
+ *
+ * @return Y velocity in NED frame in meter / s
+ */
+static inline float mavlink_msg_position_target_glo

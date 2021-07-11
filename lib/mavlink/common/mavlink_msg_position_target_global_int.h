@@ -355,4 +355,39 @@ static inline void mavlink_msg_position_target_global_int_send_buf(mavlink_messa
     packet->yaw = yaw;
     packet->yaw_rate = yaw_rate;
     packet->type_mask = type_mask;
-    packet->coordinate_frame = co
+    packet->coordinate_frame = coordinate_frame;
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_POSITION_TARGET_GLOBAL_INT, (const char *)packet, MAVLINK_MSG_ID_POSITION_TARGET_GLOBAL_INT_MIN_LEN, MAVLINK_MSG_ID_POSITION_TARGET_GLOBAL_INT_LEN, MAVLINK_MSG_ID_POSITION_TARGET_GLOBAL_INT_CRC);
+#endif
+}
+#endif
+
+#endif
+
+// MESSAGE POSITION_TARGET_GLOBAL_INT UNPACKING
+
+
+/**
+ * @brief Get field time_boot_ms from position_target_global_int message
+ *
+ * @return Timestamp in milliseconds since system boot. The rationale for the timestamp in the setpoint is to allow the system to compensate for the transport delay of the setpoint. This allows the system to compensate processing latency.
+ */
+static inline uint32_t mavlink_msg_position_target_global_int_get_time_boot_ms(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint32_t(msg,  0);
+}
+
+/**
+ * @brief Get field coordinate_frame from position_target_global_int message
+ *
+ * @return Valid options are: MAV_FRAME_GLOBAL_INT = 5, MAV_FRAME_GLOBAL_RELATIVE_ALT_INT = 6, MAV_FRAME_GLOBAL_TERRAIN_ALT_INT = 11
+ */
+static inline uint8_t mavlink_msg_position_target_global_int_get_coordinate_frame(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  50);
+}
+
+/**
+ * @brief Get field type_mask from position_target_global_int message
+ *
+ * @return Bitmask to indicate which dimensions should be ignored by the vehicle: a value of 0b0000000000000000 or 0b0000001000000000 indicates that none of the setpoint dimensions should be ignored. If bit 10 is set the floats afx afy afz should be interpreted as force instead of acceleration. Mapping: bit 1: x, bit 2: y, bit 3: z, bit 4: vx, bit 5: vy, bit 6: vz, 

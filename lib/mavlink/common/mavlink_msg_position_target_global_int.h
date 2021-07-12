@@ -442,4 +442,60 @@ static inline float mavlink_msg_position_target_global_int_get_vx(const mavlink_
  *
  * @return Y velocity in NED frame in meter / s
  */
-static inline float mavlink_msg_position_target_glo
+static inline float mavlink_msg_position_target_global_int_get_vy(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  20);
+}
+
+/**
+ * @brief Get field vz from position_target_global_int message
+ *
+ * @return Z velocity in NED frame in meter / s
+ */
+static inline float mavlink_msg_position_target_global_int_get_vz(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  24);
+}
+
+/**
+ * @brief Get field afx from position_target_global_int message
+ *
+ * @return X acceleration or force (if bit 10 of type_mask is set) in NED frame in meter / s^2 or N
+ */
+static inline float mavlink_msg_position_target_global_int_get_afx(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  28);
+}
+
+/**
+ * @brief Get field afy from position_target_global_int message
+ *
+ * @return Y acceleration or force (if bit 10 of type_mask is set) in NED frame in meter / s^2 or N
+ */
+static inline float mavlink_msg_position_target_global_int_get_afy(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  32);
+}
+
+/**
+ * @brief Get field afz from position_target_global_int message
+ *
+ * @return Z acceleration or force (if bit 10 of type_mask is set) in NED frame in meter / s^2 or N
+ */
+static inline float mavlink_msg_position_target_global_int_get_afz(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  36);
+}
+
+/**
+ * @brief Get field yaw from position_target_global_int message
+ *
+ * @return yaw setpoint in rad
+ */
+static inline float mavlink_msg_position_target_global_int_get_yaw(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  40);
+}
+
+/**
+ * @brief Get field yaw_rate from p

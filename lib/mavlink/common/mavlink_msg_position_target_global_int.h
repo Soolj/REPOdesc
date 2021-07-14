@@ -498,4 +498,32 @@ static inline float mavlink_msg_position_target_global_int_get_yaw(const mavlink
 }
 
 /**
- * @brief Get field yaw_rate from p
+ * @brief Get field yaw_rate from position_target_global_int message
+ *
+ * @return yaw rate setpoint in rad/s
+ */
+static inline float mavlink_msg_position_target_global_int_get_yaw_rate(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  44);
+}
+
+/**
+ * @brief Decode a position_target_global_int message into a struct
+ *
+ * @param msg The message to decode
+ * @param position_target_global_int C-struct to decode the message contents into
+ */
+static inline void mavlink_msg_position_target_global_int_decode(const mavlink_message_t* msg, mavlink_position_target_global_int_t* position_target_global_int)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    position_target_global_int->time_boot_ms = mavlink_msg_position_target_global_int_get_time_boot_ms(msg);
+    position_target_global_int->lat_int = mavlink_msg_position_target_global_int_get_lat_int(msg);
+    position_target_global_int->lon_int = mavlink_msg_position_target_global_int_get_lon_int(msg);
+    position_target_global_int->alt = mavlink_msg_position_target_global_int_get_alt(msg);
+    position_target_global_int->vx = mavlink_msg_position_target_global_int_get_vx(msg);
+    position_target_global_int->vy = mavlink_msg_position_target_global_int_get_vy(msg);
+    position_target_global_int->vz = mavlink_msg_position_target_global_int_get_vz(msg);
+    position_target_global_int->afx = mavlink_msg_position_target_global_int_get_afx(msg);
+    position_target_global_int->afy = mavlink_msg_position_target_global_int_get_afy(msg);
+    position_target_global_int->afz = mavlink_msg_position_target_global_int_get_afz(msg);
+    position_target_global_int->yaw = mav

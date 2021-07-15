@@ -526,4 +526,13 @@ static inline void mavlink_msg_position_target_global_int_decode(const mavlink_m
     position_target_global_int->afx = mavlink_msg_position_target_global_int_get_afx(msg);
     position_target_global_int->afy = mavlink_msg_position_target_global_int_get_afy(msg);
     position_target_global_int->afz = mavlink_msg_position_target_global_int_get_afz(msg);
-    position_target_global_int->yaw = mav
+    position_target_global_int->yaw = mavlink_msg_position_target_global_int_get_yaw(msg);
+    position_target_global_int->yaw_rate = mavlink_msg_position_target_global_int_get_yaw_rate(msg);
+    position_target_global_int->type_mask = mavlink_msg_position_target_global_int_get_type_mask(msg);
+    position_target_global_int->coordinate_frame = mavlink_msg_position_target_global_int_get_coordinate_frame(msg);
+#else
+        uint8_t len = msg->len < MAVLINK_MSG_ID_POSITION_TARGET_GLOBAL_INT_LEN? msg->len : MAVLINK_MSG_ID_POSITION_TARGET_GLOBAL_INT_LEN;
+        memset(position_target_global_int, 0, MAVLINK_MSG_ID_POSITION_TARGET_GLOBAL_INT_LEN);
+    memcpy(position_target_global_int, _MAV_PAYLOAD(msg), len);
+#endif
+}

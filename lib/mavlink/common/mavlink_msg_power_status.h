@@ -126,4 +126,40 @@ static inline uint16_t mavlink_msg_power_status_encode(uint8_t system_id, uint8_
 /**
  * @brief Encode a power_status struct on a channel
  *
- * @param sy
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param chan The MAVLink channel this message will be sent over
+ * @param msg The MAVLink message to compress the data into
+ * @param power_status C-struct to read the message contents from
+ */
+static inline uint16_t mavlink_msg_power_status_encode_chan(uint8_t system_id, uint8_t component_id, uint8_t chan, mavlink_message_t* msg, const mavlink_power_status_t* power_status)
+{
+    return mavlink_msg_power_status_pack_chan(system_id, component_id, chan, msg, power_status->Vcc, power_status->Vservo, power_status->flags);
+}
+
+/**
+ * @brief Send a power_status message
+ * @param chan MAVLink channel to send the message
+ *
+ * @param Vcc 5V rail voltage in millivolts
+ * @param Vservo servo rail voltage in millivolts
+ * @param flags power supply status flags (see MAV_POWER_STATUS enum)
+ */
+#ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
+
+static inline void mavlink_msg_power_status_send(mavlink_channel_t chan, uint16_t Vcc, uint16_t Vservo, uint16_t flags)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    char buf[MAVLINK_MSG_ID_POWER_STATUS_LEN];
+    _mav_put_uint16_t(buf, 0, Vcc);
+    _mav_put_uint16_t(buf, 2, Vservo);
+    _mav_put_uint16_t(buf, 4, flags);
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_POWER_STATUS, buf, MAVLINK_MSG_ID_POWER_STATUS_MIN_LEN, MAVLINK_MSG_ID_POWER_STATUS_LEN, MAVLINK_MSG_ID_POWER_STATUS_CRC);
+#else
+    mavlink_power_status_t packet;
+    packet.Vcc = Vcc;
+    packet.Vservo = Vservo;
+    packet.flags = flags;
+
+    _mav_finalize_message_chan_se

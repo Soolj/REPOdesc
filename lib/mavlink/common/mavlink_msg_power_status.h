@@ -196,4 +196,59 @@ static inline void mavlink_msg_power_status_send_buf(mavlink_message_t *msgbuf, 
     _mav_put_uint16_t(buf, 2, Vservo);
     _mav_put_uint16_t(buf, 4, flags);
 
-    _mav_finali
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_POWER_STATUS, buf, MAVLINK_MSG_ID_POWER_STATUS_MIN_LEN, MAVLINK_MSG_ID_POWER_STATUS_LEN, MAVLINK_MSG_ID_POWER_STATUS_CRC);
+#else
+    mavlink_power_status_t *packet = (mavlink_power_status_t *)msgbuf;
+    packet->Vcc = Vcc;
+    packet->Vservo = Vservo;
+    packet->flags = flags;
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_POWER_STATUS, (const char *)packet, MAVLINK_MSG_ID_POWER_STATUS_MIN_LEN, MAVLINK_MSG_ID_POWER_STATUS_LEN, MAVLINK_MSG_ID_POWER_STATUS_CRC);
+#endif
+}
+#endif
+
+#endif
+
+// MESSAGE POWER_STATUS UNPACKING
+
+
+/**
+ * @brief Get field Vcc from power_status message
+ *
+ * @return 5V rail voltage in millivolts
+ */
+static inline uint16_t mavlink_msg_power_status_get_Vcc(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint16_t(msg,  0);
+}
+
+/**
+ * @brief Get field Vservo from power_status message
+ *
+ * @return servo rail voltage in millivolts
+ */
+static inline uint16_t mavlink_msg_power_status_get_Vservo(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint16_t(msg,  2);
+}
+
+/**
+ * @brief Get field flags from power_status message
+ *
+ * @return power supply status flags (see MAV_POWER_STATUS enum)
+ */
+static inline uint16_t mavlink_msg_power_status_get_flags(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint16_t(msg,  4);
+}
+
+/**
+ * @brief Decode a power_status message into a struct
+ *
+ * @param msg The message to decode
+ * @param power_status C-struct to decode the message contents into
+ */
+static inline void mavlink_msg_power_status_decode(const mavlink_message_t* msg, mavlink_power_status_t* power_status)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_AL

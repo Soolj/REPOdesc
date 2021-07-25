@@ -45,4 +45,33 @@ typedef struct __mavlink_raw_imu_t {
          } \
 }
 #else
-#define MAVLINK_MESSAGE_INFO_RA
+#define MAVLINK_MESSAGE_INFO_RAW_IMU { \
+    "RAW_IMU", \
+    10, \
+    {  { "time_usec", NULL, MAVLINK_TYPE_UINT64_T, 0, 0, offsetof(mavlink_raw_imu_t, time_usec) }, \
+         { "xacc", NULL, MAVLINK_TYPE_INT16_T, 0, 8, offsetof(mavlink_raw_imu_t, xacc) }, \
+         { "yacc", NULL, MAVLINK_TYPE_INT16_T, 0, 10, offsetof(mavlink_raw_imu_t, yacc) }, \
+         { "zacc", NULL, MAVLINK_TYPE_INT16_T, 0, 12, offsetof(mavlink_raw_imu_t, zacc) }, \
+         { "xgyro", NULL, MAVLINK_TYPE_INT16_T, 0, 14, offsetof(mavlink_raw_imu_t, xgyro) }, \
+         { "ygyro", NULL, MAVLINK_TYPE_INT16_T, 0, 16, offsetof(mavlink_raw_imu_t, ygyro) }, \
+         { "zgyro", NULL, MAVLINK_TYPE_INT16_T, 0, 18, offsetof(mavlink_raw_imu_t, zgyro) }, \
+         { "xmag", NULL, MAVLINK_TYPE_INT16_T, 0, 20, offsetof(mavlink_raw_imu_t, xmag) }, \
+         { "ymag", NULL, MAVLINK_TYPE_INT16_T, 0, 22, offsetof(mavlink_raw_imu_t, ymag) }, \
+         { "zmag", NULL, MAVLINK_TYPE_INT16_T, 0, 24, offsetof(mavlink_raw_imu_t, zmag) }, \
+         } \
+}
+#endif
+
+/**
+ * @brief Pack a raw_imu message
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param msg The MAVLink message to compress the data into
+ *
+ * @param time_usec Timestamp (microseconds since UNIX epoch or microseconds since system boot)
+ * @param xacc X acceleration (raw)
+ * @param yacc Y acceleration (raw)
+ * @param zacc Z acceleration (raw)
+ * @param xgyro Angular speed around X axis (raw)
+ * @param ygyro Angular speed around Y axis (raw)
+ * @param zgyro A

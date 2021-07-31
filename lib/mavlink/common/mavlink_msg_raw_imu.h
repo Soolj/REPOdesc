@@ -114,4 +114,34 @@ static inline uint16_t mavlink_msg_raw_imu_pack(uint8_t system_id, uint8_t compo
 #endif
 
     msg->msgid = MAVLINK_MSG_ID_RAW_IMU;
-    return mavlink_f
+    return mavlink_finalize_message(msg, system_id, component_id, MAVLINK_MSG_ID_RAW_IMU_MIN_LEN, MAVLINK_MSG_ID_RAW_IMU_LEN, MAVLINK_MSG_ID_RAW_IMU_CRC);
+}
+
+/**
+ * @brief Pack a raw_imu message on a channel
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param chan The MAVLink channel this message will be sent over
+ * @param msg The MAVLink message to compress the data into
+ * @param time_usec Timestamp (microseconds since UNIX epoch or microseconds since system boot)
+ * @param xacc X acceleration (raw)
+ * @param yacc Y acceleration (raw)
+ * @param zacc Z acceleration (raw)
+ * @param xgyro Angular speed around X axis (raw)
+ * @param ygyro Angular speed around Y axis (raw)
+ * @param zgyro Angular speed around Z axis (raw)
+ * @param xmag X Magnetic field (raw)
+ * @param ymag Y Magnetic field (raw)
+ * @param zmag Z Magnetic field (raw)
+ * @return length of the message in bytes (excluding serial stream start sign)
+ */
+static inline uint16_t mavlink_msg_raw_imu_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
+                               mavlink_message_t* msg,
+                                   uint64_t time_usec,int16_t xacc,int16_t yacc,int16_t zacc,int16_t xgyro,int16_t ygyro,int16_t zgyro,int16_t xmag,int16_t ymag,int16_t zmag)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    char buf[MAVLINK_MSG_ID_RAW_IMU_LEN];
+    _mav_put_uint64_t(buf, 0, time_usec);
+    _mav_put_int16_t(buf, 8, xacc);
+    _mav_put_int16_t(buf, 10, yacc);
+    _mav_put_int16_t(bu

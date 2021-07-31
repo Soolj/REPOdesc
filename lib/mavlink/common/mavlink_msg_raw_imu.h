@@ -74,4 +74,44 @@ typedef struct __mavlink_raw_imu_t {
  * @param zacc Z acceleration (raw)
  * @param xgyro Angular speed around X axis (raw)
  * @param ygyro Angular speed around Y axis (raw)
- * @param zgyro A
+ * @param zgyro Angular speed around Z axis (raw)
+ * @param xmag X Magnetic field (raw)
+ * @param ymag Y Magnetic field (raw)
+ * @param zmag Z Magnetic field (raw)
+ * @return length of the message in bytes (excluding serial stream start sign)
+ */
+static inline uint16_t mavlink_msg_raw_imu_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
+                               uint64_t time_usec, int16_t xacc, int16_t yacc, int16_t zacc, int16_t xgyro, int16_t ygyro, int16_t zgyro, int16_t xmag, int16_t ymag, int16_t zmag)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    char buf[MAVLINK_MSG_ID_RAW_IMU_LEN];
+    _mav_put_uint64_t(buf, 0, time_usec);
+    _mav_put_int16_t(buf, 8, xacc);
+    _mav_put_int16_t(buf, 10, yacc);
+    _mav_put_int16_t(buf, 12, zacc);
+    _mav_put_int16_t(buf, 14, xgyro);
+    _mav_put_int16_t(buf, 16, ygyro);
+    _mav_put_int16_t(buf, 18, zgyro);
+    _mav_put_int16_t(buf, 20, xmag);
+    _mav_put_int16_t(buf, 22, ymag);
+    _mav_put_int16_t(buf, 24, zmag);
+
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_RAW_IMU_LEN);
+#else
+    mavlink_raw_imu_t packet;
+    packet.time_usec = time_usec;
+    packet.xacc = xacc;
+    packet.yacc = yacc;
+    packet.zacc = zacc;
+    packet.xgyro = xgyro;
+    packet.ygyro = ygyro;
+    packet.zgyro = zgyro;
+    packet.xmag = xmag;
+    packet.ymag = ymag;
+    packet.zmag = zmag;
+
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_RAW_IMU_LEN);
+#endif
+
+    msg->msgid = MAVLINK_MSG_ID_RAW_IMU;
+    return mavlink_f

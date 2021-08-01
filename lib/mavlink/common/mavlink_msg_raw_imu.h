@@ -144,4 +144,43 @@ static inline uint16_t mavlink_msg_raw_imu_pack_chan(uint8_t system_id, uint8_t 
     _mav_put_uint64_t(buf, 0, time_usec);
     _mav_put_int16_t(buf, 8, xacc);
     _mav_put_int16_t(buf, 10, yacc);
-    _mav_put_int16_t(bu
+    _mav_put_int16_t(buf, 12, zacc);
+    _mav_put_int16_t(buf, 14, xgyro);
+    _mav_put_int16_t(buf, 16, ygyro);
+    _mav_put_int16_t(buf, 18, zgyro);
+    _mav_put_int16_t(buf, 20, xmag);
+    _mav_put_int16_t(buf, 22, ymag);
+    _mav_put_int16_t(buf, 24, zmag);
+
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_RAW_IMU_LEN);
+#else
+    mavlink_raw_imu_t packet;
+    packet.time_usec = time_usec;
+    packet.xacc = xacc;
+    packet.yacc = yacc;
+    packet.zacc = zacc;
+    packet.xgyro = xgyro;
+    packet.ygyro = ygyro;
+    packet.zgyro = zgyro;
+    packet.xmag = xmag;
+    packet.ymag = ymag;
+    packet.zmag = zmag;
+
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_RAW_IMU_LEN);
+#endif
+
+    msg->msgid = MAVLINK_MSG_ID_RAW_IMU;
+    return mavlink_finalize_message_chan(msg, system_id, component_id, chan, MAVLINK_MSG_ID_RAW_IMU_MIN_LEN, MAVLINK_MSG_ID_RAW_IMU_LEN, MAVLINK_MSG_ID_RAW_IMU_CRC);
+}
+
+/**
+ * @brief Encode a raw_imu struct
+ *
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param msg The MAVLink message to compress the data into
+ * @param raw_imu C-struct to read the message contents from
+ */
+static inline uint16_t mavlink_msg_raw_imu_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_raw_imu_t* raw_imu)
+{
+    return mavlink_msg_raw_imu_pack(system_id, component_id, msg, raw_imu->time_usec, raw_imu->xacc, raw_imu->yacc, raw_imu->zacc, raw_imu->xgyro, raw_imu->ygyro, raw_imu->zgyro, raw_imu->xmag, raw_imu->ymag, raw_imu-

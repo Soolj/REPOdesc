@@ -288,4 +288,68 @@ static inline void mavlink_msg_raw_imu_send_buf(mavlink_message_t *msgbuf, mavli
     _mav_put_int16_t(buf, 24, zmag);
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_RAW_IMU, buf, MAVLINK_MSG_ID_RAW_IMU_MIN_LEN, MAVLINK_MSG_ID_RAW_IMU_LEN, MAVLINK_MSG_ID_RAW_IMU_CRC);
-#
+#else
+    mavlink_raw_imu_t *packet = (mavlink_raw_imu_t *)msgbuf;
+    packet->time_usec = time_usec;
+    packet->xacc = xacc;
+    packet->yacc = yacc;
+    packet->zacc = zacc;
+    packet->xgyro = xgyro;
+    packet->ygyro = ygyro;
+    packet->zgyro = zgyro;
+    packet->xmag = xmag;
+    packet->ymag = ymag;
+    packet->zmag = zmag;
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_RAW_IMU, (const char *)packet, MAVLINK_MSG_ID_RAW_IMU_MIN_LEN, MAVLINK_MSG_ID_RAW_IMU_LEN, MAVLINK_MSG_ID_RAW_IMU_CRC);
+#endif
+}
+#endif
+
+#endif
+
+// MESSAGE RAW_IMU UNPACKING
+
+
+/**
+ * @brief Get field time_usec from raw_imu message
+ *
+ * @return Timestamp (microseconds since UNIX epoch or microseconds since system boot)
+ */
+static inline uint64_t mavlink_msg_raw_imu_get_time_usec(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint64_t(msg,  0);
+}
+
+/**
+ * @brief Get field xacc from raw_imu message
+ *
+ * @return X acceleration (raw)
+ */
+static inline int16_t mavlink_msg_raw_imu_get_xacc(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int16_t(msg,  8);
+}
+
+/**
+ * @brief Get field yacc from raw_imu message
+ *
+ * @return Y acceleration (raw)
+ */
+static inline int16_t mavlink_msg_raw_imu_get_yacc(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int16_t(msg,  10);
+}
+
+/**
+ * @brief Get field zacc from raw_imu message
+ *
+ * @return Z acceleration (raw)
+ */
+static inline int16_t mavlink_msg_raw_imu_get_zacc(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int16_t(msg,  12);
+}
+
+/**
+ * @brief Get field xgyro from raw_i

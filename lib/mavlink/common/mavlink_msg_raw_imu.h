@@ -418,3 +418,21 @@ static inline int16_t mavlink_msg_raw_imu_get_zmag(const mavlink_message_t* msg)
  * @param raw_imu C-struct to decode the message contents into
  */
 static inline void mavlink_msg_raw_imu_decode(const mavlink_message_t* msg, mavlink_raw_imu_t* raw_imu)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    raw_imu->time_usec = mavlink_msg_raw_imu_get_time_usec(msg);
+    raw_imu->xacc = mavlink_msg_raw_imu_get_xacc(msg);
+    raw_imu->yacc = mavlink_msg_raw_imu_get_yacc(msg);
+    raw_imu->zacc = mavlink_msg_raw_imu_get_zacc(msg);
+    raw_imu->xgyro = mavlink_msg_raw_imu_get_xgyro(msg);
+    raw_imu->ygyro = mavlink_msg_raw_imu_get_ygyro(msg);
+    raw_imu->zgyro = mavlink_msg_raw_imu_get_zgyro(msg);
+    raw_imu->xmag = mavlink_msg_raw_imu_get_xmag(msg);
+    raw_imu->ymag = mavlink_msg_raw_imu_get_ymag(msg);
+    raw_imu->zmag = mavlink_msg_raw_imu_get_zmag(msg);
+#else
+        uint8_t len = msg->len < MAVLINK_MSG_ID_RAW_IMU_LEN? msg->len : MAVLINK_MSG_ID_RAW_IMU_LEN;
+        memset(raw_imu, 0, MAVLINK_MSG_ID_RAW_IMU_LEN);
+    memcpy(raw_imu, _MAV_PAYLOAD(msg), len);
+#endif
+}

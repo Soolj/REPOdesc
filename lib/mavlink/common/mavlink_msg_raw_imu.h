@@ -352,4 +352,69 @@ static inline int16_t mavlink_msg_raw_imu_get_zacc(const mavlink_message_t* msg)
 }
 
 /**
- * @brief Get field xgyro from raw_i
+ * @brief Get field xgyro from raw_imu message
+ *
+ * @return Angular speed around X axis (raw)
+ */
+static inline int16_t mavlink_msg_raw_imu_get_xgyro(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int16_t(msg,  14);
+}
+
+/**
+ * @brief Get field ygyro from raw_imu message
+ *
+ * @return Angular speed around Y axis (raw)
+ */
+static inline int16_t mavlink_msg_raw_imu_get_ygyro(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int16_t(msg,  16);
+}
+
+/**
+ * @brief Get field zgyro from raw_imu message
+ *
+ * @return Angular speed around Z axis (raw)
+ */
+static inline int16_t mavlink_msg_raw_imu_get_zgyro(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int16_t(msg,  18);
+}
+
+/**
+ * @brief Get field xmag from raw_imu message
+ *
+ * @return X Magnetic field (raw)
+ */
+static inline int16_t mavlink_msg_raw_imu_get_xmag(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int16_t(msg,  20);
+}
+
+/**
+ * @brief Get field ymag from raw_imu message
+ *
+ * @return Y Magnetic field (raw)
+ */
+static inline int16_t mavlink_msg_raw_imu_get_ymag(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int16_t(msg,  22);
+}
+
+/**
+ * @brief Get field zmag from raw_imu message
+ *
+ * @return Z Magnetic field (raw)
+ */
+static inline int16_t mavlink_msg_raw_imu_get_zmag(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int16_t(msg,  24);
+}
+
+/**
+ * @brief Decode a raw_imu message into a struct
+ *
+ * @param msg The message to decode
+ * @param raw_imu C-struct to decode the message contents into
+ */
+static inline void mavlink_msg_raw_imu_decode(const mavlink_message_t* msg, mavlink_raw_imu_t* raw_imu)

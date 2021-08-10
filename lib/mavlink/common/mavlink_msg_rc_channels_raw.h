@@ -113,4 +113,28 @@ static inline uint16_t mavlink_msg_rc_channels_raw_pack(uint8_t system_id, uint8
     packet.chan6_raw = chan6_raw;
     packet.chan7_raw = chan7_raw;
     packet.chan8_raw = chan8_raw;
-    packet.po
+    packet.port = port;
+    packet.rssi = rssi;
+
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_RC_CHANNELS_RAW_LEN);
+#endif
+
+    msg->msgid = MAVLINK_MSG_ID_RC_CHANNELS_RAW;
+    return mavlink_finalize_message(msg, system_id, component_id, MAVLINK_MSG_ID_RC_CHANNELS_RAW_MIN_LEN, MAVLINK_MSG_ID_RC_CHANNELS_RAW_LEN, MAVLINK_MSG_ID_RC_CHANNELS_RAW_CRC);
+}
+
+/**
+ * @brief Pack a rc_channels_raw message on a channel
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param chan The MAVLink channel this message will be sent over
+ * @param msg The MAVLink message to compress the data into
+ * @param time_boot_ms Timestamp (milliseconds since system boot)
+ * @param port Servo output port (set of 8 outputs = 1 port). Most MAVs will just use one, but this allows for more than 8 servos.
+ * @param chan1_raw RC channel 1 value, in microseconds. A value of UINT16_MAX implies the channel is unused.
+ * @param chan2_raw RC channel 2 value, in microseconds. A value of UINT16_MAX implies the channel is unused.
+ * @param chan3_raw RC channel 3 value, in microseconds. A value of UINT16_MAX implies the channel is unused.
+ * @param chan4_raw RC channel 4 value, in microseconds. A value of UINT16_MAX implies the channel is unused.
+ * @param chan5_raw RC channel 5 value, in microseconds. A value of UINT16_MAX implies the channel is unused.
+ * @param chan6_raw RC channel 6 value, in microseconds. A value of UINT16_MAX implies the channel is unused.
+ * @param chan7_raw RC channel 7 value, in microseconds. A value of U

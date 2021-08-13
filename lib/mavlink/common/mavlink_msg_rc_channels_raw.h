@@ -201,4 +201,23 @@ static inline uint16_t mavlink_msg_rc_channels_raw_encode(uint8_t system_id, uin
  * @param system_id ID of this system
  * @param component_id ID of this component (e.g. 200 for IMU)
  * @param chan The MAVLink channel this message will be sent over
- * @param msg The MAVLink message
+ * @param msg The MAVLink message to compress the data into
+ * @param rc_channels_raw C-struct to read the message contents from
+ */
+static inline uint16_t mavlink_msg_rc_channels_raw_encode_chan(uint8_t system_id, uint8_t component_id, uint8_t chan, mavlink_message_t* msg, const mavlink_rc_channels_raw_t* rc_channels_raw)
+{
+    return mavlink_msg_rc_channels_raw_pack_chan(system_id, component_id, chan, msg, rc_channels_raw->time_boot_ms, rc_channels_raw->port, rc_channels_raw->chan1_raw, rc_channels_raw->chan2_raw, rc_channels_raw->chan3_raw, rc_channels_raw->chan4_raw, rc_channels_raw->chan5_raw, rc_channels_raw->chan6_raw, rc_channels_raw->chan7_raw, rc_channels_raw->chan8_raw, rc_channels_raw->rssi);
+}
+
+/**
+ * @brief Send a rc_channels_raw message
+ * @param chan MAVLink channel to send the message
+ *
+ * @param time_boot_ms Timestamp (milliseconds since system boot)
+ * @param port Servo output port (set of 8 outputs = 1 port). Most MAVs will just use one, but this allows for more than 8 servos.
+ * @param chan1_raw RC channel 1 value, in microseconds. A value of UINT16_MAX implies the channel is unused.
+ * @param chan2_raw RC channel 2 value, in microseconds. A value of UINT16_MAX implies the channel is unused.
+ * @param chan3_raw RC channel 3 value, in microseconds. A value of UINT16_MAX implies the channel is unused.
+ * @param chan4_raw RC channel 4 value, in microseconds. A value of UINT16_MAX implies the channel is unused.
+ * @param chan5_raw RC channel 5 value, in microseconds. A value of UINT16_MAX implies the channel is unused.
+ * @param chan6_raw RC channel 6 value, in microseconds. A value of UINT16_MAX implies the

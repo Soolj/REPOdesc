@@ -315,4 +315,57 @@ static inline void mavlink_msg_rc_channels_raw_send_buf(mavlink_message_t *msgbu
     packet->port = port;
     packet->rssi = rssi;
 
-    _m
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_RC_CHANNELS_RAW, (const char *)packet, MAVLINK_MSG_ID_RC_CHANNELS_RAW_MIN_LEN, MAVLINK_MSG_ID_RC_CHANNELS_RAW_LEN, MAVLINK_MSG_ID_RC_CHANNELS_RAW_CRC);
+#endif
+}
+#endif
+
+#endif
+
+// MESSAGE RC_CHANNELS_RAW UNPACKING
+
+
+/**
+ * @brief Get field time_boot_ms from rc_channels_raw message
+ *
+ * @return Timestamp (milliseconds since system boot)
+ */
+static inline uint32_t mavlink_msg_rc_channels_raw_get_time_boot_ms(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint32_t(msg,  0);
+}
+
+/**
+ * @brief Get field port from rc_channels_raw message
+ *
+ * @return Servo output port (set of 8 outputs = 1 port). Most MAVs will just use one, but this allows for more than 8 servos.
+ */
+static inline uint8_t mavlink_msg_rc_channels_raw_get_port(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  20);
+}
+
+/**
+ * @brief Get field chan1_raw from rc_channels_raw message
+ *
+ * @return RC channel 1 value, in microseconds. A value of UINT16_MAX implies the channel is unused.
+ */
+static inline uint16_t mavlink_msg_rc_channels_raw_get_chan1_raw(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint16_t(msg,  4);
+}
+
+/**
+ * @brief Get field chan2_raw from rc_channels_raw message
+ *
+ * @return RC channel 2 value, in microseconds. A value of UINT16_MAX implies the channel is unused.
+ */
+static inline uint16_t mavlink_msg_rc_channels_raw_get_chan2_raw(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint16_t(msg,  6);
+}
+
+/**
+ * @brief Get field chan3_raw from rc_channels_raw message
+ *
+ * @return R

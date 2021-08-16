@@ -418,4 +418,38 @@ static inline uint16_t mavlink_msg_rc_channels_raw_get_chan7_raw(const mavlink_m
 /**
  * @brief Get field chan8_raw from rc_channels_raw message
  *
- * @return RC channel 8 value, in microseconds. A va
+ * @return RC channel 8 value, in microseconds. A value of UINT16_MAX implies the channel is unused.
+ */
+static inline uint16_t mavlink_msg_rc_channels_raw_get_chan8_raw(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint16_t(msg,  18);
+}
+
+/**
+ * @brief Get field rssi from rc_channels_raw message
+ *
+ * @return Receive signal strength indicator, 0: 0%, 100: 100%, 255: invalid/unknown.
+ */
+static inline uint8_t mavlink_msg_rc_channels_raw_get_rssi(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  21);
+}
+
+/**
+ * @brief Decode a rc_channels_raw message into a struct
+ *
+ * @param msg The message to decode
+ * @param rc_channels_raw C-struct to decode the message contents into
+ */
+static inline void mavlink_msg_rc_channels_raw_decode(const mavlink_message_t* msg, mavlink_rc_channels_raw_t* rc_channels_raw)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    rc_channels_raw->time_boot_ms = mavlink_msg_rc_channels_raw_get_time_boot_ms(msg);
+    rc_channels_raw->chan1_raw = mavlink_msg_rc_channels_raw_get_chan1_raw(msg);
+    rc_channels_raw->chan2_raw = mavlink_msg_rc_channels_raw_get_chan2_raw(msg);
+    rc_channels_raw->chan3_raw = mavlink_msg_rc_channels_raw_get_chan3_raw(msg);
+    rc_channels_raw->chan4_raw = mavlink_msg_rc_channels_raw_get_chan4_raw(msg);
+    rc_channels_raw->chan5_raw = mavlink_msg_rc_channels_raw_get_chan5_raw(msg);
+    rc_channels_raw->chan6_raw = mavlink_msg_rc_channels_raw_get_chan6_raw(msg);
+    rc_channels_raw->chan7_raw = mavlink_msg_rc_channels_raw_get_chan7_raw(msg);
+    rc_channels_raw->chan

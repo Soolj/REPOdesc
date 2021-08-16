@@ -368,4 +368,54 @@ static inline uint16_t mavlink_msg_rc_channels_raw_get_chan2_raw(const mavlink_m
 /**
  * @brief Get field chan3_raw from rc_channels_raw message
  *
- * @return R
+ * @return RC channel 3 value, in microseconds. A value of UINT16_MAX implies the channel is unused.
+ */
+static inline uint16_t mavlink_msg_rc_channels_raw_get_chan3_raw(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint16_t(msg,  8);
+}
+
+/**
+ * @brief Get field chan4_raw from rc_channels_raw message
+ *
+ * @return RC channel 4 value, in microseconds. A value of UINT16_MAX implies the channel is unused.
+ */
+static inline uint16_t mavlink_msg_rc_channels_raw_get_chan4_raw(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint16_t(msg,  10);
+}
+
+/**
+ * @brief Get field chan5_raw from rc_channels_raw message
+ *
+ * @return RC channel 5 value, in microseconds. A value of UINT16_MAX implies the channel is unused.
+ */
+static inline uint16_t mavlink_msg_rc_channels_raw_get_chan5_raw(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint16_t(msg,  12);
+}
+
+/**
+ * @brief Get field chan6_raw from rc_channels_raw message
+ *
+ * @return RC channel 6 value, in microseconds. A value of UINT16_MAX implies the channel is unused.
+ */
+static inline uint16_t mavlink_msg_rc_channels_raw_get_chan6_raw(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint16_t(msg,  14);
+}
+
+/**
+ * @brief Get field chan7_raw from rc_channels_raw message
+ *
+ * @return RC channel 7 value, in microseconds. A value of UINT16_MAX implies the channel is unused.
+ */
+static inline uint16_t mavlink_msg_rc_channels_raw_get_chan7_raw(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint16_t(msg,  16);
+}
+
+/**
+ * @brief Get field chan8_raw from rc_channels_raw message
+ *
+ * @return RC channel 8 value, in microseconds. A va

@@ -415,3 +415,25 @@ static inline int16_t mavlink_msg_scaled_imu2_get_zmag(const mavlink_message_t* 
 /**
  * @brief Decode a scaled_imu2 message into a struct
  *
+ * @param msg The message to decode
+ * @param scaled_imu2 C-struct to decode the message contents into
+ */
+static inline void mavlink_msg_scaled_imu2_decode(const mavlink_message_t* msg, mavlink_scaled_imu2_t* scaled_imu2)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    scaled_imu2->time_boot_ms = mavlink_msg_scaled_imu2_get_time_boot_ms(msg);
+    scaled_imu2->xacc = mavlink_msg_scaled_imu2_get_xacc(msg);
+    scaled_imu2->yacc = mavlink_msg_scaled_imu2_get_yacc(msg);
+    scaled_imu2->zacc = mavlink_msg_scaled_imu2_get_zacc(msg);
+    scaled_imu2->xgyro = mavlink_msg_scaled_imu2_get_xgyro(msg);
+    scaled_imu2->ygyro = mavlink_msg_scaled_imu2_get_ygyro(msg);
+    scaled_imu2->zgyro = mavlink_msg_scaled_imu2_get_zgyro(msg);
+    scaled_imu2->xmag = mavlink_msg_scaled_imu2_get_xmag(msg);
+    scaled_imu2->ymag = mavlink_msg_scaled_imu2_get_ymag(msg);
+    scaled_imu2->zmag = mavlink_msg_scaled_imu2_get_zmag(msg);
+#else
+        uint8_t len = msg->len < MAVLINK_MSG_ID_SCALED_IMU2_LEN? msg->len : MAVLINK_MSG_ID_SCALED_IMU2_LEN;
+        memset(scaled_imu2, 0, MAVLINK_MSG_ID_SCALED_IMU2_LEN);
+    memcpy(scaled_imu2, _MAV_PAYLOAD(msg), len);
+#endif
+}

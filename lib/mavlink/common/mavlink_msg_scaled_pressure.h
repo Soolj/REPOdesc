@@ -159,4 +159,33 @@ static inline uint16_t mavlink_msg_scaled_pressure_encode_chan(uint8_t system_id
 
 static inline void mavlink_msg_scaled_pressure_send(mavlink_channel_t chan, uint32_t time_boot_ms, float press_abs, float press_diff, int16_t temperature)
 {
-#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    char buf[MAVLINK_MSG_ID_SCALED_PRESSURE_LEN];
+    _mav_put_uint32_t(buf, 0, time_boot_ms);
+    _mav_put_float(buf, 4, press_abs);
+    _mav_put_float(buf, 8, press_diff);
+    _mav_put_int16_t(buf, 12, temperature);
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_SCALED_PRESSURE, buf, MAVLINK_MSG_ID_SCALED_PRESSURE_MIN_LEN, MAVLINK_MSG_ID_SCALED_PRESSURE_LEN, MAVLINK_MSG_ID_SCALED_PRESSURE_CRC);
+#else
+    mavlink_scaled_pressure_t packet;
+    packet.time_boot_ms = time_boot_ms;
+    packet.press_abs = press_abs;
+    packet.press_diff = press_diff;
+    packet.temperature = temperature;
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_SCALED_PRESSURE, (const char *)&packet, MAVLINK_MSG_ID_SCALED_PRESSURE_MIN_LEN, MAVLINK_MSG_ID_SCALED_PRESSURE_LEN, MAVLINK_MSG_ID_SCALED_PRESSURE_CRC);
+#endif
+}
+
+/**
+ * @brief Send a scaled_pressure message
+ * @param chan MAVLink channel to send the message
+ * @param struct The MAVLink struct to serialize
+ */
+static inline void mavlink_msg_scaled_pressure_send_struct(mavlink_channel_t chan, const mavlink_scaled_pressure_t* scaled_pressure)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    mavlink_msg_scaled_pressure_send(chan, scaled_pressure->time_boot_ms, scaled_pressure->press_abs, scaled_pressure->press_diff, scaled_pressure->temperature);
+#else
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_SCALED_PRESSURE, (const char *)scaled_pressure, MAVLINK_MSG_ID_SCALED_PRESSURE_MIN_LEN, MAVLINK_MSG_ID_SCALED_PRESSURE_LEN, MAVLINK_MSG_ID_SCALED_PRESS

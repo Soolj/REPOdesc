@@ -221,3 +221,61 @@ static inline void mavlink_msg_scaled_pressure_send_buf(mavlink_message_t *msgbu
 #endif
 }
 #endif
+
+#endif
+
+// MESSAGE SCALED_PRESSURE UNPACKING
+
+
+/**
+ * @brief Get field time_boot_ms from scaled_pressure message
+ *
+ * @return Timestamp (milliseconds since system boot)
+ */
+static inline uint32_t mavlink_msg_scaled_pressure_get_time_boot_ms(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint32_t(msg,  0);
+}
+
+/**
+ * @brief Get field press_abs from scaled_pressure message
+ *
+ * @return Absolute pressure (hectopascal)
+ */
+static inline float mavlink_msg_scaled_pressure_get_press_abs(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  4);
+}
+
+/**
+ * @brief Get field press_diff from scaled_pressure message
+ *
+ * @return Differential pressure 1 (hectopascal)
+ */
+static inline float mavlink_msg_scaled_pressure_get_press_diff(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  8);
+}
+
+/**
+ * @brief Get field temperature from scaled_pressure message
+ *
+ * @return Temperature measurement (0.01 degrees celsius)
+ */
+static inline int16_t mavlink_msg_scaled_pressure_get_temperature(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int16_t(msg,  12);
+}
+
+/**
+ * @brief Decode a scaled_pressure message into a struct
+ *
+ * @param msg The message to decode
+ * @param scaled_pressure C-struct to decode the message contents into
+ */
+static inline void mavlink_msg_scaled_pressure_decode(const mavlink_message_t* msg, mavlink_scaled_pressure_t* scaled_pressure)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    scaled_pressure->time_boot_ms = mavlink_msg_scaled_pressure_get_time_boot_ms(msg);
+    scaled_pressure->press_abs = mavlink_msg_scaled_pressure_get_press_abs(msg);
+    scaled_pressure->press_diff = mavlink_msg_sca

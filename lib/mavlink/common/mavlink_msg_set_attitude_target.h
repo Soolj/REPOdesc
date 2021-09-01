@@ -90,4 +90,33 @@ static inline uint16_t mavlink_msg_set_attitude_target_pack(uint8_t system_id, u
     _mav_put_uint8_t(buf, 37, target_component);
     _mav_put_uint8_t(buf, 38, type_mask);
     _mav_put_float_array(buf, 4, q, 4);
-        memcpy(_MAV_PAYLOA
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_SET_ATTITUDE_TARGET_LEN);
+#else
+    mavlink_set_attitude_target_t packet;
+    packet.time_boot_ms = time_boot_ms;
+    packet.body_roll_rate = body_roll_rate;
+    packet.body_pitch_rate = body_pitch_rate;
+    packet.body_yaw_rate = body_yaw_rate;
+    packet.thrust = thrust;
+    packet.target_system = target_system;
+    packet.target_component = target_component;
+    packet.type_mask = type_mask;
+    mav_array_memcpy(packet.q, q, sizeof(float)*4);
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_SET_ATTITUDE_TARGET_LEN);
+#endif
+
+    msg->msgid = MAVLINK_MSG_ID_SET_ATTITUDE_TARGET;
+    return mavlink_finalize_message(msg, system_id, component_id, MAVLINK_MSG_ID_SET_ATTITUDE_TARGET_MIN_LEN, MAVLINK_MSG_ID_SET_ATTITUDE_TARGET_LEN, MAVLINK_MSG_ID_SET_ATTITUDE_TARGET_CRC);
+}
+
+/**
+ * @brief Pack a set_attitude_target message on a channel
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param chan The MAVLink channel this message will be sent over
+ * @param msg The MAVLink message to compress the data into
+ * @param time_boot_ms Timestamp in milliseconds since system boot
+ * @param target_system System ID
+ * @param target_component Component ID
+ * @param type_mask Mappings: If any of these bits are set, the corresponding input should be ignored: bit 1: body roll rate, bit 2: body pitch rate, bit 3: body yaw rate. bit 4-bit 6: reserved, bit 7: throttle, bit 8: attitude
+ * @param q Attitude quaternion (w, x, y, z order, zero-rotation is 1, 0, 0, 0)

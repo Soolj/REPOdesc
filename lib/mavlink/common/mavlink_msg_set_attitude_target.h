@@ -148,4 +148,34 @@ static inline uint16_t mavlink_msg_set_attitude_target_pack_chan(uint8_t system_
     packet.body_roll_rate = body_roll_rate;
     packet.body_pitch_rate = body_pitch_rate;
     packet.body_yaw_rate = body_yaw_rate;
-  
+    packet.thrust = thrust;
+    packet.target_system = target_system;
+    packet.target_component = target_component;
+    packet.type_mask = type_mask;
+    mav_array_memcpy(packet.q, q, sizeof(float)*4);
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_SET_ATTITUDE_TARGET_LEN);
+#endif
+
+    msg->msgid = MAVLINK_MSG_ID_SET_ATTITUDE_TARGET;
+    return mavlink_finalize_message_chan(msg, system_id, component_id, chan, MAVLINK_MSG_ID_SET_ATTITUDE_TARGET_MIN_LEN, MAVLINK_MSG_ID_SET_ATTITUDE_TARGET_LEN, MAVLINK_MSG_ID_SET_ATTITUDE_TARGET_CRC);
+}
+
+/**
+ * @brief Encode a set_attitude_target struct
+ *
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param msg The MAVLink message to compress the data into
+ * @param set_attitude_target C-struct to read the message contents from
+ */
+static inline uint16_t mavlink_msg_set_attitude_target_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_set_attitude_target_t* set_attitude_target)
+{
+    return mavlink_msg_set_attitude_target_pack(system_id, component_id, msg, set_attitude_target->time_boot_ms, set_attitude_target->target_system, set_attitude_target->target_component, set_attitude_target->type_mask, set_attitude_target->q, set_attitude_target->body_roll_rate, set_attitude_target->body_pitch_rate, set_attitude_target->body_yaw_rate, set_attitude_target->thrust);
+}
+
+/**
+ * @brief Encode a set_attitude_target struct on a channel
+ *
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param chan The MAVLink

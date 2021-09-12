@@ -334,4 +334,56 @@ static inline uint8_t mavlink_msg_set_attitude_target_get_type_mask(const mavlin
  *
  * @return Attitude quaternion (w, x, y, z order, zero-rotation is 1, 0, 0, 0)
  */
-static inline uint
+static inline uint16_t mavlink_msg_set_attitude_target_get_q(const mavlink_message_t* msg, float *q)
+{
+    return _MAV_RETURN_float_array(msg, q, 4,  4);
+}
+
+/**
+ * @brief Get field body_roll_rate from set_attitude_target message
+ *
+ * @return Body roll rate in radians per second
+ */
+static inline float mavlink_msg_set_attitude_target_get_body_roll_rate(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  20);
+}
+
+/**
+ * @brief Get field body_pitch_rate from set_attitude_target message
+ *
+ * @return Body pitch rate in radians per second
+ */
+static inline float mavlink_msg_set_attitude_target_get_body_pitch_rate(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  24);
+}
+
+/**
+ * @brief Get field body_yaw_rate from set_attitude_target message
+ *
+ * @return Body yaw rate in radians per second
+ */
+static inline float mavlink_msg_set_attitude_target_get_body_yaw_rate(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  28);
+}
+
+/**
+ * @brief Get field thrust from set_attitude_target message
+ *
+ * @return Collective thrust, normalized to 0 .. 1 (-1 .. 1 for vehicles capable of reverse trust)
+ */
+static inline float mavlink_msg_set_attitude_target_get_thrust(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  32);
+}
+
+/**
+ * @brief Decode a set_attitude_target message into a struct
+ *
+ * @param msg The message to decode
+ * @param set_attitude_target C-struct to decode the message contents into
+ */
+static inline void mavlink_msg_set_attitude_target_decode(const mavlink_message_t* msg, mavlink_set_attitude_target_t* set_attitude_target)
+{

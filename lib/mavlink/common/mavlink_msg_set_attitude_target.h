@@ -279,4 +279,59 @@ static inline void mavlink_msg_set_attitude_target_send_buf(mavlink_message_t *m
     packet->target_component = target_component;
     packet->type_mask = type_mask;
     mav_array_memcpy(packet->q, q, sizeof(float)*4);
-    _mav_finalize_message_chan_send(chan, MAVLINK_M
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_SET_ATTITUDE_TARGET, (const char *)packet, MAVLINK_MSG_ID_SET_ATTITUDE_TARGET_MIN_LEN, MAVLINK_MSG_ID_SET_ATTITUDE_TARGET_LEN, MAVLINK_MSG_ID_SET_ATTITUDE_TARGET_CRC);
+#endif
+}
+#endif
+
+#endif
+
+// MESSAGE SET_ATTITUDE_TARGET UNPACKING
+
+
+/**
+ * @brief Get field time_boot_ms from set_attitude_target message
+ *
+ * @return Timestamp in milliseconds since system boot
+ */
+static inline uint32_t mavlink_msg_set_attitude_target_get_time_boot_ms(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint32_t(msg,  0);
+}
+
+/**
+ * @brief Get field target_system from set_attitude_target message
+ *
+ * @return System ID
+ */
+static inline uint8_t mavlink_msg_set_attitude_target_get_target_system(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  36);
+}
+
+/**
+ * @brief Get field target_component from set_attitude_target message
+ *
+ * @return Component ID
+ */
+static inline uint8_t mavlink_msg_set_attitude_target_get_target_component(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  37);
+}
+
+/**
+ * @brief Get field type_mask from set_attitude_target message
+ *
+ * @return Mappings: If any of these bits are set, the corresponding input should be ignored: bit 1: body roll rate, bit 2: body pitch rate, bit 3: body yaw rate. bit 4-bit 6: reserved, bit 7: throttle, bit 8: attitude
+ */
+static inline uint8_t mavlink_msg_set_attitude_target_get_type_mask(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  38);
+}
+
+/**
+ * @brief Get field q from set_attitude_target message
+ *
+ * @return Attitude quaternion (w, x, y, z order, zero-rotation is 1, 0, 0, 0)
+ */
+static inline uint

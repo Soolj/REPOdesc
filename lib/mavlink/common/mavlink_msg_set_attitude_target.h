@@ -387,3 +387,19 @@ static inline float mavlink_msg_set_attitude_target_get_thrust(const mavlink_mes
  */
 static inline void mavlink_msg_set_attitude_target_decode(const mavlink_message_t* msg, mavlink_set_attitude_target_t* set_attitude_target)
 {
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    set_attitude_target->time_boot_ms = mavlink_msg_set_attitude_target_get_time_boot_ms(msg);
+    mavlink_msg_set_attitude_target_get_q(msg, set_attitude_target->q);
+    set_attitude_target->body_roll_rate = mavlink_msg_set_attitude_target_get_body_roll_rate(msg);
+    set_attitude_target->body_pitch_rate = mavlink_msg_set_attitude_target_get_body_pitch_rate(msg);
+    set_attitude_target->body_yaw_rate = mavlink_msg_set_attitude_target_get_body_yaw_rate(msg);
+    set_attitude_target->thrust = mavlink_msg_set_attitude_target_get_thrust(msg);
+    set_attitude_target->target_system = mavlink_msg_set_attitude_target_get_target_system(msg);
+    set_attitude_target->target_component = mavlink_msg_set_attitude_target_get_target_component(msg);
+    set_attitude_target->type_mask = mavlink_msg_set_attitude_target_get_type_mask(msg);
+#else
+        uint8_t len = msg->len < MAVLINK_MSG_ID_SET_ATTITUDE_TARGET_LEN? msg->len : MAVLINK_MSG_ID_SET_ATTITUDE_TARGET_LEN;
+        memset(set_attitude_target, 0, MAVLINK_MSG_ID_SET_ATTITUDE_TARGET_LEN);
+    memcpy(set_attitude_target, _MAV_PAYLOAD(msg), len);
+#endif
+}

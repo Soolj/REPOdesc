@@ -41,4 +41,36 @@ typedef struct __mavlink_set_gps_global_origin_t {
     {  { "target_system", NULL, MAVLINK_TYPE_UINT8_T, 0, 12, offsetof(mavlink_set_gps_global_origin_t, target_system) }, \
          { "latitude", NULL, MAVLINK_TYPE_INT32_T, 0, 0, offsetof(mavlink_set_gps_global_origin_t, latitude) }, \
          { "longitude", NULL, MAVLINK_TYPE_INT32_T, 0, 4, offsetof(mavlink_set_gps_global_origin_t, longitude) }, \
-         
+         { "altitude", NULL, MAVLINK_TYPE_INT32_T, 0, 8, offsetof(mavlink_set_gps_global_origin_t, altitude) }, \
+         { "time_usec", NULL, MAVLINK_TYPE_UINT64_T, 0, 13, offsetof(mavlink_set_gps_global_origin_t, time_usec) }, \
+         } \
+}
+#endif
+
+/**
+ * @brief Pack a set_gps_global_origin message
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param msg The MAVLink message to compress the data into
+ *
+ * @param target_system System ID
+ * @param latitude Latitude (WGS84), in degrees * 1E7
+ * @param longitude Longitude (WGS84), in degrees * 1E7
+ * @param altitude Altitude (AMSL), in meters * 1000 (positive for up)
+ * @param time_usec Timestamp (microseconds since UNIX epoch or microseconds since system boot)
+ * @return length of the message in bytes (excluding serial stream start sign)
+ */
+static inline uint16_t mavlink_msg_set_gps_global_origin_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
+                               uint8_t target_system, int32_t latitude, int32_t longitude, int32_t altitude, uint64_t time_usec)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    char buf[MAVLINK_MSG_ID_SET_GPS_GLOBAL_ORIGIN_LEN];
+    _mav_put_int32_t(buf, 0, latitude);
+    _mav_put_int32_t(buf, 4, longitude);
+    _mav_put_int32_t(buf, 8, altitude);
+    _mav_put_uint8_t(buf, 12, target_system);
+    _mav_put_uint64_t(buf, 13, time_usec);
+
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_SET_GPS_GLOBAL_ORIGIN_LEN);
+#else
+   

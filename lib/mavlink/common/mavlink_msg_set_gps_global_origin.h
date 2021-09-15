@@ -73,4 +73,33 @@ static inline uint16_t mavlink_msg_set_gps_global_origin_pack(uint8_t system_id,
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_SET_GPS_GLOBAL_ORIGIN_LEN);
 #else
-   
+    mavlink_set_gps_global_origin_t packet;
+    packet.latitude = latitude;
+    packet.longitude = longitude;
+    packet.altitude = altitude;
+    packet.target_system = target_system;
+    packet.time_usec = time_usec;
+
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_SET_GPS_GLOBAL_ORIGIN_LEN);
+#endif
+
+    msg->msgid = MAVLINK_MSG_ID_SET_GPS_GLOBAL_ORIGIN;
+    return mavlink_finalize_message(msg, system_id, component_id, MAVLINK_MSG_ID_SET_GPS_GLOBAL_ORIGIN_MIN_LEN, MAVLINK_MSG_ID_SET_GPS_GLOBAL_ORIGIN_LEN, MAVLINK_MSG_ID_SET_GPS_GLOBAL_ORIGIN_CRC);
+}
+
+/**
+ * @brief Pack a set_gps_global_origin message on a channel
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param chan The MAVLink channel this message will be sent over
+ * @param msg The MAVLink message to compress the data into
+ * @param target_system System ID
+ * @param latitude Latitude (WGS84), in degrees * 1E7
+ * @param longitude Longitude (WGS84), in degrees * 1E7
+ * @param altitude Altitude (AMSL), in meters * 1000 (positive for up)
+ * @param time_usec Timestamp (microseconds since UNIX epoch or microseconds since system boot)
+ * @return length of the message in bytes (excluding serial stream start sign)
+ */
+static inline uint16_t mavlink_msg_set_gps_global_origin_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
+                               mavlink_message_t* msg,
+                                   uint8_t target_system,int32_t latitude,in

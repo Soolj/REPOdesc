@@ -165,4 +165,36 @@ static inline uint16_t mavlink_msg_set_gps_global_origin_encode_chan(uint8_t sys
  * @param altitude Altitude (AMSL), in meters * 1000 (positive for up)
  * @param time_usec Timestamp (microseconds since UNIX epoch or microseconds since system boot)
  */
-#ifdef MAV
+#ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
+
+static inline void mavlink_msg_set_gps_global_origin_send(mavlink_channel_t chan, uint8_t target_system, int32_t latitude, int32_t longitude, int32_t altitude, uint64_t time_usec)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    char buf[MAVLINK_MSG_ID_SET_GPS_GLOBAL_ORIGIN_LEN];
+    _mav_put_int32_t(buf, 0, latitude);
+    _mav_put_int32_t(buf, 4, longitude);
+    _mav_put_int32_t(buf, 8, altitude);
+    _mav_put_uint8_t(buf, 12, target_system);
+    _mav_put_uint64_t(buf, 13, time_usec);
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_SET_GPS_GLOBAL_ORIGIN, buf, MAVLINK_MSG_ID_SET_GPS_GLOBAL_ORIGIN_MIN_LEN, MAVLINK_MSG_ID_SET_GPS_GLOBAL_ORIGIN_LEN, MAVLINK_MSG_ID_SET_GPS_GLOBAL_ORIGIN_CRC);
+#else
+    mavlink_set_gps_global_origin_t packet;
+    packet.latitude = latitude;
+    packet.longitude = longitude;
+    packet.altitude = altitude;
+    packet.target_system = target_system;
+    packet.time_usec = time_usec;
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_SET_GPS_GLOBAL_ORIGIN, (const char *)&packet, MAVLINK_MSG_ID_SET_GPS_GLOBAL_ORIGIN_MIN_LEN, MAVLINK_MSG_ID_SET_GPS_GLOBAL_ORIGIN_LEN, MAVLINK_MSG_ID_SET_GPS_GLOBAL_ORIGIN_CRC);
+#endif
+}
+
+/**
+ * @brief Send a set_gps_global_origin message
+ * @param chan MAVLink channel to send the message
+ * @param struct The MAVLink struct to serialize
+ */
+static inline void mavlink_msg_set_gps_global_origin_send_struct(mavlink_channel_t chan, const mavlink_set_gps_global_origin_t* set_gps_global_origin)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLIN

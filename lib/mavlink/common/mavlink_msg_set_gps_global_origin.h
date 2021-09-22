@@ -274,4 +274,38 @@ static inline int32_t mavlink_msg_set_gps_global_origin_get_longitude(const mavl
 /**
  * @brief Get field altitude from set_gps_global_origin message
  *
- * @return Altitude (AMSL), in meters *
+ * @return Altitude (AMSL), in meters * 1000 (positive for up)
+ */
+static inline int32_t mavlink_msg_set_gps_global_origin_get_altitude(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int32_t(msg,  8);
+}
+
+/**
+ * @brief Get field time_usec from set_gps_global_origin message
+ *
+ * @return Timestamp (microseconds since UNIX epoch or microseconds since system boot)
+ */
+static inline uint64_t mavlink_msg_set_gps_global_origin_get_time_usec(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint64_t(msg,  13);
+}
+
+/**
+ * @brief Decode a set_gps_global_origin message into a struct
+ *
+ * @param msg The message to decode
+ * @param set_gps_global_origin C-struct to decode the message contents into
+ */
+static inline void mavlink_msg_set_gps_global_origin_decode(const mavlink_message_t* msg, mavlink_set_gps_global_origin_t* set_gps_global_origin)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    set_gps_global_origin->latitude = mavlink_msg_set_gps_global_origin_get_latitude(msg);
+    set_gps_global_origin->longitude = mavlink_msg_set_gps_global_origin_get_longitude(msg);
+    set_gps_global_origin->altitude = mavlink_msg_set_gps_global_origin_get_altitude(msg);
+    set_gps_global_origin->target_system = mavlink_msg_set_gps_global_origin_get_target_system(msg);
+    set_gps_global_origin->time_usec = mavlink_msg_set_gps_global_origin_get_time_usec(msg);
+#else
+        uint8_t len = msg->len < MAVLINK_MSG_ID_SET_GPS_GLOBAL_ORIGIN_LEN? msg->len : MAVLINK_MSG_ID_SET_GPS_GLOBAL_ORIGIN_LEN;
+        memset(set_gps_global_origin, 0, MAVLINK_MSG_ID_SET_GPS_GLOBAL_ORIGIN_LEN);
+    mem

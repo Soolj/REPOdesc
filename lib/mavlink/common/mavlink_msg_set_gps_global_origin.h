@@ -308,4 +308,6 @@ static inline void mavlink_msg_set_gps_global_origin_decode(const mavlink_messag
 #else
         uint8_t len = msg->len < MAVLINK_MSG_ID_SET_GPS_GLOBAL_ORIGIN_LEN? msg->len : MAVLINK_MSG_ID_SET_GPS_GLOBAL_ORIGIN_LEN;
         memset(set_gps_global_origin, 0, MAVLINK_MSG_ID_SET_GPS_GLOBAL_ORIGIN_LEN);
-    mem
+    memcpy(set_gps_global_origin, _MAV_PAYLOAD(msg), len);
+#endif
+}

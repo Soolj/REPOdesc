@@ -101,4 +101,42 @@ static inline uint16_t mavlink_msg_set_mode_pack_chan(uint8_t system_id, uint8_t
     mavlink_set_mode_t packet;
     packet.custom_mode = custom_mode;
     packet.target_system = target_system;
-    packet.base_mode = b
+    packet.base_mode = base_mode;
+
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_SET_MODE_LEN);
+#endif
+
+    msg->msgid = MAVLINK_MSG_ID_SET_MODE;
+    return mavlink_finalize_message_chan(msg, system_id, component_id, chan, MAVLINK_MSG_ID_SET_MODE_MIN_LEN, MAVLINK_MSG_ID_SET_MODE_LEN, MAVLINK_MSG_ID_SET_MODE_CRC);
+}
+
+/**
+ * @brief Encode a set_mode struct
+ *
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param msg The MAVLink message to compress the data into
+ * @param set_mode C-struct to read the message contents from
+ */
+static inline uint16_t mavlink_msg_set_mode_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_set_mode_t* set_mode)
+{
+    return mavlink_msg_set_mode_pack(system_id, component_id, msg, set_mode->target_system, set_mode->base_mode, set_mode->custom_mode);
+}
+
+/**
+ * @brief Encode a set_mode struct on a channel
+ *
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param chan The MAVLink channel this message will be sent over
+ * @param msg The MAVLink message to compress the data into
+ * @param set_mode C-struct to read the message contents from
+ */
+static inline uint16_t mavlink_msg_set_mode_encode_chan(uint8_t system_id, uint8_t component_id, uint8_t chan, mavlink_message_t* msg, const mavlink_set_mode_t* set_mode)
+{
+    return mavlink_msg_set_mode_pack_chan(system_id, component_id, chan, msg, set_mode->target_system, set_mode->base_mode, set_mode->custom_mode);
+}
+
+/**
+ * @brief Send a set_mode message
+ * @param chan MAVLink channel to

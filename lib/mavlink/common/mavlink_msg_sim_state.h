@@ -24,4 +24,34 @@ typedef struct __mavlink_sim_state_t {
  float std_dev_horz; /*< Horizontal position standard deviation*/
  float std_dev_vert; /*< Vertical position standard deviation*/
  float vn; /*< True velocity in m/s in NORTH direction in earth-fixed NED frame*/
- float ve; /*< True velocity in m/s in EAST direc
+ float ve; /*< True velocity in m/s in EAST direction in earth-fixed NED frame*/
+ float vd; /*< True velocity in m/s in DOWN direction in earth-fixed NED frame*/
+}) mavlink_sim_state_t;
+
+#define MAVLINK_MSG_ID_SIM_STATE_LEN 84
+#define MAVLINK_MSG_ID_SIM_STATE_MIN_LEN 84
+#define MAVLINK_MSG_ID_108_LEN 84
+#define MAVLINK_MSG_ID_108_MIN_LEN 84
+
+#define MAVLINK_MSG_ID_SIM_STATE_CRC 32
+#define MAVLINK_MSG_ID_108_CRC 32
+
+
+
+#if MAVLINK_COMMAND_24BIT
+#define MAVLINK_MESSAGE_INFO_SIM_STATE { \
+    108, \
+    "SIM_STATE", \
+    21, \
+    {  { "q1", NULL, MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_sim_state_t, q1) }, \
+         { "q2", NULL, MAVLINK_TYPE_FLOAT, 0, 4, offsetof(mavlink_sim_state_t, q2) }, \
+         { "q3", NULL, MAVLINK_TYPE_FLOAT, 0, 8, offsetof(mavlink_sim_state_t, q3) }, \
+         { "q4", NULL, MAVLINK_TYPE_FLOAT, 0, 12, offsetof(mavlink_sim_state_t, q4) }, \
+         { "roll", NULL, MAVLINK_TYPE_FLOAT, 0, 16, offsetof(mavlink_sim_state_t, roll) }, \
+         { "pitch", NULL, MAVLINK_TYPE_FLOAT, 0, 20, offsetof(mavlink_sim_state_t, pitch) }, \
+         { "yaw", NULL, MAVLINK_TYPE_FLOAT, 0, 24, offsetof(mavlink_sim_state_t, yaw) }, \
+         { "xacc", NULL, MAVLINK_TYPE_FLOAT, 0, 28, offsetof(mavlink_sim_state_t, xacc) }, \
+         { "yacc", NULL, MAVLINK_TYPE_FLOAT, 0, 32, offsetof(mavlink_sim_state_t, yacc) }, \
+         { "zacc", NULL, MAVLINK_TYPE_FLOAT, 0, 36, offsetof(mavlink_sim_state_t, zacc) }, \
+         { "xgyro", NULL, MAVLINK_TYPE_FLOAT, 0, 40, offsetof(mavlink_sim_state_t, xgyro) }, \
+         { "ygyro", NULL, MAVLINK_TYPE_FLOAT, 0, 44, offsetof(mavlink_sim_state_t, 

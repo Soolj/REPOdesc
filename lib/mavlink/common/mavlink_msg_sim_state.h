@@ -171,4 +171,35 @@ static inline uint16_t mavlink_msg_sim_state_pack(uint8_t system_id, uint8_t com
     packet.lon = lon;
     packet.alt = alt;
     packet.std_dev_horz = std_dev_horz;
-    packet.std_dev_ver
+    packet.std_dev_vert = std_dev_vert;
+    packet.vn = vn;
+    packet.ve = ve;
+    packet.vd = vd;
+
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_SIM_STATE_LEN);
+#endif
+
+    msg->msgid = MAVLINK_MSG_ID_SIM_STATE;
+    return mavlink_finalize_message(msg, system_id, component_id, MAVLINK_MSG_ID_SIM_STATE_MIN_LEN, MAVLINK_MSG_ID_SIM_STATE_LEN, MAVLINK_MSG_ID_SIM_STATE_CRC);
+}
+
+/**
+ * @brief Pack a sim_state message on a channel
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param chan The MAVLink channel this message will be sent over
+ * @param msg The MAVLink message to compress the data into
+ * @param q1 True attitude quaternion component 1, w (1 in null-rotation)
+ * @param q2 True attitude quaternion component 2, x (0 in null-rotation)
+ * @param q3 True attitude quaternion component 3, y (0 in null-rotation)
+ * @param q4 True attitude quaternion component 4, z (0 in null-rotation)
+ * @param roll Attitude roll expressed as Euler angles, not recommended except for human-readable outputs
+ * @param pitch Attitude pitch expressed as Euler angles, not recommended except for human-readable outputs
+ * @param yaw Attitude yaw expressed as Euler angles, not recommended except for human-readable outputs
+ * @param xacc X acceleration m/s/s
+ * @param yacc Y acceleration m/s/s
+ * @param zacc Z acceleration m/s/s
+ * @param xgyro Angular speed around X axis rad/s
+ * @param ygyro Angular speed around Y axis rad/s
+ * @param zgyro Angular speed around Z axis rad/s
+ * @param lat Latitu

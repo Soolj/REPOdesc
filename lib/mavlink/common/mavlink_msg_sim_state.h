@@ -202,4 +202,36 @@ static inline uint16_t mavlink_msg_sim_state_pack(uint8_t system_id, uint8_t com
  * @param xgyro Angular speed around X axis rad/s
  * @param ygyro Angular speed around Y axis rad/s
  * @param zgyro Angular speed around Z axis rad/s
- * @param lat Latitu
+ * @param lat Latitude in degrees
+ * @param lon Longitude in degrees
+ * @param alt Altitude in meters
+ * @param std_dev_horz Horizontal position standard deviation
+ * @param std_dev_vert Vertical position standard deviation
+ * @param vn True velocity in m/s in NORTH direction in earth-fixed NED frame
+ * @param ve True velocity in m/s in EAST direction in earth-fixed NED frame
+ * @param vd True velocity in m/s in DOWN direction in earth-fixed NED frame
+ * @return length of the message in bytes (excluding serial stream start sign)
+ */
+static inline uint16_t mavlink_msg_sim_state_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
+                               mavlink_message_t* msg,
+                                   float q1,float q2,float q3,float q4,float roll,float pitch,float yaw,float xacc,float yacc,float zacc,float xgyro,float ygyro,float zgyro,float lat,float lon,float alt,float std_dev_horz,float std_dev_vert,float vn,float ve,float vd)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    char buf[MAVLINK_MSG_ID_SIM_STATE_LEN];
+    _mav_put_float(buf, 0, q1);
+    _mav_put_float(buf, 4, q2);
+    _mav_put_float(buf, 8, q3);
+    _mav_put_float(buf, 12, q4);
+    _mav_put_float(buf, 16, roll);
+    _mav_put_float(buf, 20, pitch);
+    _mav_put_float(buf, 24, yaw);
+    _mav_put_float(buf, 28, xacc);
+    _mav_put_float(buf, 32, yacc);
+    _mav_put_float(buf, 36, zacc);
+    _mav_put_float(buf, 40, xgyro);
+    _mav_put_float(buf, 44, ygyro);
+    _mav_put_float(buf, 48, zgyro);
+    _mav_put_float(buf, 52, lat);
+    _mav_put_float(buf, 56, lon);
+    _mav_put_float(buf, 60, alt);
+    _mav_p

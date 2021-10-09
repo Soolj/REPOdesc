@@ -234,4 +234,52 @@ static inline uint16_t mavlink_msg_sim_state_pack_chan(uint8_t system_id, uint8_
     _mav_put_float(buf, 52, lat);
     _mav_put_float(buf, 56, lon);
     _mav_put_float(buf, 60, alt);
-    _mav_p
+    _mav_put_float(buf, 64, std_dev_horz);
+    _mav_put_float(buf, 68, std_dev_vert);
+    _mav_put_float(buf, 72, vn);
+    _mav_put_float(buf, 76, ve);
+    _mav_put_float(buf, 80, vd);
+
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_SIM_STATE_LEN);
+#else
+    mavlink_sim_state_t packet;
+    packet.q1 = q1;
+    packet.q2 = q2;
+    packet.q3 = q3;
+    packet.q4 = q4;
+    packet.roll = roll;
+    packet.pitch = pitch;
+    packet.yaw = yaw;
+    packet.xacc = xacc;
+    packet.yacc = yacc;
+    packet.zacc = zacc;
+    packet.xgyro = xgyro;
+    packet.ygyro = ygyro;
+    packet.zgyro = zgyro;
+    packet.lat = lat;
+    packet.lon = lon;
+    packet.alt = alt;
+    packet.std_dev_horz = std_dev_horz;
+    packet.std_dev_vert = std_dev_vert;
+    packet.vn = vn;
+    packet.ve = ve;
+    packet.vd = vd;
+
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_SIM_STATE_LEN);
+#endif
+
+    msg->msgid = MAVLINK_MSG_ID_SIM_STATE;
+    return mavlink_finalize_message_chan(msg, system_id, component_id, chan, MAVLINK_MSG_ID_SIM_STATE_MIN_LEN, MAVLINK_MSG_ID_SIM_STATE_LEN, MAVLINK_MSG_ID_SIM_STATE_CRC);
+}
+
+/**
+ * @brief Encode a sim_state struct
+ *
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param msg The MAVLink message to compress the data into
+ * @param sim_state C-struct to read the message contents from
+ */
+static inline uint16_t mavlink_msg_sim_state_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_sim_state_t* sim_state)
+{
+    return mavlink_msg_sim_state_pack(system_id, component_id, msg, sim_state->q

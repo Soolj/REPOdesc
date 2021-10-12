@@ -304,4 +304,27 @@ static inline uint16_t mavlink_msg_sim_state_encode_chan(uint8_t system_id, uint
  * @param chan MAVLink channel to send the message
  *
  * @param q1 True attitude quaternion component 1, w (1 in null-rotation)
- * @param q2 True attitude quaternio
+ * @param q2 True attitude quaternion component 2, x (0 in null-rotation)
+ * @param q3 True attitude quaternion component 3, y (0 in null-rotation)
+ * @param q4 True attitude quaternion component 4, z (0 in null-rotation)
+ * @param roll Attitude roll expressed as Euler angles, not recommended except for human-readable outputs
+ * @param pitch Attitude pitch expressed as Euler angles, not recommended except for human-readable outputs
+ * @param yaw Attitude yaw expressed as Euler angles, not recommended except for human-readable outputs
+ * @param xacc X acceleration m/s/s
+ * @param yacc Y acceleration m/s/s
+ * @param zacc Z acceleration m/s/s
+ * @param xgyro Angular speed around X axis rad/s
+ * @param ygyro Angular speed around Y axis rad/s
+ * @param zgyro Angular speed around Z axis rad/s
+ * @param lat Latitude in degrees
+ * @param lon Longitude in degrees
+ * @param alt Altitude in meters
+ * @param std_dev_horz Horizontal position standard deviation
+ * @param std_dev_vert Vertical position standard deviation
+ * @param vn True velocity in m/s in NORTH direction in earth-fixed NED frame
+ * @param ve True velocity in m/s in EAST direction in earth-fixed NED frame
+ * @param vd True velocity in m/s in DOWN direction in earth-fixed NED frame
+ */
+#ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
+
+static inline void mavlink_msg_sim_state_send(mavlink_channel_t chan, float q1, float q2, float q3, float q4, float roll, float pitch, float yaw, float xacc, float yacc, float zacc, float xgyro, float ygyro, float zgyro, float lat, float lon, float alt, float std_dev_horz, float std_dev_vert, float vn, float ve, f

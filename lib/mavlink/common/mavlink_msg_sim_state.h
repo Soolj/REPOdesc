@@ -378,4 +378,30 @@ static inline void mavlink_msg_sim_state_send(mavlink_channel_t chan, float q1, 
     packet.ve = ve;
     packet.vd = vd;
 
-    _mav_finalize_messag
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_SIM_STATE, (const char *)&packet, MAVLINK_MSG_ID_SIM_STATE_MIN_LEN, MAVLINK_MSG_ID_SIM_STATE_LEN, MAVLINK_MSG_ID_SIM_STATE_CRC);
+#endif
+}
+
+/**
+ * @brief Send a sim_state message
+ * @param chan MAVLink channel to send the message
+ * @param struct The MAVLink struct to serialize
+ */
+static inline void mavlink_msg_sim_state_send_struct(mavlink_channel_t chan, const mavlink_sim_state_t* sim_state)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    mavlink_msg_sim_state_send(chan, sim_state->q1, sim_state->q2, sim_state->q3, sim_state->q4, sim_state->roll, sim_state->pitch, sim_state->yaw, sim_state->xacc, sim_state->yacc, sim_state->zacc, sim_state->xgyro, sim_state->ygyro, sim_state->zgyro, sim_state->lat, sim_state->lon, sim_state->alt, sim_state->std_dev_horz, sim_state->std_dev_vert, sim_state->vn, sim_state->ve, sim_state->vd);
+#else
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_SIM_STATE, (const char *)sim_state, MAVLINK_MSG_ID_SIM_STATE_MIN_LEN, MAVLINK_MSG_ID_SIM_STATE_LEN, MAVLINK_MSG_ID_SIM_STATE_CRC);
+#endif
+}
+
+#if MAVLINK_MSG_ID_SIM_STATE_LEN <= MAVLINK_MAX_PAYLOAD_LEN
+/*
+  This varient of _send() can be used to save stack space by re-using
+  memory from the receive buffer.  The caller provides a
+  mavlink_message_t which is the size of a full mavlink message. This
+  is usually the receive buffer for the channel, and allows a reply to an
+  incoming message with minimum stack space usage.
+ */
+static inline void mavlink_msg_sim_state_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  floa

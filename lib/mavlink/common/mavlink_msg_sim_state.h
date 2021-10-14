@@ -508,4 +508,66 @@ static inline float mavlink_msg_sim_state_get_q4(const mavlink_message_t* msg)
 /**
  * @brief Get field roll from sim_state message
  *
- * @return Attitude r
+ * @return Attitude roll expressed as Euler angles, not recommended except for human-readable outputs
+ */
+static inline float mavlink_msg_sim_state_get_roll(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  16);
+}
+
+/**
+ * @brief Get field pitch from sim_state message
+ *
+ * @return Attitude pitch expressed as Euler angles, not recommended except for human-readable outputs
+ */
+static inline float mavlink_msg_sim_state_get_pitch(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  20);
+}
+
+/**
+ * @brief Get field yaw from sim_state message
+ *
+ * @return Attitude yaw expressed as Euler angles, not recommended except for human-readable outputs
+ */
+static inline float mavlink_msg_sim_state_get_yaw(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  24);
+}
+
+/**
+ * @brief Get field xacc from sim_state message
+ *
+ * @return X acceleration m/s/s
+ */
+static inline float mavlink_msg_sim_state_get_xacc(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  28);
+}
+
+/**
+ * @brief Get field yacc from sim_state message
+ *
+ * @return Y acceleration m/s/s
+ */
+static inline float mavlink_msg_sim_state_get_yacc(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  32);
+}
+
+/**
+ * @brief Get field zacc from sim_state message
+ *
+ * @return Z acceleration m/s/s
+ */
+static inline float mavlink_msg_sim_state_get_zacc(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  36);
+}
+
+/**
+ * @brief Get field xgyro from sim_state message
+ *
+ * @return Angular speed around X axis rad/s
+ */
+sta

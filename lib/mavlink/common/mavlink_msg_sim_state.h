@@ -443,4 +443,69 @@ static inline void mavlink_msg_sim_state_send_buf(mavlink_message_t *msgbuf, mav
     packet->xacc = xacc;
     packet->yacc = yacc;
     packet->zacc = zacc;
-    packet-
+    packet->xgyro = xgyro;
+    packet->ygyro = ygyro;
+    packet->zgyro = zgyro;
+    packet->lat = lat;
+    packet->lon = lon;
+    packet->alt = alt;
+    packet->std_dev_horz = std_dev_horz;
+    packet->std_dev_vert = std_dev_vert;
+    packet->vn = vn;
+    packet->ve = ve;
+    packet->vd = vd;
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_SIM_STATE, (const char *)packet, MAVLINK_MSG_ID_SIM_STATE_MIN_LEN, MAVLINK_MSG_ID_SIM_STATE_LEN, MAVLINK_MSG_ID_SIM_STATE_CRC);
+#endif
+}
+#endif
+
+#endif
+
+// MESSAGE SIM_STATE UNPACKING
+
+
+/**
+ * @brief Get field q1 from sim_state message
+ *
+ * @return True attitude quaternion component 1, w (1 in null-rotation)
+ */
+static inline float mavlink_msg_sim_state_get_q1(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  0);
+}
+
+/**
+ * @brief Get field q2 from sim_state message
+ *
+ * @return True attitude quaternion component 2, x (0 in null-rotation)
+ */
+static inline float mavlink_msg_sim_state_get_q2(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  4);
+}
+
+/**
+ * @brief Get field q3 from sim_state message
+ *
+ * @return True attitude quaternion component 3, y (0 in null-rotation)
+ */
+static inline float mavlink_msg_sim_state_get_q3(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  8);
+}
+
+/**
+ * @brief Get field q4 from sim_state message
+ *
+ * @return True attitude quaternion component 4, z (0 in null-rotation)
+ */
+static inline float mavlink_msg_sim_state_get_q4(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  12);
+}
+
+/**
+ * @brief Get field roll from sim_state message
+ *
+ * @return Attitude r

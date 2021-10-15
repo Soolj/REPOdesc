@@ -640,4 +640,54 @@ static inline float mavlink_msg_sim_state_get_std_dev_horz(const mavlink_message
  *
  * @return Vertical position standard deviation
  */
-stati
+static inline float mavlink_msg_sim_state_get_std_dev_vert(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  68);
+}
+
+/**
+ * @brief Get field vn from sim_state message
+ *
+ * @return True velocity in m/s in NORTH direction in earth-fixed NED frame
+ */
+static inline float mavlink_msg_sim_state_get_vn(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  72);
+}
+
+/**
+ * @brief Get field ve from sim_state message
+ *
+ * @return True velocity in m/s in EAST direction in earth-fixed NED frame
+ */
+static inline float mavlink_msg_sim_state_get_ve(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  76);
+}
+
+/**
+ * @brief Get field vd from sim_state message
+ *
+ * @return True velocity in m/s in DOWN direction in earth-fixed NED frame
+ */
+static inline float mavlink_msg_sim_state_get_vd(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  80);
+}
+
+/**
+ * @brief Decode a sim_state message into a struct
+ *
+ * @param msg The message to decode
+ * @param sim_state C-struct to decode the message contents into
+ */
+static inline void mavlink_msg_sim_state_decode(const mavlink_message_t* msg, mavlink_sim_state_t* sim_state)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    sim_state->q1 = mavlink_msg_sim_state_get_q1(msg);
+    sim_state->q2 = mavlink_msg_sim_state_get_q2(msg);
+    sim_state->q3 = mavlink_msg_sim_state_get_q3(msg);
+    sim_state->q4 = mavlink_msg_sim_state_get_q4(msg);
+    sim_state->roll = mavlink_msg_sim_state_get_roll(msg);
+    sim_state->pitch = mavlink_msg_sim_state_get_pitch(msg);
+    sim_state->yaw = mavlink_msg_sim_state_

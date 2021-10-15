@@ -570,4 +570,74 @@ static inline float mavlink_msg_sim_state_get_zacc(const mavlink_message_t* msg)
  *
  * @return Angular speed around X axis rad/s
  */
-sta
+static inline float mavlink_msg_sim_state_get_xgyro(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  40);
+}
+
+/**
+ * @brief Get field ygyro from sim_state message
+ *
+ * @return Angular speed around Y axis rad/s
+ */
+static inline float mavlink_msg_sim_state_get_ygyro(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  44);
+}
+
+/**
+ * @brief Get field zgyro from sim_state message
+ *
+ * @return Angular speed around Z axis rad/s
+ */
+static inline float mavlink_msg_sim_state_get_zgyro(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  48);
+}
+
+/**
+ * @brief Get field lat from sim_state message
+ *
+ * @return Latitude in degrees
+ */
+static inline float mavlink_msg_sim_state_get_lat(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  52);
+}
+
+/**
+ * @brief Get field lon from sim_state message
+ *
+ * @return Longitude in degrees
+ */
+static inline float mavlink_msg_sim_state_get_lon(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  56);
+}
+
+/**
+ * @brief Get field alt from sim_state message
+ *
+ * @return Altitude in meters
+ */
+static inline float mavlink_msg_sim_state_get_alt(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  60);
+}
+
+/**
+ * @brief Get field std_dev_horz from sim_state message
+ *
+ * @return Horizontal position standard deviation
+ */
+static inline float mavlink_msg_sim_state_get_std_dev_horz(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  64);
+}
+
+/**
+ * @brief Get field std_dev_vert from sim_state message
+ *
+ * @return Vertical position standard deviation
+ */
+stati

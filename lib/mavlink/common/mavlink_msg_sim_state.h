@@ -690,4 +690,24 @@ static inline void mavlink_msg_sim_state_decode(const mavlink_message_t* msg, ma
     sim_state->q4 = mavlink_msg_sim_state_get_q4(msg);
     sim_state->roll = mavlink_msg_sim_state_get_roll(msg);
     sim_state->pitch = mavlink_msg_sim_state_get_pitch(msg);
-    sim_state->yaw = mavlink_msg_sim_state_
+    sim_state->yaw = mavlink_msg_sim_state_get_yaw(msg);
+    sim_state->xacc = mavlink_msg_sim_state_get_xacc(msg);
+    sim_state->yacc = mavlink_msg_sim_state_get_yacc(msg);
+    sim_state->zacc = mavlink_msg_sim_state_get_zacc(msg);
+    sim_state->xgyro = mavlink_msg_sim_state_get_xgyro(msg);
+    sim_state->ygyro = mavlink_msg_sim_state_get_ygyro(msg);
+    sim_state->zgyro = mavlink_msg_sim_state_get_zgyro(msg);
+    sim_state->lat = mavlink_msg_sim_state_get_lat(msg);
+    sim_state->lon = mavlink_msg_sim_state_get_lon(msg);
+    sim_state->alt = mavlink_msg_sim_state_get_alt(msg);
+    sim_state->std_dev_horz = mavlink_msg_sim_state_get_std_dev_horz(msg);
+    sim_state->std_dev_vert = mavlink_msg_sim_state_get_std_dev_vert(msg);
+    sim_state->vn = mavlink_msg_sim_state_get_vn(msg);
+    sim_state->ve = mavlink_msg_sim_state_get_ve(msg);
+    sim_state->vd = mavlink_msg_sim_state_get_vd(msg);
+#else
+        uint8_t len = msg->len < MAVLINK_MSG_ID_SIM_STATE_LEN? msg->len : MAVLINK_MSG_ID_SIM_STATE_LEN;
+        memset(sim_state, 0, MAVLINK_MSG_ID_SIM_STATE_LEN);
+    memcpy(sim_state, _MAV_PAYLOAD(msg), len);
+#endif
+}

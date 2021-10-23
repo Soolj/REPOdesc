@@ -198,4 +198,33 @@ static inline void mavlink_msg_statustext_send_buf(mavlink_message_t *msgbuf, ma
  */
 static inline uint8_t mavlink_msg_statustext_get_severity(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_uint8_t(msg
+    return _MAV_RETURN_uint8_t(msg,  0);
+}
+
+/**
+ * @brief Get field text from statustext message
+ *
+ * @return Status text message, without null termination character
+ */
+static inline uint16_t mavlink_msg_statustext_get_text(const mavlink_message_t* msg, char *text)
+{
+    return _MAV_RETURN_char_array(msg, text, 50,  1);
+}
+
+/**
+ * @brief Decode a statustext message into a struct
+ *
+ * @param msg The message to decode
+ * @param statustext C-struct to decode the message contents into
+ */
+static inline void mavlink_msg_statustext_decode(const mavlink_message_t* msg, mavlink_statustext_t* statustext)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    statustext->severity = mavlink_msg_statustext_get_severity(msg);
+    mavlink_msg_statustext_get_text(msg, statustext->text);
+#else
+        uint8_t len = msg->len < MAVLINK_MSG_ID_STATUSTEXT_LEN? msg->len : MAVLINK_MSG_ID_STATUSTEXT_LEN;
+        memset(statustext, 0, MAVLINK_MSG_ID_STATUSTEXT_LEN);
+    memcpy(statustext, _MAV_PAYLOAD(msg), len);
+#endif
+}

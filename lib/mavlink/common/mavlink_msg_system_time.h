@@ -176,4 +176,53 @@ static inline void mavlink_msg_system_time_send_struct(mavlink_channel_t chan, c
   is usually the receive buffer for the channel, and allows a reply to an
   incoming message with minimum stack space usage.
  */
-static inline void mavlink_msg_system_time_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  uint64_t time_unix_usec, uint32_t ti
+static inline void mavlink_msg_system_time_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  uint64_t time_unix_usec, uint32_t time_boot_ms)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    char *buf = (char *)msgbuf;
+    _mav_put_uint64_t(buf, 0, time_unix_usec);
+    _mav_put_uint32_t(buf, 8, time_boot_ms);
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_SYSTEM_TIME, buf, MAVLINK_MSG_ID_SYSTEM_TIME_MIN_LEN, MAVLINK_MSG_ID_SYSTEM_TIME_LEN, MAVLINK_MSG_ID_SYSTEM_TIME_CRC);
+#else
+    mavlink_system_time_t *packet = (mavlink_system_time_t *)msgbuf;
+    packet->time_unix_usec = time_unix_usec;
+    packet->time_boot_ms = time_boot_ms;
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_SYSTEM_TIME, (const char *)packet, MAVLINK_MSG_ID_SYSTEM_TIME_MIN_LEN, MAVLINK_MSG_ID_SYSTEM_TIME_LEN, MAVLINK_MSG_ID_SYSTEM_TIME_CRC);
+#endif
+}
+#endif
+
+#endif
+
+// MESSAGE SYSTEM_TIME UNPACKING
+
+
+/**
+ * @brief Get field time_unix_usec from system_time message
+ *
+ * @return Timestamp of the master clock in microseconds since UNIX epoch.
+ */
+static inline uint64_t mavlink_msg_system_time_get_time_unix_usec(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint64_t(msg,  0);
+}
+
+/**
+ * @brief Get field time_boot_ms from system_time message
+ *
+ * @return Timestamp of the component clock since boot time in milliseconds.
+ */
+static inline uint32_t mavlink_msg_system_time_get_time_boot_ms(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint32_t(msg,  8);
+}
+
+/**
+ * @brief Decode a system_time message into a struct
+ *
+ * @param msg The message to decode
+ * @param system_time C-struct to decode the message contents into
+ */
+static inline void mav

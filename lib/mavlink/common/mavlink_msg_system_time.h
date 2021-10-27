@@ -144,4 +144,36 @@ static inline void mavlink_msg_system_time_send(mavlink_channel_t chan, uint64_t
     _mav_put_uint64_t(buf, 0, time_unix_usec);
     _mav_put_uint32_t(buf, 8, time_boot_ms);
 
-    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_SYSTEM_TIME, buf, MAVLINK_MSG
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_SYSTEM_TIME, buf, MAVLINK_MSG_ID_SYSTEM_TIME_MIN_LEN, MAVLINK_MSG_ID_SYSTEM_TIME_LEN, MAVLINK_MSG_ID_SYSTEM_TIME_CRC);
+#else
+    mavlink_system_time_t packet;
+    packet.time_unix_usec = time_unix_usec;
+    packet.time_boot_ms = time_boot_ms;
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_SYSTEM_TIME, (const char *)&packet, MAVLINK_MSG_ID_SYSTEM_TIME_MIN_LEN, MAVLINK_MSG_ID_SYSTEM_TIME_LEN, MAVLINK_MSG_ID_SYSTEM_TIME_CRC);
+#endif
+}
+
+/**
+ * @brief Send a system_time message
+ * @param chan MAVLink channel to send the message
+ * @param struct The MAVLink struct to serialize
+ */
+static inline void mavlink_msg_system_time_send_struct(mavlink_channel_t chan, const mavlink_system_time_t* system_time)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    mavlink_msg_system_time_send(chan, system_time->time_unix_usec, system_time->time_boot_ms);
+#else
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_SYSTEM_TIME, (const char *)system_time, MAVLINK_MSG_ID_SYSTEM_TIME_MIN_LEN, MAVLINK_MSG_ID_SYSTEM_TIME_LEN, MAVLINK_MSG_ID_SYSTEM_TIME_CRC);
+#endif
+}
+
+#if MAVLINK_MSG_ID_SYSTEM_TIME_LEN <= MAVLINK_MAX_PAYLOAD_LEN
+/*
+  This varient of _send() can be used to save stack space by re-using
+  memory from the receive buffer.  The caller provides a
+  mavlink_message_t which is the size of a full mavlink message. This
+  is usually the receive buffer for the channel, and allows a reply to an
+  incoming message with minimum stack space usage.
+ */
+static inline void mavlink_msg_system_time_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  uint64_t time_unix_usec, uint32_t ti

@@ -23,4 +23,36 @@ typedef struct __mavlink_terrain_data_t {
 #define MAVLINK_MSG_TERRAIN_DATA_FIELD_DATA_LEN 16
 
 #if MAVLINK_COMMAND_24BIT
-#de
+#define MAVLINK_MESSAGE_INFO_TERRAIN_DATA { \
+    134, \
+    "TERRAIN_DATA", \
+    5, \
+    {  { "lat", NULL, MAVLINK_TYPE_INT32_T, 0, 0, offsetof(mavlink_terrain_data_t, lat) }, \
+         { "lon", NULL, MAVLINK_TYPE_INT32_T, 0, 4, offsetof(mavlink_terrain_data_t, lon) }, \
+         { "grid_spacing", NULL, MAVLINK_TYPE_UINT16_T, 0, 8, offsetof(mavlink_terrain_data_t, grid_spacing) }, \
+         { "gridbit", NULL, MAVLINK_TYPE_UINT8_T, 0, 42, offsetof(mavlink_terrain_data_t, gridbit) }, \
+         { "data", NULL, MAVLINK_TYPE_INT16_T, 16, 10, offsetof(mavlink_terrain_data_t, data) }, \
+         } \
+}
+#else
+#define MAVLINK_MESSAGE_INFO_TERRAIN_DATA { \
+    "TERRAIN_DATA", \
+    5, \
+    {  { "lat", NULL, MAVLINK_TYPE_INT32_T, 0, 0, offsetof(mavlink_terrain_data_t, lat) }, \
+         { "lon", NULL, MAVLINK_TYPE_INT32_T, 0, 4, offsetof(mavlink_terrain_data_t, lon) }, \
+         { "grid_spacing", NULL, MAVLINK_TYPE_UINT16_T, 0, 8, offsetof(mavlink_terrain_data_t, grid_spacing) }, \
+         { "gridbit", NULL, MAVLINK_TYPE_UINT8_T, 0, 42, offsetof(mavlink_terrain_data_t, gridbit) }, \
+         { "data", NULL, MAVLINK_TYPE_INT16_T, 16, 10, offsetof(mavlink_terrain_data_t, data) }, \
+         } \
+}
+#endif
+
+/**
+ * @brief Pack a terrain_data message
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param msg The MAVLink message to compress the data into
+ *
+ * @param lat Latitude of SW corner of first grid (degrees *10^7)
+ * @param lon Longitude of SW corner of first grid (in degrees *10^7)
+ * @param grid_spacing

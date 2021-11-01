@@ -156,4 +156,40 @@ static inline uint16_t mavlink_msg_terrain_data_encode_chan(uint8_t system_id, u
  * @param chan MAVLink channel to send the message
  *
  * @param lat Latitude of SW corner of first grid (degrees *10^7)
- * @param lon Lon
+ * @param lon Longitude of SW corner of first grid (in degrees *10^7)
+ * @param grid_spacing Grid spacing in meters
+ * @param gridbit bit within the terrain request mask
+ * @param data Terrain data in meters AMSL
+ */
+#ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
+
+static inline void mavlink_msg_terrain_data_send(mavlink_channel_t chan, int32_t lat, int32_t lon, uint16_t grid_spacing, uint8_t gridbit, const int16_t *data)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    char buf[MAVLINK_MSG_ID_TERRAIN_DATA_LEN];
+    _mav_put_int32_t(buf, 0, lat);
+    _mav_put_int32_t(buf, 4, lon);
+    _mav_put_uint16_t(buf, 8, grid_spacing);
+    _mav_put_uint8_t(buf, 42, gridbit);
+    _mav_put_int16_t_array(buf, 10, data, 16);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_TERRAIN_DATA, buf, MAVLINK_MSG_ID_TERRAIN_DATA_MIN_LEN, MAVLINK_MSG_ID_TERRAIN_DATA_LEN, MAVLINK_MSG_ID_TERRAIN_DATA_CRC);
+#else
+    mavlink_terrain_data_t packet;
+    packet.lat = lat;
+    packet.lon = lon;
+    packet.grid_spacing = grid_spacing;
+    packet.gridbit = gridbit;
+    mav_array_memcpy(packet.data, data, sizeof(int16_t)*16);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_TERRAIN_DATA, (const char *)&packet, MAVLINK_MSG_ID_TERRAIN_DATA_MIN_LEN, MAVLINK_MSG_ID_TERRAIN_DATA_LEN, MAVLINK_MSG_ID_TERRAIN_DATA_CRC);
+#endif
+}
+
+/**
+ * @brief Send a terrain_data message
+ * @param chan MAVLink channel to send the message
+ * @param struct The MAVLink struct to serialize
+ */
+static inline void mavlink_msg_terrain_data_send_struct(mavlink_channel_t chan, const mavlink_terrain_data_t* terrain_data)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    mavli

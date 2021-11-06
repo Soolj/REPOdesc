@@ -280,4 +280,26 @@ static inline uint8_t mavlink_msg_terrain_data_get_gridbit(const mavlink_message
  */
 static inline uint16_t mavlink_msg_terrain_data_get_data(const mavlink_message_t* msg, int16_t *data)
 {
-    return _MAV_RETURN_int16_t_array
+    return _MAV_RETURN_int16_t_array(msg, data, 16,  10);
+}
+
+/**
+ * @brief Decode a terrain_data message into a struct
+ *
+ * @param msg The message to decode
+ * @param terrain_data C-struct to decode the message contents into
+ */
+static inline void mavlink_msg_terrain_data_decode(const mavlink_message_t* msg, mavlink_terrain_data_t* terrain_data)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    terrain_data->lat = mavlink_msg_terrain_data_get_lat(msg);
+    terrain_data->lon = mavlink_msg_terrain_data_get_lon(msg);
+    terrain_data->grid_spacing = mavlink_msg_terrain_data_get_grid_spacing(msg);
+    mavlink_msg_terrain_data_get_data(msg, terrain_data->data);
+    terrain_data->gridbit = mavlink_msg_terrain_data_get_gridbit(msg);
+#else
+        uint8_t len = msg->len < MAVLINK_MSG_ID_TERRAIN_DATA_LEN? msg->len : MAVLINK_MSG_ID_TERRAIN_DATA_LEN;
+        memset(terrain_data, 0, MAVLINK_MSG_ID_TERRAIN_DATA_LEN);
+    memcpy(terrain_data, _MAV_PAYLOAD(msg), len);
+#endif
+}

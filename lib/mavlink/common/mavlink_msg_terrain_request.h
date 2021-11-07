@@ -222,3 +222,68 @@ static inline void mavlink_msg_terrain_request_send_buf(mavlink_message_t *msgbu
 #endif
 }
 #endif
+
+#endif
+
+// MESSAGE TERRAIN_REQUEST UNPACKING
+
+
+/**
+ * @brief Get field lat from terrain_request message
+ *
+ * @return Latitude of SW corner of first grid (degrees *10^7)
+ */
+static inline int32_t mavlink_msg_terrain_request_get_lat(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int32_t(msg,  8);
+}
+
+/**
+ * @brief Get field lon from terrain_request message
+ *
+ * @return Longitude of SW corner of first grid (in degrees *10^7)
+ */
+static inline int32_t mavlink_msg_terrain_request_get_lon(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int32_t(msg,  12);
+}
+
+/**
+ * @brief Get field grid_spacing from terrain_request message
+ *
+ * @return Grid spacing in meters
+ */
+static inline uint16_t mavlink_msg_terrain_request_get_grid_spacing(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint16_t(msg,  16);
+}
+
+/**
+ * @brief Get field mask from terrain_request message
+ *
+ * @return Bitmask of requested 4x4 grids (row major 8x7 array of grids, 56 bits)
+ */
+static inline uint64_t mavlink_msg_terrain_request_get_mask(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint64_t(msg,  0);
+}
+
+/**
+ * @brief Decode a terrain_request message into a struct
+ *
+ * @param msg The message to decode
+ * @param terrain_request C-struct to decode the message contents into
+ */
+static inline void mavlink_msg_terrain_request_decode(const mavlink_message_t* msg, mavlink_terrain_request_t* terrain_request)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    terrain_request->mask = mavlink_msg_terrain_request_get_mask(msg);
+    terrain_request->lat = mavlink_msg_terrain_request_get_lat(msg);
+    terrain_request->lon = mavlink_msg_terrain_request_get_lon(msg);
+    terrain_request->grid_spacing = mavlink_msg_terrain_request_get_grid_spacing(msg);
+#else
+        uint8_t len = msg->len < MAVLINK_MSG_ID_TERRAIN_REQUEST_LEN? msg->len : MAVLINK_MSG_ID_TERRAIN_REQUEST_LEN;
+        memset(terrain_request, 0, MAVLINK_MSG_ID_TERRAIN_REQUEST_LEN);
+    memcpy(terrain_request, _MAV_PAYLOAD(msg), len);
+#endif
+}

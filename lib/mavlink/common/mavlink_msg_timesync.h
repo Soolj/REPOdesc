@@ -92,4 +92,45 @@ static inline uint16_t mavlink_msg_timesync_pack_chan(uint8_t system_id, uint8_t
 #else
     mavlink_timesync_t packet;
     packet.tc1 = tc1;
- 
+    packet.ts1 = ts1;
+
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_TIMESYNC_LEN);
+#endif
+
+    msg->msgid = MAVLINK_MSG_ID_TIMESYNC;
+    return mavlink_finalize_message_chan(msg, system_id, component_id, chan, MAVLINK_MSG_ID_TIMESYNC_MIN_LEN, MAVLINK_MSG_ID_TIMESYNC_LEN, MAVLINK_MSG_ID_TIMESYNC_CRC);
+}
+
+/**
+ * @brief Encode a timesync struct
+ *
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param msg The MAVLink message to compress the data into
+ * @param timesync C-struct to read the message contents from
+ */
+static inline uint16_t mavlink_msg_timesync_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_timesync_t* timesync)
+{
+    return mavlink_msg_timesync_pack(system_id, component_id, msg, timesync->tc1, timesync->ts1);
+}
+
+/**
+ * @brief Encode a timesync struct on a channel
+ *
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param chan The MAVLink channel this message will be sent over
+ * @param msg The MAVLink message to compress the data into
+ * @param timesync C-struct to read the message contents from
+ */
+static inline uint16_t mavlink_msg_timesync_encode_chan(uint8_t system_id, uint8_t component_id, uint8_t chan, mavlink_message_t* msg, const mavlink_timesync_t* timesync)
+{
+    return mavlink_msg_timesync_pack_chan(system_id, component_id, chan, msg, timesync->tc1, timesync->ts1);
+}
+
+/**
+ * @brief Send a timesync message
+ * @param chan MAVLink channel to send the message
+ *
+ * @param tc1 Time sync timestamp 1
+ * @param t

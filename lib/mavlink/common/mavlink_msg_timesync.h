@@ -172,4 +172,57 @@ static inline void mavlink_msg_timesync_send_struct(mavlink_channel_t chan, cons
 /*
   This varient of _send() can be used to save stack space by re-using
   memory from the receive buffer.  The caller provides a
-  mavlink_message_t which is
+  mavlink_message_t which is the size of a full mavlink message. This
+  is usually the receive buffer for the channel, and allows a reply to an
+  incoming message with minimum stack space usage.
+ */
+static inline void mavlink_msg_timesync_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  int64_t tc1, int64_t ts1)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    char *buf = (char *)msgbuf;
+    _mav_put_int64_t(buf, 0, tc1);
+    _mav_put_int64_t(buf, 8, ts1);
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_TIMESYNC, buf, MAVLINK_MSG_ID_TIMESYNC_MIN_LEN, MAVLINK_MSG_ID_TIMESYNC_LEN, MAVLINK_MSG_ID_TIMESYNC_CRC);
+#else
+    mavlink_timesync_t *packet = (mavlink_timesync_t *)msgbuf;
+    packet->tc1 = tc1;
+    packet->ts1 = ts1;
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_TIMESYNC, (const char *)packet, MAVLINK_MSG_ID_TIMESYNC_MIN_LEN, MAVLINK_MSG_ID_TIMESYNC_LEN, MAVLINK_MSG_ID_TIMESYNC_CRC);
+#endif
+}
+#endif
+
+#endif
+
+// MESSAGE TIMESYNC UNPACKING
+
+
+/**
+ * @brief Get field tc1 from timesync message
+ *
+ * @return Time sync timestamp 1
+ */
+static inline int64_t mavlink_msg_timesync_get_tc1(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int64_t(msg,  0);
+}
+
+/**
+ * @brief Get field ts1 from timesync message
+ *
+ * @return Time sync timestamp 2
+ */
+static inline int64_t mavlink_msg_timesync_get_ts1(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int64_t(msg,  8);
+}
+
+/**
+ * @brief Decode a timesync message into a struct
+ *
+ * @param msg The message to decode
+ * @param timesync C-struct to decode the message contents into
+ */
+static inline void mavlink_msg_t

@@ -225,4 +225,14 @@ static inline int64_t mavlink_msg_timesync_get_ts1(const mavlink_message_t* msg)
  * @param msg The message to decode
  * @param timesync C-struct to decode the message contents into
  */
-static inline void mavlink_msg_t
+static inline void mavlink_msg_timesync_decode(const mavlink_message_t* msg, mavlink_timesync_t* timesync)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    timesync->tc1 = mavlink_msg_timesync_get_tc1(msg);
+    timesync->ts1 = mavlink_msg_timesync_get_ts1(msg);
+#else
+        uint8_t len = msg->len < MAVLINK_MSG_ID_TIMESYNC_LEN? msg->len : MAVLINK_MSG_ID_TIMESYNC_LEN;
+        memset(timesync, 0, MAVLINK_MSG_ID_TIMESYNC_LEN);
+    memcpy(timesync, _MAV_PAYLOAD(msg), len);
+#endif
+}

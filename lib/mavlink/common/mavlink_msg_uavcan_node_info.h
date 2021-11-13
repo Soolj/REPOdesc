@@ -48,4 +48,28 @@ typedef struct __mavlink_uavcan_node_info_t {
     "UAVCAN_NODE_INFO", \
     9, \
     {  { "time_usec", NULL, MAVLINK_TYPE_UINT64_T, 0, 0, offsetof(mavlink_uavcan_node_info_t, time_usec) }, \
-         { "uptime_sec", NULL, MAVLINK_TYPE_UINT32_T, 0, 8, offsetof(mavlink_uavcan_node_info_t, 
+         { "uptime_sec", NULL, MAVLINK_TYPE_UINT32_T, 0, 8, offsetof(mavlink_uavcan_node_info_t, uptime_sec) }, \
+         { "name", NULL, MAVLINK_TYPE_CHAR, 80, 16, offsetof(mavlink_uavcan_node_info_t, name) }, \
+         { "hw_version_major", NULL, MAVLINK_TYPE_UINT8_T, 0, 96, offsetof(mavlink_uavcan_node_info_t, hw_version_major) }, \
+         { "hw_version_minor", NULL, MAVLINK_TYPE_UINT8_T, 0, 97, offsetof(mavlink_uavcan_node_info_t, hw_version_minor) }, \
+         { "hw_unique_id", NULL, MAVLINK_TYPE_UINT8_T, 16, 98, offsetof(mavlink_uavcan_node_info_t, hw_unique_id) }, \
+         { "sw_version_major", NULL, MAVLINK_TYPE_UINT8_T, 0, 114, offsetof(mavlink_uavcan_node_info_t, sw_version_major) }, \
+         { "sw_version_minor", NULL, MAVLINK_TYPE_UINT8_T, 0, 115, offsetof(mavlink_uavcan_node_info_t, sw_version_minor) }, \
+         { "sw_vcs_commit", NULL, MAVLINK_TYPE_UINT32_T, 0, 12, offsetof(mavlink_uavcan_node_info_t, sw_vcs_commit) }, \
+         } \
+}
+#endif
+
+/**
+ * @brief Pack a uavcan_node_info message
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param msg The MAVLink message to compress the data into
+ *
+ * @param time_usec Timestamp (microseconds since UNIX epoch or microseconds since system boot)
+ * @param uptime_sec The number of seconds since the start-up of the node.
+ * @param name Node name string. For example, "sapog.px4.io".
+ * @param hw_version_major Hardware major version number.
+ * @param hw_version_minor Hardware minor version number.
+ * @param hw_unique_id Hardware unique 128-bit ID.
+ * @param sw_version_

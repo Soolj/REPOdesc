@@ -100,4 +100,31 @@ static inline uint16_t mavlink_msg_uavcan_node_info_pack(uint8_t system_id, uint
     packet.hw_version_major = hw_version_major;
     packet.hw_version_minor = hw_version_minor;
     packet.sw_version_major = sw_version_major;
-    packet.sw_ver
+    packet.sw_version_minor = sw_version_minor;
+    mav_array_memcpy(packet.name, name, sizeof(char)*80);
+    mav_array_memcpy(packet.hw_unique_id, hw_unique_id, sizeof(uint8_t)*16);
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_UAVCAN_NODE_INFO_LEN);
+#endif
+
+    msg->msgid = MAVLINK_MSG_ID_UAVCAN_NODE_INFO;
+    return mavlink_finalize_message(msg, system_id, component_id, MAVLINK_MSG_ID_UAVCAN_NODE_INFO_MIN_LEN, MAVLINK_MSG_ID_UAVCAN_NODE_INFO_LEN, MAVLINK_MSG_ID_UAVCAN_NODE_INFO_CRC);
+}
+
+/**
+ * @brief Pack a uavcan_node_info message on a channel
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param chan The MAVLink channel this message will be sent over
+ * @param msg The MAVLink message to compress the data into
+ * @param time_usec Timestamp (microseconds since UNIX epoch or microseconds since system boot)
+ * @param uptime_sec The number of seconds since the start-up of the node.
+ * @param name Node name string. For example, "sapog.px4.io".
+ * @param hw_version_major Hardware major version number.
+ * @param hw_version_minor Hardware minor version number.
+ * @param hw_unique_id Hardware unique 128-bit ID.
+ * @param sw_version_major Software major version number.
+ * @param sw_version_minor Software minor version number.
+ * @param sw_vcs_commit Version control system (VCS) revision identifier (e.g. git short commit hash). Zero if unknown.
+ * @return length of the message in bytes (excluding serial stream start sign)
+ */
+static inline uint16_t mavlink_msg_uavcan_node_info_pack_chan(uint8_t system_id, uint8_t component_id, uint8

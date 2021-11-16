@@ -72,4 +72,32 @@ typedef struct __mavlink_uavcan_node_info_t {
  * @param hw_version_major Hardware major version number.
  * @param hw_version_minor Hardware minor version number.
  * @param hw_unique_id Hardware unique 128-bit ID.
- * @param sw_version_
+ * @param sw_version_major Software major version number.
+ * @param sw_version_minor Software minor version number.
+ * @param sw_vcs_commit Version control system (VCS) revision identifier (e.g. git short commit hash). Zero if unknown.
+ * @return length of the message in bytes (excluding serial stream start sign)
+ */
+static inline uint16_t mavlink_msg_uavcan_node_info_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
+                               uint64_t time_usec, uint32_t uptime_sec, const char *name, uint8_t hw_version_major, uint8_t hw_version_minor, const uint8_t *hw_unique_id, uint8_t sw_version_major, uint8_t sw_version_minor, uint32_t sw_vcs_commit)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    char buf[MAVLINK_MSG_ID_UAVCAN_NODE_INFO_LEN];
+    _mav_put_uint64_t(buf, 0, time_usec);
+    _mav_put_uint32_t(buf, 8, uptime_sec);
+    _mav_put_uint32_t(buf, 12, sw_vcs_commit);
+    _mav_put_uint8_t(buf, 96, hw_version_major);
+    _mav_put_uint8_t(buf, 97, hw_version_minor);
+    _mav_put_uint8_t(buf, 114, sw_version_major);
+    _mav_put_uint8_t(buf, 115, sw_version_minor);
+    _mav_put_char_array(buf, 16, name, 80);
+    _mav_put_uint8_t_array(buf, 98, hw_unique_id, 16);
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_UAVCAN_NODE_INFO_LEN);
+#else
+    mavlink_uavcan_node_info_t packet;
+    packet.time_usec = time_usec;
+    packet.uptime_sec = uptime_sec;
+    packet.sw_vcs_commit = sw_vcs_commit;
+    packet.hw_version_major = hw_version_major;
+    packet.hw_version_minor = hw_version_minor;
+    packet.sw_version_major = sw_version_major;
+    packet.sw_ver

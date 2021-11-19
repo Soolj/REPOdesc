@@ -158,4 +158,29 @@ static inline uint16_t mavlink_msg_uavcan_node_info_pack_chan(uint8_t system_id,
 #endif
 
     msg->msgid = MAVLINK_MSG_ID_UAVCAN_NODE_INFO;
-    return mavlink_finalize_message_chan(msg, system_id, component
+    return mavlink_finalize_message_chan(msg, system_id, component_id, chan, MAVLINK_MSG_ID_UAVCAN_NODE_INFO_MIN_LEN, MAVLINK_MSG_ID_UAVCAN_NODE_INFO_LEN, MAVLINK_MSG_ID_UAVCAN_NODE_INFO_CRC);
+}
+
+/**
+ * @brief Encode a uavcan_node_info struct
+ *
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param msg The MAVLink message to compress the data into
+ * @param uavcan_node_info C-struct to read the message contents from
+ */
+static inline uint16_t mavlink_msg_uavcan_node_info_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_uavcan_node_info_t* uavcan_node_info)
+{
+    return mavlink_msg_uavcan_node_info_pack(system_id, component_id, msg, uavcan_node_info->time_usec, uavcan_node_info->uptime_sec, uavcan_node_info->name, uavcan_node_info->hw_version_major, uavcan_node_info->hw_version_minor, uavcan_node_info->hw_unique_id, uavcan_node_info->sw_version_major, uavcan_node_info->sw_version_minor, uavcan_node_info->sw_vcs_commit);
+}
+
+/**
+ * @brief Encode a uavcan_node_info struct on a channel
+ *
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param chan The MAVLink channel this message will be sent over
+ * @param msg The MAVLink message to compress the data into
+ * @param uavcan_node_info C-struct to read the message contents from
+ */
+static inline uint16_t mavlink_msg_uavcan_node_info_encode_chan(uint8_t system_id, uint8_t component_id, uint8_t chan, mavlink_message_t* msg, const mavlink_uavcan_node_info_t* uavcan_node_info)

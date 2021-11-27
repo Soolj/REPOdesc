@@ -240,4 +240,28 @@ static inline void mavlink_msg_uavcan_node_info_send(mavlink_channel_t chan, uin
  */
 static inline void mavlink_msg_uavcan_node_info_send_struct(mavlink_channel_t chan, const mavlink_uavcan_node_info_t* uavcan_node_info)
 {
-#if MAVLINK_NEED_BYTE
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    mavlink_msg_uavcan_node_info_send(chan, uavcan_node_info->time_usec, uavcan_node_info->uptime_sec, uavcan_node_info->name, uavcan_node_info->hw_version_major, uavcan_node_info->hw_version_minor, uavcan_node_info->hw_unique_id, uavcan_node_info->sw_version_major, uavcan_node_info->sw_version_minor, uavcan_node_info->sw_vcs_commit);
+#else
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_UAVCAN_NODE_INFO, (const char *)uavcan_node_info, MAVLINK_MSG_ID_UAVCAN_NODE_INFO_MIN_LEN, MAVLINK_MSG_ID_UAVCAN_NODE_INFO_LEN, MAVLINK_MSG_ID_UAVCAN_NODE_INFO_CRC);
+#endif
+}
+
+#if MAVLINK_MSG_ID_UAVCAN_NODE_INFO_LEN <= MAVLINK_MAX_PAYLOAD_LEN
+/*
+  This varient of _send() can be used to save stack space by re-using
+  memory from the receive buffer.  The caller provides a
+  mavlink_message_t which is the size of a full mavlink message. This
+  is usually the receive buffer for the channel, and allows a reply to an
+  incoming message with minimum stack space usage.
+ */
+static inline void mavlink_msg_uavcan_node_info_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  uint64_t time_usec, uint32_t uptime_sec, const char *name, uint8_t hw_version_major, uint8_t hw_version_minor, const uint8_t *hw_unique_id, uint8_t sw_version_major, uint8_t sw_version_minor, uint32_t sw_vcs_commit)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    char *buf = (char *)msgbuf;
+    _mav_put_uint64_t(buf, 0, time_usec);
+    _mav_put_uint32_t(buf, 8, uptime_sec);
+    _mav_put_uint32_t(buf, 12, sw_vcs_commit);
+    _mav_put_uint8_t(buf, 96, hw_version_major);
+    _mav_put_uint8_t(buf, 97, hw_version_minor);
+    _mav_put_uint

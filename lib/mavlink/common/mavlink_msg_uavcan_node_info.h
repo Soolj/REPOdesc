@@ -264,4 +264,43 @@ static inline void mavlink_msg_uavcan_node_info_send_buf(mavlink_message_t *msgb
     _mav_put_uint32_t(buf, 12, sw_vcs_commit);
     _mav_put_uint8_t(buf, 96, hw_version_major);
     _mav_put_uint8_t(buf, 97, hw_version_minor);
-    _mav_put_uint
+    _mav_put_uint8_t(buf, 114, sw_version_major);
+    _mav_put_uint8_t(buf, 115, sw_version_minor);
+    _mav_put_char_array(buf, 16, name, 80);
+    _mav_put_uint8_t_array(buf, 98, hw_unique_id, 16);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_UAVCAN_NODE_INFO, buf, MAVLINK_MSG_ID_UAVCAN_NODE_INFO_MIN_LEN, MAVLINK_MSG_ID_UAVCAN_NODE_INFO_LEN, MAVLINK_MSG_ID_UAVCAN_NODE_INFO_CRC);
+#else
+    mavlink_uavcan_node_info_t *packet = (mavlink_uavcan_node_info_t *)msgbuf;
+    packet->time_usec = time_usec;
+    packet->uptime_sec = uptime_sec;
+    packet->sw_vcs_commit = sw_vcs_commit;
+    packet->hw_version_major = hw_version_major;
+    packet->hw_version_minor = hw_version_minor;
+    packet->sw_version_major = sw_version_major;
+    packet->sw_version_minor = sw_version_minor;
+    mav_array_memcpy(packet->name, name, sizeof(char)*80);
+    mav_array_memcpy(packet->hw_unique_id, hw_unique_id, sizeof(uint8_t)*16);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_UAVCAN_NODE_INFO, (const char *)packet, MAVLINK_MSG_ID_UAVCAN_NODE_INFO_MIN_LEN, MAVLINK_MSG_ID_UAVCAN_NODE_INFO_LEN, MAVLINK_MSG_ID_UAVCAN_NODE_INFO_CRC);
+#endif
+}
+#endif
+
+#endif
+
+// MESSAGE UAVCAN_NODE_INFO UNPACKING
+
+
+/**
+ * @brief Get field time_usec from uavcan_node_info message
+ *
+ * @return Timestamp (microseconds since UNIX epoch or microseconds since system boot)
+ */
+static inline uint64_t mavlink_msg_uavcan_node_info_get_time_usec(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint64_t(msg,  0);
+}
+
+/**
+ * @brief Get field uptime_sec from uavcan_node_info message
+ *
+ * @return The number of sec

@@ -357,4 +357,42 @@ static inline uint16_t mavlink_msg_uavcan_node_info_get_hw_unique_id(const mavli
  */
 static inline uint8_t mavlink_msg_uavcan_node_info_get_sw_version_major(const mavlink_message_t* msg)
 {
- 
+    return _MAV_RETURN_uint8_t(msg,  114);
+}
+
+/**
+ * @brief Get field sw_version_minor from uavcan_node_info message
+ *
+ * @return Software minor version number.
+ */
+static inline uint8_t mavlink_msg_uavcan_node_info_get_sw_version_minor(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  115);
+}
+
+/**
+ * @brief Get field sw_vcs_commit from uavcan_node_info message
+ *
+ * @return Version control system (VCS) revision identifier (e.g. git short commit hash). Zero if unknown.
+ */
+static inline uint32_t mavlink_msg_uavcan_node_info_get_sw_vcs_commit(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint32_t(msg,  12);
+}
+
+/**
+ * @brief Decode a uavcan_node_info message into a struct
+ *
+ * @param msg The message to decode
+ * @param uavcan_node_info C-struct to decode the message contents into
+ */
+static inline void mavlink_msg_uavcan_node_info_decode(const mavlink_message_t* msg, mavlink_uavcan_node_info_t* uavcan_node_info)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    uavcan_node_info->time_usec = mavlink_msg_uavcan_node_info_get_time_usec(msg);
+    uavcan_node_info->uptime_sec = mavlink_msg_uavcan_node_info_get_uptime_sec(msg);
+    uavcan_node_info->sw_vcs_commit = mavlink_msg_uavcan_node_info_get_sw_vcs_commit(msg);
+    mavlink_msg_uavcan_node_info_get_name(msg, uavcan_node_info->name);
+    uavcan_node_info->hw_version_major = mavlink_msg_uavcan_node_info_get_hw_version_major(msg);
+    uavcan_node_info->hw_version_minor = mavlink_msg_uavcan_node_info_get_hw_version_minor(msg);
+    mavlink_msg_uavcan_node_info_get_hw_unique_id(msg, uavcan_node_info->hw_unique_id);

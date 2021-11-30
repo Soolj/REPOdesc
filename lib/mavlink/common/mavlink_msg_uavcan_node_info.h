@@ -303,4 +303,58 @@ static inline uint64_t mavlink_msg_uavcan_node_info_get_time_usec(const mavlink_
 /**
  * @brief Get field uptime_sec from uavcan_node_info message
  *
- * @return The number of sec
+ * @return The number of seconds since the start-up of the node.
+ */
+static inline uint32_t mavlink_msg_uavcan_node_info_get_uptime_sec(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint32_t(msg,  8);
+}
+
+/**
+ * @brief Get field name from uavcan_node_info message
+ *
+ * @return Node name string. For example, "sapog.px4.io".
+ */
+static inline uint16_t mavlink_msg_uavcan_node_info_get_name(const mavlink_message_t* msg, char *name)
+{
+    return _MAV_RETURN_char_array(msg, name, 80,  16);
+}
+
+/**
+ * @brief Get field hw_version_major from uavcan_node_info message
+ *
+ * @return Hardware major version number.
+ */
+static inline uint8_t mavlink_msg_uavcan_node_info_get_hw_version_major(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  96);
+}
+
+/**
+ * @brief Get field hw_version_minor from uavcan_node_info message
+ *
+ * @return Hardware minor version number.
+ */
+static inline uint8_t mavlink_msg_uavcan_node_info_get_hw_version_minor(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  97);
+}
+
+/**
+ * @brief Get field hw_unique_id from uavcan_node_info message
+ *
+ * @return Hardware unique 128-bit ID.
+ */
+static inline uint16_t mavlink_msg_uavcan_node_info_get_hw_unique_id(const mavlink_message_t* msg, uint8_t *hw_unique_id)
+{
+    return _MAV_RETURN_uint8_t_array(msg, hw_unique_id, 16,  98);
+}
+
+/**
+ * @brief Get field sw_version_major from uavcan_node_info message
+ *
+ * @return Software major version number.
+ */
+static inline uint8_t mavlink_msg_uavcan_node_info_get_sw_version_major(const mavlink_message_t* msg)
+{
+ 

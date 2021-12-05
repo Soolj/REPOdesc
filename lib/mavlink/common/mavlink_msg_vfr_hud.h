@@ -118,4 +118,43 @@ static inline uint16_t mavlink_msg_vfr_hud_pack_chan(uint8_t system_id, uint8_t 
     _mav_put_float(buf, 8, alt);
     _mav_put_float(buf, 12, climb);
     _mav_put_int16_t(buf, 16, heading);
-    _mav_put_uint16_t(
+    _mav_put_uint16_t(buf, 18, throttle);
+
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_VFR_HUD_LEN);
+#else
+    mavlink_vfr_hud_t packet;
+    packet.airspeed = airspeed;
+    packet.groundspeed = groundspeed;
+    packet.alt = alt;
+    packet.climb = climb;
+    packet.heading = heading;
+    packet.throttle = throttle;
+
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_VFR_HUD_LEN);
+#endif
+
+    msg->msgid = MAVLINK_MSG_ID_VFR_HUD;
+    return mavlink_finalize_message_chan(msg, system_id, component_id, chan, MAVLINK_MSG_ID_VFR_HUD_MIN_LEN, MAVLINK_MSG_ID_VFR_HUD_LEN, MAVLINK_MSG_ID_VFR_HUD_CRC);
+}
+
+/**
+ * @brief Encode a vfr_hud struct
+ *
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param msg The MAVLink message to compress the data into
+ * @param vfr_hud C-struct to read the message contents from
+ */
+static inline uint16_t mavlink_msg_vfr_hud_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_vfr_hud_t* vfr_hud)
+{
+    return mavlink_msg_vfr_hud_pack(system_id, component_id, msg, vfr_hud->airspeed, vfr_hud->groundspeed, vfr_hud->heading, vfr_hud->throttle, vfr_hud->alt, vfr_hud->climb);
+}
+
+/**
+ * @brief Encode a vfr_hud struct on a channel
+ *
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param chan The MAVLink channel this message will be sent over
+ * @param msg The MAVLink message to compress the data into
+ * @param vfr_hud C-struct to read the message contents fro

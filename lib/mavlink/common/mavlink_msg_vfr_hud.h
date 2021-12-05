@@ -44,4 +44,43 @@ typedef struct __mavlink_vfr_hud_t {
          { "groundspeed", NULL, MAVLINK_TYPE_FLOAT, 0, 4, offsetof(mavlink_vfr_hud_t, groundspeed) }, \
          { "heading", NULL, MAVLINK_TYPE_INT16_T, 0, 16, offsetof(mavlink_vfr_hud_t, heading) }, \
          { "throttle", NULL, MAVLINK_TYPE_UINT16_T, 0, 18, offsetof(mavlink_vfr_hud_t, throttle) }, \
-         { "alt", NULL, MAVLINK_TYPE_FLOAT, 0, 8, offsetof(mavlink_vfr_hud_t, alt)
+         { "alt", NULL, MAVLINK_TYPE_FLOAT, 0, 8, offsetof(mavlink_vfr_hud_t, alt) }, \
+         { "climb", NULL, MAVLINK_TYPE_FLOAT, 0, 12, offsetof(mavlink_vfr_hud_t, climb) }, \
+         } \
+}
+#endif
+
+/**
+ * @brief Pack a vfr_hud message
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param msg The MAVLink message to compress the data into
+ *
+ * @param airspeed Current airspeed in m/s
+ * @param groundspeed Current ground speed in m/s
+ * @param heading Current heading in degrees, in compass units (0..360, 0=north)
+ * @param throttle Current throttle setting in integer percent, 0 to 100
+ * @param alt Current altitude (MSL), in meters
+ * @param climb Current climb rate in meters/second
+ * @return length of the message in bytes (excluding serial stream start sign)
+ */
+static inline uint16_t mavlink_msg_vfr_hud_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
+                               float airspeed, float groundspeed, int16_t heading, uint16_t throttle, float alt, float climb)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    char buf[MAVLINK_MSG_ID_VFR_HUD_LEN];
+    _mav_put_float(buf, 0, airspeed);
+    _mav_put_float(buf, 4, groundspeed);
+    _mav_put_float(buf, 8, alt);
+    _mav_put_float(buf, 12, climb);
+    _mav_put_int16_t(buf, 16, heading);
+    _mav_put_uint16_t(buf, 18, throttle);
+
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_VFR_HUD_LEN);
+#else
+    mavlink_vfr_hud_t packet;
+    packet.airspeed = airspeed;
+    packet.groundspeed = groundspeed;
+    packet.alt = alt;
+    packet.climb = climb;
+    packet.heading = 

@@ -226,4 +226,56 @@ static inline void mavlink_msg_vfr_hud_send_struct(mavlink_channel_t chan, const
  */
 static inline void mavlink_msg_vfr_hud_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  float airspeed, float groundspeed, int16_t heading, uint16_t throttle, float alt, float climb)
 {
-#
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    char *buf = (char *)msgbuf;
+    _mav_put_float(buf, 0, airspeed);
+    _mav_put_float(buf, 4, groundspeed);
+    _mav_put_float(buf, 8, alt);
+    _mav_put_float(buf, 12, climb);
+    _mav_put_int16_t(buf, 16, heading);
+    _mav_put_uint16_t(buf, 18, throttle);
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_VFR_HUD, buf, MAVLINK_MSG_ID_VFR_HUD_MIN_LEN, MAVLINK_MSG_ID_VFR_HUD_LEN, MAVLINK_MSG_ID_VFR_HUD_CRC);
+#else
+    mavlink_vfr_hud_t *packet = (mavlink_vfr_hud_t *)msgbuf;
+    packet->airspeed = airspeed;
+    packet->groundspeed = groundspeed;
+    packet->alt = alt;
+    packet->climb = climb;
+    packet->heading = heading;
+    packet->throttle = throttle;
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_VFR_HUD, (const char *)packet, MAVLINK_MSG_ID_VFR_HUD_MIN_LEN, MAVLINK_MSG_ID_VFR_HUD_LEN, MAVLINK_MSG_ID_VFR_HUD_CRC);
+#endif
+}
+#endif
+
+#endif
+
+// MESSAGE VFR_HUD UNPACKING
+
+
+/**
+ * @brief Get field airspeed from vfr_hud message
+ *
+ * @return Current airspeed in m/s
+ */
+static inline float mavlink_msg_vfr_hud_get_airspeed(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  0);
+}
+
+/**
+ * @brief Get field groundspeed from vfr_hud message
+ *
+ * @return Current ground speed in m/s
+ */
+static inline float mavlink_msg_vfr_hud_get_groundspeed(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  4);
+}
+
+/**
+ * @brief Get field heading from vfr_hud message
+ *
+ * @return Current heading in degrees, in compass units (0..360, 0=north)

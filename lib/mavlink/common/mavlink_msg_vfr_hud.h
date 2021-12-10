@@ -157,4 +157,39 @@ static inline uint16_t mavlink_msg_vfr_hud_encode(uint8_t system_id, uint8_t com
  * @param component_id ID of this component (e.g. 200 for IMU)
  * @param chan The MAVLink channel this message will be sent over
  * @param msg The MAVLink message to compress the data into
- * @param vfr_hud C-struct to read the message contents fro
+ * @param vfr_hud C-struct to read the message contents from
+ */
+static inline uint16_t mavlink_msg_vfr_hud_encode_chan(uint8_t system_id, uint8_t component_id, uint8_t chan, mavlink_message_t* msg, const mavlink_vfr_hud_t* vfr_hud)
+{
+    return mavlink_msg_vfr_hud_pack_chan(system_id, component_id, chan, msg, vfr_hud->airspeed, vfr_hud->groundspeed, vfr_hud->heading, vfr_hud->throttle, vfr_hud->alt, vfr_hud->climb);
+}
+
+/**
+ * @brief Send a vfr_hud message
+ * @param chan MAVLink channel to send the message
+ *
+ * @param airspeed Current airspeed in m/s
+ * @param groundspeed Current ground speed in m/s
+ * @param heading Current heading in degrees, in compass units (0..360, 0=north)
+ * @param throttle Current throttle setting in integer percent, 0 to 100
+ * @param alt Current altitude (MSL), in meters
+ * @param climb Current climb rate in meters/second
+ */
+#ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
+
+static inline void mavlink_msg_vfr_hud_send(mavlink_channel_t chan, float airspeed, float groundspeed, int16_t heading, uint16_t throttle, float alt, float climb)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    char buf[MAVLINK_MSG_ID_VFR_HUD_LEN];
+    _mav_put_float(buf, 0, airspeed);
+    _mav_put_float(buf, 4, groundspeed);
+    _mav_put_float(buf, 8, alt);
+    _mav_put_float(buf, 12, climb);
+    _mav_put_int16_t(buf, 16, heading);
+    _mav_put_uint16_t(buf, 18, throttle);
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_VFR_HUD, buf, MAVLINK_MSG_ID_VFR_HUD_MIN_LEN, MAVLINK_MSG_ID_VFR_HUD_LEN, MAVLINK_MSG_ID_VFR_HUD_CRC);
+#else
+    mavlink_vfr_hud_t packet;
+    packet.airspeed = airspeed;
+    pac

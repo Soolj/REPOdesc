@@ -101,4 +101,35 @@ static inline uint16_t mavlink_msg_vibration_pack(uint8_t system_id, uint8_t com
 
 /**
  * @brief Pack a vibration message on a channel
- * @param system_id ID of th
+ * @param system_id ID of this system
+ * @param component_id ID of this component (e.g. 200 for IMU)
+ * @param chan The MAVLink channel this message will be sent over
+ * @param msg The MAVLink message to compress the data into
+ * @param time_usec Timestamp (micros since boot or Unix epoch)
+ * @param vibration_x Vibration levels on X-axis
+ * @param vibration_y Vibration levels on Y-axis
+ * @param vibration_z Vibration levels on Z-axis
+ * @param clipping_0 first accelerometer clipping count
+ * @param clipping_1 second accelerometer clipping count
+ * @param clipping_2 third accelerometer clipping count
+ * @return length of the message in bytes (excluding serial stream start sign)
+ */
+static inline uint16_t mavlink_msg_vibration_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
+                               mavlink_message_t* msg,
+                                   uint64_t time_usec,float vibration_x,float vibration_y,float vibration_z,uint32_t clipping_0,uint32_t clipping_1,uint32_t clipping_2)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    char buf[MAVLINK_MSG_ID_VIBRATION_LEN];
+    _mav_put_uint64_t(buf, 0, time_usec);
+    _mav_put_float(buf, 8, vibration_x);
+    _mav_put_float(buf, 12, vibration_y);
+    _mav_put_float(buf, 16, vibration_z);
+    _mav_put_uint32_t(buf, 20, clipping_0);
+    _mav_put_uint32_t(buf, 24, clipping_1);
+    _mav_put_uint32_t(buf, 28, clipping_2);
+
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_VIBRATION_LEN);
+#else
+    mavlink_vibration_t packet;
+    packet.time_usec = time_usec;
+    packet.vibration_

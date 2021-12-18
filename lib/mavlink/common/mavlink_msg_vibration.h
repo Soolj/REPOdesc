@@ -168,4 +168,35 @@ static inline uint16_t mavlink_msg_vibration_encode(uint8_t system_id, uint8_t c
  * @param msg The MAVLink message to compress the data into
  * @param vibration C-struct to read the message contents from
  */
-static inline uint16_t ma
+static inline uint16_t mavlink_msg_vibration_encode_chan(uint8_t system_id, uint8_t component_id, uint8_t chan, mavlink_message_t* msg, const mavlink_vibration_t* vibration)
+{
+    return mavlink_msg_vibration_pack_chan(system_id, component_id, chan, msg, vibration->time_usec, vibration->vibration_x, vibration->vibration_y, vibration->vibration_z, vibration->clipping_0, vibration->clipping_1, vibration->clipping_2);
+}
+
+/**
+ * @brief Send a vibration message
+ * @param chan MAVLink channel to send the message
+ *
+ * @param time_usec Timestamp (micros since boot or Unix epoch)
+ * @param vibration_x Vibration levels on X-axis
+ * @param vibration_y Vibration levels on Y-axis
+ * @param vibration_z Vibration levels on Z-axis
+ * @param clipping_0 first accelerometer clipping count
+ * @param clipping_1 second accelerometer clipping count
+ * @param clipping_2 third accelerometer clipping count
+ */
+#ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
+
+static inline void mavlink_msg_vibration_send(mavlink_channel_t chan, uint64_t time_usec, float vibration_x, float vibration_y, float vibration_z, uint32_t clipping_0, uint32_t clipping_1, uint32_t clipping_2)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    char buf[MAVLINK_MSG_ID_VIBRATION_LEN];
+    _mav_put_uint64_t(buf, 0, time_usec);
+    _mav_put_float(buf, 8, vibration_x);
+    _mav_put_float(buf, 12, vibration_y);
+    _mav_put_float(buf, 16, vibration_z);
+    _mav_put_uint32_t(buf, 20, clipping_0);
+    _mav_put_uint32_t(buf, 24, clipping_1);
+    _mav_put_uint32_t(buf, 28, clipping_2);
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_VIBRATION, bu

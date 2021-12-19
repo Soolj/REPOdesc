@@ -270,4 +270,66 @@ static inline void mavlink_msg_vibration_send_buf(mavlink_message_t *msgbuf, mav
 
 
 /**
- * @brief Get 
+ * @brief Get field time_usec from vibration message
+ *
+ * @return Timestamp (micros since boot or Unix epoch)
+ */
+static inline uint64_t mavlink_msg_vibration_get_time_usec(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint64_t(msg,  0);
+}
+
+/**
+ * @brief Get field vibration_x from vibration message
+ *
+ * @return Vibration levels on X-axis
+ */
+static inline float mavlink_msg_vibration_get_vibration_x(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  8);
+}
+
+/**
+ * @brief Get field vibration_y from vibration message
+ *
+ * @return Vibration levels on Y-axis
+ */
+static inline float mavlink_msg_vibration_get_vibration_y(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  12);
+}
+
+/**
+ * @brief Get field vibration_z from vibration message
+ *
+ * @return Vibration levels on Z-axis
+ */
+static inline float mavlink_msg_vibration_get_vibration_z(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  16);
+}
+
+/**
+ * @brief Get field clipping_0 from vibration message
+ *
+ * @return first accelerometer clipping count
+ */
+static inline uint32_t mavlink_msg_vibration_get_clipping_0(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint32_t(msg,  20);
+}
+
+/**
+ * @brief Get field clipping_1 from vibration message
+ *
+ * @return second accelerometer clipping count
+ */
+static inline uint32_t mavlink_msg_vibration_get_clipping_1(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint32_t(msg,  24);
+}
+
+/**
+ * @brief Get field clipping_2 from vibration message
+ *
+ * @return third accelerometer clipping co

@@ -199,4 +199,37 @@ static inline void mavlink_msg_vibration_send(mavlink_channel_t chan, uint64_t t
     _mav_put_uint32_t(buf, 24, clipping_1);
     _mav_put_uint32_t(buf, 28, clipping_2);
 
-    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_VIBRATION, bu
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_VIBRATION, buf, MAVLINK_MSG_ID_VIBRATION_MIN_LEN, MAVLINK_MSG_ID_VIBRATION_LEN, MAVLINK_MSG_ID_VIBRATION_CRC);
+#else
+    mavlink_vibration_t packet;
+    packet.time_usec = time_usec;
+    packet.vibration_x = vibration_x;
+    packet.vibration_y = vibration_y;
+    packet.vibration_z = vibration_z;
+    packet.clipping_0 = clipping_0;
+    packet.clipping_1 = clipping_1;
+    packet.clipping_2 = clipping_2;
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_VIBRATION, (const char *)&packet, MAVLINK_MSG_ID_VIBRATION_MIN_LEN, MAVLINK_MSG_ID_VIBRATION_LEN, MAVLINK_MSG_ID_VIBRATION_CRC);
+#endif
+}
+
+/**
+ * @brief Send a vibration message
+ * @param chan MAVLink channel to send the message
+ * @param struct The MAVLink struct to serialize
+ */
+static inline void mavlink_msg_vibration_send_struct(mavlink_channel_t chan, const mavlink_vibration_t* vibration)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    mavlink_msg_vibration_send(chan, vibration->time_usec, vibration->vibration_x, vibration->vibration_y, vibration->vibration_z, vibration->clipping_0, vibration->clipping_1, vibration->clipping_2);
+#else
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_VIBRATION, (const char *)vibration, MAVLINK_MSG_ID_VIBRATION_MIN_LEN, MAVLINK_MSG_ID_VIBRATION_LEN, MAVLINK_MSG_ID_VIBRATION_CRC);
+#endif
+}
+
+#if MAVLINK_MSG_ID_VIBRATION_LEN <= MAVLINK_MAX_PAYLOAD_LEN
+/*
+  This varient of _send() can be used to save stack space by re-using
+  memory from the receive buffer.  The caller provides a
+  mavlink_message_t which is the size of a full mavlink m

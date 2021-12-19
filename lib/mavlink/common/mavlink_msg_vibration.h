@@ -332,4 +332,32 @@ static inline uint32_t mavlink_msg_vibration_get_clipping_1(const mavlink_messag
 /**
  * @brief Get field clipping_2 from vibration message
  *
- * @return third accelerometer clipping co
+ * @return third accelerometer clipping count
+ */
+static inline uint32_t mavlink_msg_vibration_get_clipping_2(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint32_t(msg,  28);
+}
+
+/**
+ * @brief Decode a vibration message into a struct
+ *
+ * @param msg The message to decode
+ * @param vibration C-struct to decode the message contents into
+ */
+static inline void mavlink_msg_vibration_decode(const mavlink_message_t* msg, mavlink_vibration_t* vibration)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    vibration->time_usec = mavlink_msg_vibration_get_time_usec(msg);
+    vibration->vibration_x = mavlink_msg_vibration_get_vibration_x(msg);
+    vibration->vibration_y = mavlink_msg_vibration_get_vibration_y(msg);
+    vibration->vibration_z = mavlink_msg_vibration_get_vibration_z(msg);
+    vibration->clipping_0 = mavlink_msg_vibration_get_clipping_0(msg);
+    vibration->clipping_1 = mavlink_msg_vibration_get_clipping_1(msg);
+    vibration->clipping_2 = mavlink_msg_vibration_get_clipping_2(msg);
+#else
+        uint8_t len = msg->len < MAVLINK_MSG_ID_VIBRATION_LEN? msg->len : MAVLINK_MSG_ID_VIBRATION_LEN;
+        memset(vibration, 0, MAVLINK_MSG_ID_VIBRATION_LEN);
+    memcpy(vibration, _MAV_PAYLOAD(msg), len);
+#endif
+}

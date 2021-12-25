@@ -179,4 +179,42 @@ static inline uint16_t mavlink_msg_vicon_position_estimate_encode_chan(uint8_t s
  *
  * @param usec Timestamp (microseconds, synced to UNIX time or since system boot)
  * @param x Global X position
- 
+ * @param y Global Y position
+ * @param z Global Z position
+ * @param roll Roll angle in rad
+ * @param pitch Pitch angle in rad
+ * @param yaw Yaw angle in rad
+ */
+#ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
+
+static inline void mavlink_msg_vicon_position_estimate_send(mavlink_channel_t chan, uint64_t usec, float x, float y, float z, float roll, float pitch, float yaw)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    char buf[MAVLINK_MSG_ID_VICON_POSITION_ESTIMATE_LEN];
+    _mav_put_uint64_t(buf, 0, usec);
+    _mav_put_float(buf, 8, x);
+    _mav_put_float(buf, 12, y);
+    _mav_put_float(buf, 16, z);
+    _mav_put_float(buf, 20, roll);
+    _mav_put_float(buf, 24, pitch);
+    _mav_put_float(buf, 28, yaw);
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_VICON_POSITION_ESTIMATE, buf, MAVLINK_MSG_ID_VICON_POSITION_ESTIMATE_MIN_LEN, MAVLINK_MSG_ID_VICON_POSITION_ESTIMATE_LEN, MAVLINK_MSG_ID_VICON_POSITION_ESTIMATE_CRC);
+#else
+    mavlink_vicon_position_estimate_t packet;
+    packet.usec = usec;
+    packet.x = x;
+    packet.y = y;
+    packet.z = z;
+    packet.roll = roll;
+    packet.pitch = pitch;
+    packet.yaw = yaw;
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_VICON_POSITION_ESTIMATE, (const char *)&packet, MAVLINK_MSG_ID_VICON_POSITION_ESTIMATE_MIN_LEN, MAVLINK_MSG_ID_VICON_POSITION_ESTIMATE_LEN, MAVLINK_MSG_ID_VICON_POSITION_ESTIMATE_CRC);
+#endif
+}
+
+/**
+ * @brief Send a vicon_position_estimate message
+ * @param chan MAVLink channel to send the message
+ * @param struct The MAVLink struct to ser

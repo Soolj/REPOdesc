@@ -294,4 +294,60 @@ static inline float mavlink_msg_vicon_position_estimate_get_x(const mavlink_mess
  *
  * @return Global Y position
  */
-static inline float mavl
+static inline float mavlink_msg_vicon_position_estimate_get_y(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  12);
+}
+
+/**
+ * @brief Get field z from vicon_position_estimate message
+ *
+ * @return Global Z position
+ */
+static inline float mavlink_msg_vicon_position_estimate_get_z(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  16);
+}
+
+/**
+ * @brief Get field roll from vicon_position_estimate message
+ *
+ * @return Roll angle in rad
+ */
+static inline float mavlink_msg_vicon_position_estimate_get_roll(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  20);
+}
+
+/**
+ * @brief Get field pitch from vicon_position_estimate message
+ *
+ * @return Pitch angle in rad
+ */
+static inline float mavlink_msg_vicon_position_estimate_get_pitch(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  24);
+}
+
+/**
+ * @brief Get field yaw from vicon_position_estimate message
+ *
+ * @return Yaw angle in rad
+ */
+static inline float mavlink_msg_vicon_position_estimate_get_yaw(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  28);
+}
+
+/**
+ * @brief Decode a vicon_position_estimate message into a struct
+ *
+ * @param msg The message to decode
+ * @param vicon_position_estimate C-struct to decode the message contents into
+ */
+static inline void mavlink_msg_vicon_position_estimate_decode(const mavlink_message_t* msg, mavlink_vicon_position_estimate_t* vicon_position_estimate)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    vicon_position_estimate->usec = mavlink_msg_vicon_position_estimate_get_usec(msg);
+    vicon_position_estimate->x = mavlink_msg_vicon_position_estimate_get_x(msg);
+    vicon_pos

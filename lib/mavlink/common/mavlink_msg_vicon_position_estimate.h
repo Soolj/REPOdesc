@@ -242,4 +242,56 @@ static inline void mavlink_msg_vicon_position_estimate_send_buf(mavlink_message_
     char *buf = (char *)msgbuf;
     _mav_put_uint64_t(buf, 0, usec);
     _mav_put_float(buf, 8, x);
-    _mav_put_float(buf, 12, y)
+    _mav_put_float(buf, 12, y);
+    _mav_put_float(buf, 16, z);
+    _mav_put_float(buf, 20, roll);
+    _mav_put_float(buf, 24, pitch);
+    _mav_put_float(buf, 28, yaw);
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_VICON_POSITION_ESTIMATE, buf, MAVLINK_MSG_ID_VICON_POSITION_ESTIMATE_MIN_LEN, MAVLINK_MSG_ID_VICON_POSITION_ESTIMATE_LEN, MAVLINK_MSG_ID_VICON_POSITION_ESTIMATE_CRC);
+#else
+    mavlink_vicon_position_estimate_t *packet = (mavlink_vicon_position_estimate_t *)msgbuf;
+    packet->usec = usec;
+    packet->x = x;
+    packet->y = y;
+    packet->z = z;
+    packet->roll = roll;
+    packet->pitch = pitch;
+    packet->yaw = yaw;
+
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_VICON_POSITION_ESTIMATE, (const char *)packet, MAVLINK_MSG_ID_VICON_POSITION_ESTIMATE_MIN_LEN, MAVLINK_MSG_ID_VICON_POSITION_ESTIMATE_LEN, MAVLINK_MSG_ID_VICON_POSITION_ESTIMATE_CRC);
+#endif
+}
+#endif
+
+#endif
+
+// MESSAGE VICON_POSITION_ESTIMATE UNPACKING
+
+
+/**
+ * @brief Get field usec from vicon_position_estimate message
+ *
+ * @return Timestamp (microseconds, synced to UNIX time or since system boot)
+ */
+static inline uint64_t mavlink_msg_vicon_position_estimate_get_usec(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint64_t(msg,  0);
+}
+
+/**
+ * @brief Get field x from vicon_position_estimate message
+ *
+ * @return Global X position
+ */
+static inline float mavlink_msg_vicon_position_estimate_get_x(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  8);
+}
+
+/**
+ * @brief Get field y from vicon_position_estimate message
+ *
+ * @return Global Y position
+ */
+static inline float mavl

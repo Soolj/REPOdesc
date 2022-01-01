@@ -174,4 +174,45 @@ static inline void mavlink_msg_wifi_config_ap_send_struct(mavlink_channel_t chan
   This varient of _send() can be used to save stack space by re-using
   memory from the receive buffer.  The caller provides a
   mavlink_message_t which is the size of a full mavlink message. This
-  is usually the receive buffer for the cha
+  is usually the receive buffer for the channel, and allows a reply to an
+  incoming message with minimum stack space usage.
+ */
+static inline void mavlink_msg_wifi_config_ap_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  const char *ssid, const char *password)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    char *buf = (char *)msgbuf;
+
+    _mav_put_char_array(buf, 0, ssid, 32);
+    _mav_put_char_array(buf, 32, password, 64);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_WIFI_CONFIG_AP, buf, MAVLINK_MSG_ID_WIFI_CONFIG_AP_MIN_LEN, MAVLINK_MSG_ID_WIFI_CONFIG_AP_LEN, MAVLINK_MSG_ID_WIFI_CONFIG_AP_CRC);
+#else
+    mavlink_wifi_config_ap_t *packet = (mavlink_wifi_config_ap_t *)msgbuf;
+
+    mav_array_memcpy(packet->ssid, ssid, sizeof(char)*32);
+    mav_array_memcpy(packet->password, password, sizeof(char)*64);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_WIFI_CONFIG_AP, (const char *)packet, MAVLINK_MSG_ID_WIFI_CONFIG_AP_MIN_LEN, MAVLINK_MSG_ID_WIFI_CONFIG_AP_LEN, MAVLINK_MSG_ID_WIFI_CONFIG_AP_CRC);
+#endif
+}
+#endif
+
+#endif
+
+// MESSAGE WIFI_CONFIG_AP UNPACKING
+
+
+/**
+ * @brief Get field ssid from wifi_config_ap message
+ *
+ * @return Name of Wi-Fi network (SSID). Leave it blank to leave it unchanged.
+ */
+static inline uint16_t mavlink_msg_wifi_config_ap_get_ssid(const mavlink_message_t* msg, char *ssid)
+{
+    return _MAV_RETURN_char_array(msg, ssid, 32,  0);
+}
+
+/**
+ * @brief Get field password from wifi_config_ap message
+ *
+ * @return Password. Leave it blank for an open AP.
+ */
+static inline uint16_t mavlink_msg_wifi_conf

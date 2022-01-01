@@ -215,4 +215,25 @@ static inline uint16_t mavlink_msg_wifi_config_ap_get_ssid(const mavlink_message
  *
  * @return Password. Leave it blank for an open AP.
  */
-static inline uint16_t mavlink_msg_wifi_conf
+static inline uint16_t mavlink_msg_wifi_config_ap_get_password(const mavlink_message_t* msg, char *password)
+{
+    return _MAV_RETURN_char_array(msg, password, 64,  32);
+}
+
+/**
+ * @brief Decode a wifi_config_ap message into a struct
+ *
+ * @param msg The message to decode
+ * @param wifi_config_ap C-struct to decode the message contents into
+ */
+static inline void mavlink_msg_wifi_config_ap_decode(const mavlink_message_t* msg, mavlink_wifi_config_ap_t* wifi_config_ap)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    mavlink_msg_wifi_config_ap_get_ssid(msg, wifi_config_ap->ssid);
+    mavlink_msg_wifi_config_ap_get_password(msg, wifi_config_ap->password);
+#else
+        uint8_t len = msg->len < MAVLINK_MSG_ID_WIFI_CONFIG_AP_LEN? msg->len : MAVLINK_MSG_ID_WIFI_CONFIG_AP_LEN;
+        memset(wifi_config_ap, 0, MAVLINK_MSG_ID_WIFI_CONFIG_AP_LEN);
+    memcpy(wifi_config_ap, _MAV_PAYLOAD(msg), len);
+#endif
+}

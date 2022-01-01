@@ -143,4 +143,35 @@ static inline void mavlink_msg_wifi_config_ap_send(mavlink_channel_t chan, const
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_WIFI_CONFIG_AP_LEN];
 
-    _mav_put_char_array(buf, 0, 
+    _mav_put_char_array(buf, 0, ssid, 32);
+    _mav_put_char_array(buf, 32, password, 64);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_WIFI_CONFIG_AP, buf, MAVLINK_MSG_ID_WIFI_CONFIG_AP_MIN_LEN, MAVLINK_MSG_ID_WIFI_CONFIG_AP_LEN, MAVLINK_MSG_ID_WIFI_CONFIG_AP_CRC);
+#else
+    mavlink_wifi_config_ap_t packet;
+
+    mav_array_memcpy(packet.ssid, ssid, sizeof(char)*32);
+    mav_array_memcpy(packet.password, password, sizeof(char)*64);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_WIFI_CONFIG_AP, (const char *)&packet, MAVLINK_MSG_ID_WIFI_CONFIG_AP_MIN_LEN, MAVLINK_MSG_ID_WIFI_CONFIG_AP_LEN, MAVLINK_MSG_ID_WIFI_CONFIG_AP_CRC);
+#endif
+}
+
+/**
+ * @brief Send a wifi_config_ap message
+ * @param chan MAVLink channel to send the message
+ * @param struct The MAVLink struct to serialize
+ */
+static inline void mavlink_msg_wifi_config_ap_send_struct(mavlink_channel_t chan, const mavlink_wifi_config_ap_t* wifi_config_ap)
+{
+#if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    mavlink_msg_wifi_config_ap_send(chan, wifi_config_ap->ssid, wifi_config_ap->password);
+#else
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_WIFI_CONFIG_AP, (const char *)wifi_config_ap, MAVLINK_MSG_ID_WIFI_CONFIG_AP_MIN_LEN, MAVLINK_MSG_ID_WIFI_CONFIG_AP_LEN, MAVLINK_MSG_ID_WIFI_CONFIG_AP_CRC);
+#endif
+}
+
+#if MAVLINK_MSG_ID_WIFI_CONFIG_AP_LEN <= MAVLINK_MAX_PAYLOAD_LEN
+/*
+  This varient of _send() can be used to save stack space by re-using
+  memory from the receive buffer.  The caller provides a
+  mavlink_message_t which is the size of a full mavlink message. This
+  is usually the receive buffer for the cha

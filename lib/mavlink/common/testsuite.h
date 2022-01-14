@@ -388,4 +388,37 @@ static void mavlink_test_auth_key(uint8_t system_id, uint8_t component_id, mavli
         uint16_t i;
     mavlink_auth_key_t packet_in = {
         "ABCDEFGHIJKLMNOPQRSTUVWXYZABCDE"
-  
+    };
+    mavlink_auth_key_t packet1, packet2;
+        memset(&packet1, 0, sizeof(packet1));
+        
+        mav_array_memcpy(packet1.key, packet_in.key, sizeof(char)*32);
+        
+#ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
+        if (status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) {
+           // cope with extensions
+           memset(MAVLINK_MSG_ID_AUTH_KEY_MIN_LEN + (char *)&packet1, 0, sizeof(packet1)-MAVLINK_MSG_ID_AUTH_KEY_MIN_LEN);
+        }
+#endif
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_auth_key_encode(system_id, component_id, &msg, &packet1);
+    mavlink_msg_auth_key_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_auth_key_pack(system_id, component_id, &msg , packet1.key );
+    mavlink_msg_auth_key_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_auth_key_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.key );
+    mavlink_msg_auth_key_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+        mavlink_msg_to_send_buffer(buffer, &msg);
+        for (i=0; i<mavlink_msg_get_send_buffer_length(&msg); i++) {
+            comm_send_ch(MAVLINK_COMM_0, buffer[i]);
+        }
+    mavlink_msg_auth_key_decode(last_msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, s

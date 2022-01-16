@@ -492,4 +492,36 @@ static void mavlink_test_param_request_read(uint8_t system_id, uint8_t component
         if ((status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) && MAVLINK_MSG_ID_PARAM_REQUEST_READ >= 256) {
             return;
         }
-#e
+#endif
+    mavlink_message_t msg;
+        uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
+        uint16_t i;
+    mavlink_param_request_read_t packet_in = {
+        17235,139,206,"EFGHIJKLMNOPQRS"
+    };
+    mavlink_param_request_read_t packet1, packet2;
+        memset(&packet1, 0, sizeof(packet1));
+        packet1.param_index = packet_in.param_index;
+        packet1.target_system = packet_in.target_system;
+        packet1.target_component = packet_in.target_component;
+        
+        mav_array_memcpy(packet1.param_id, packet_in.param_id, sizeof(char)*16);
+        
+#ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
+        if (status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) {
+           // cope with extensions
+           memset(MAVLINK_MSG_ID_PARAM_REQUEST_READ_MIN_LEN + (char *)&packet1, 0, sizeof(packet1)-MAVLINK_MSG_ID_PARAM_REQUEST_READ_MIN_LEN);
+        }
+#endif
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_param_request_read_encode(system_id, component_id, &msg, &packet1);
+    mavlink_msg_param_request_read_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_param_request_read_pack(system_id, component_id, &msg , packet1.target_system , packet1.target_component , packet1.param_id , packet1.param_index );
+    mavlink_msg_param_request_read_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_param_request_read_pack_chan(system_id, component_id, MAVL

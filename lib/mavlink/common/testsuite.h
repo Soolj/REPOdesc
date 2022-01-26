@@ -907,4 +907,41 @@ static void mavlink_test_raw_imu(uint8_t system_id, uint8_t component_id, mavlin
 {
 #ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
     mavlink_status_t *status = mavlink_get_channel_status(MAVLINK_COMM_0);
-        if ((status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) && MAVLINK_MSG_ID_RAW_IMU >=
+        if ((status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) && MAVLINK_MSG_ID_RAW_IMU >= 256) {
+            return;
+        }
+#endif
+    mavlink_message_t msg;
+        uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
+        uint16_t i;
+    mavlink_raw_imu_t packet_in = {
+        93372036854775807ULL,17651,17755,17859,17963,18067,18171,18275,18379,18483
+    };
+    mavlink_raw_imu_t packet1, packet2;
+        memset(&packet1, 0, sizeof(packet1));
+        packet1.time_usec = packet_in.time_usec;
+        packet1.xacc = packet_in.xacc;
+        packet1.yacc = packet_in.yacc;
+        packet1.zacc = packet_in.zacc;
+        packet1.xgyro = packet_in.xgyro;
+        packet1.ygyro = packet_in.ygyro;
+        packet1.zgyro = packet_in.zgyro;
+        packet1.xmag = packet_in.xmag;
+        packet1.ymag = packet_in.ymag;
+        packet1.zmag = packet_in.zmag;
+        
+        
+#ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
+        if (status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) {
+           // cope with extensions
+           memset(MAVLINK_MSG_ID_RAW_IMU_MIN_LEN + (char *)&packet1, 0, sizeof(packet1)-MAVLINK_MSG_ID_RAW_IMU_MIN_LEN);
+        }
+#endif
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_raw_imu_encode(system_id, component_id, &msg, &packet1);
+    mavlink_msg_raw_imu_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_raw_imu_pack(system_id, component_id, &msg , packet1.time_usec , packet1.xacc , packet1.yacc , packet1.zacc , packet1.xgyro , packet1.ygyro , packet1.zgyro , packet1.xmag , packet1.ymag , packet1.zmag );
+    mavlink_msg_raw_imu_decode(&msg

@@ -1402,3 +1402,32 @@ static void mavlink_test_rc_channels_raw(uint8_t system_id, uint8_t component_id
     mavlink_rc_channels_raw_t packet_in = {
         963497464,17443,17547,17651,17755,17859,17963,18067,18171,65,132
     };
+    mavlink_rc_channels_raw_t packet1, packet2;
+        memset(&packet1, 0, sizeof(packet1));
+        packet1.time_boot_ms = packet_in.time_boot_ms;
+        packet1.chan1_raw = packet_in.chan1_raw;
+        packet1.chan2_raw = packet_in.chan2_raw;
+        packet1.chan3_raw = packet_in.chan3_raw;
+        packet1.chan4_raw = packet_in.chan4_raw;
+        packet1.chan5_raw = packet_in.chan5_raw;
+        packet1.chan6_raw = packet_in.chan6_raw;
+        packet1.chan7_raw = packet_in.chan7_raw;
+        packet1.chan8_raw = packet_in.chan8_raw;
+        packet1.port = packet_in.port;
+        packet1.rssi = packet_in.rssi;
+        
+        
+#ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
+        if (status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) {
+           // cope with extensions
+           memset(MAVLINK_MSG_ID_RC_CHANNELS_RAW_MIN_LEN + (char *)&packet1, 0, sizeof(packet1)-MAVLINK_MSG_ID_RC_CHANNELS_RAW_MIN_LEN);
+        }
+#endif
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_rc_channels_raw_encode(system_id, component_id, &msg, &packet1);
+    mavlink_msg_rc_channels_raw_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_rc_channels_raw_pack(system_id, component_id, &msg , packet1.time_boot_ms , packet1.port , packet1.chan1_raw , packet1.chan2_raw , packet1.chan3_raw , packet1.chan4_raw , packet1.chan5_raw , packet1.chan6_raw , packet1.chan7_raw , packet1.chan8_raw , packet1.rssi );
+    mavlin

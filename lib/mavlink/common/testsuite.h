@@ -2280,4 +2280,32 @@ static void mavlink_test_param_map_rc(uint8_t system_id, uint8_t component_id, m
     mavlink_message_t msg;
         uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
         uint16_t i;
-    mavlink_param_map
+    mavlink_param_map_rc_t packet_in = {
+        17.0,45.0,73.0,101.0,18067,187,254,"UVWXYZABCDEFGHI",113
+    };
+    mavlink_param_map_rc_t packet1, packet2;
+        memset(&packet1, 0, sizeof(packet1));
+        packet1.param_value0 = packet_in.param_value0;
+        packet1.scale = packet_in.scale;
+        packet1.param_value_min = packet_in.param_value_min;
+        packet1.param_value_max = packet_in.param_value_max;
+        packet1.param_index = packet_in.param_index;
+        packet1.target_system = packet_in.target_system;
+        packet1.target_component = packet_in.target_component;
+        packet1.parameter_rc_channel_index = packet_in.parameter_rc_channel_index;
+        
+        mav_array_memcpy(packet1.param_id, packet_in.param_id, sizeof(char)*16);
+        
+#ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
+        if (status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) {
+           // cope with extensions
+           memset(MAVLINK_MSG_ID_PARAM_MAP_RC_MIN_LEN + (char *)&packet1, 0, sizeof(packet1)-MAVLINK_MSG_ID_PARAM_MAP_RC_MIN_LEN);
+        }
+#endif
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_param_map_rc_encode(system_id, component_id, &msg, &packet1);
+    mavlink_msg_param_map_rc_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_param_map_rc_pack(system_id, component_id, &msg , packet1.target_system , packet1.target_component , packet1.param_id , packet1.param_index , packet1.parameter_rc_channel_index , packet1.param_value0 , pac

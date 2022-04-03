@@ -2735,4 +2735,29 @@ static void mavlink_test_local_position_ned_cov(uint8_t system_id, uint8_t compo
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_local_position_ned_cov_pack(system_id, component_id, &msg , packet1.time_usec , packet1.estimator_type , packet1.x , packet1.y , packet1.z , packet1.vx , packet1.vy , packet1.vz , packet1.ax , packet1.ay , packet1.az , packet1
+    mavlink_msg_local_position_ned_cov_pack(system_id, component_id, &msg , packet1.time_usec , packet1.estimator_type , packet1.x , packet1.y , packet1.z , packet1.vx , packet1.vy , packet1.vz , packet1.ax , packet1.ay , packet1.az , packet1.covariance );
+    mavlink_msg_local_position_ned_cov_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_local_position_ned_cov_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.time_usec , packet1.estimator_type , packet1.x , packet1.y , packet1.z , packet1.vx , packet1.vy , packet1.vz , packet1.ax , packet1.ay , packet1.az , packet1.covariance );
+    mavlink_msg_local_position_ned_cov_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+        mavlink_msg_to_send_buffer(buffer, &msg);
+        for (i=0; i<mavlink_msg_get_send_buffer_length(&msg); i++) {
+            comm_send_ch(MAVLINK_COMM_0, buffer[i]);
+        }
+    mavlink_msg_local_position_ned_cov_decode(last_msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+        
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_local_position_ned_cov_send(MAVLINK_COMM_1 , packet1.time_usec , packet1.estimator_type , packet1.x , packet1.y , packet1.z , packet1.vx , packet1.vy , packet1.vz , packet1.ax , packet1.ay , packet1.az , packet1.covariance );
+    mavlink_msg_local_position_ned_cov_decode(last_msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+}
+
+static void mavlink_test_rc_channels(uint8_t system_id, uint8_t component_id, mavlink_message_t *last_msg)
+{
+#ifdef MAVLINK_STATUS_

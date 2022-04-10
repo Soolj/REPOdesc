@@ -3079,4 +3079,38 @@ static void mavlink_test_mission_item_int(uint8_t system_id, uint8_t component_i
     mavlink_message_t msg;
         uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
         uint16_t i;
-    mavlink_mission_item_
+    mavlink_mission_item_int_t packet_in = {
+        17.0,45.0,73.0,101.0,963498296,963498504,185.0,18691,18795,101,168,235,46,113,180
+    };
+    mavlink_mission_item_int_t packet1, packet2;
+        memset(&packet1, 0, sizeof(packet1));
+        packet1.param1 = packet_in.param1;
+        packet1.param2 = packet_in.param2;
+        packet1.param3 = packet_in.param3;
+        packet1.param4 = packet_in.param4;
+        packet1.x = packet_in.x;
+        packet1.y = packet_in.y;
+        packet1.z = packet_in.z;
+        packet1.seq = packet_in.seq;
+        packet1.command = packet_in.command;
+        packet1.target_system = packet_in.target_system;
+        packet1.target_component = packet_in.target_component;
+        packet1.frame = packet_in.frame;
+        packet1.current = packet_in.current;
+        packet1.autocontinue = packet_in.autocontinue;
+        packet1.mission_type = packet_in.mission_type;
+        
+        
+#ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
+        if (status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) {
+           // cope with extensions
+           memset(MAVLINK_MSG_ID_MISSION_ITEM_INT_MIN_LEN + (char *)&packet1, 0, sizeof(packet1)-MAVLINK_MSG_ID_MISSION_ITEM_INT_MIN_LEN);
+        }
+#endif
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_mission_item_int_encode(system_id, component_id, &msg, &packet1);
+    mavlink_msg_mission_item_int_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_mission_item_int_pack(system_id, component_id, &msg , packet1.target_syste

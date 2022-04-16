@@ -3317,4 +3317,37 @@ static void mavlink_test_command_long(uint8_t system_id, uint8_t component_id, m
             comm_send_ch(MAVLINK_COMM_0, buffer[i]);
         }
     mavlink_msg_command_long_decode(last_msg, &packet2);
-        MAVLINK_ASSERT(mem
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+        
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_command_long_send(MAVLINK_COMM_1 , packet1.target_system , packet1.target_component , packet1.command , packet1.confirmation , packet1.param1 , packet1.param2 , packet1.param3 , packet1.param4 , packet1.param5 , packet1.param6 , packet1.param7 );
+    mavlink_msg_command_long_decode(last_msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+}
+
+static void mavlink_test_command_ack(uint8_t system_id, uint8_t component_id, mavlink_message_t *last_msg)
+{
+#ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
+    mavlink_status_t *status = mavlink_get_channel_status(MAVLINK_COMM_0);
+        if ((status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) && MAVLINK_MSG_ID_COMMAND_ACK >= 256) {
+            return;
+        }
+#endif
+    mavlink_message_t msg;
+        uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
+        uint16_t i;
+    mavlink_command_ack_t packet_in = {
+        17235,139,206,963497672,29,96
+    };
+    mavlink_command_ack_t packet1, packet2;
+        memset(&packet1, 0, sizeof(packet1));
+        packet1.command = packet_in.command;
+        packet1.result = packet_in.result;
+        packet1.progress = packet_in.progress;
+        packet1.result_param2 = packet_in.result_param2;
+        packet1.target_system = packet_in.target_system;
+        packet1.target_component = packet_in.target_component;
+        
+        
+#ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
+        if (status->flags & MAVLIN

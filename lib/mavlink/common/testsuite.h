@@ -3720,4 +3720,32 @@ static void mavlink_test_set_position_target_global_int(uint8_t system_id, uint8
         memset(&packet1, 0, sizeof(packet1));
         packet1.time_boot_ms = packet_in.time_boot_ms;
         packet1.lat_int = packet_in.lat_int;
-        packet1.lon_int = pac
+        packet1.lon_int = packet_in.lon_int;
+        packet1.alt = packet_in.alt;
+        packet1.vx = packet_in.vx;
+        packet1.vy = packet_in.vy;
+        packet1.vz = packet_in.vz;
+        packet1.afx = packet_in.afx;
+        packet1.afy = packet_in.afy;
+        packet1.afz = packet_in.afz;
+        packet1.yaw = packet_in.yaw;
+        packet1.yaw_rate = packet_in.yaw_rate;
+        packet1.type_mask = packet_in.type_mask;
+        packet1.target_system = packet_in.target_system;
+        packet1.target_component = packet_in.target_component;
+        packet1.coordinate_frame = packet_in.coordinate_frame;
+        
+        
+#ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
+        if (status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) {
+           // cope with extensions
+           memset(MAVLINK_MSG_ID_SET_POSITION_TARGET_GLOBAL_INT_MIN_LEN + (char *)&packet1, 0, sizeof(packet1)-MAVLINK_MSG_ID_SET_POSITION_TARGET_GLOBAL_INT_MIN_LEN);
+        }
+#endif
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_set_position_target_global_int_encode(system_id, component_id, &msg, &packet1);
+    mavlink_msg_set_position_target_global_int_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_set_position_target_global_int_pack(system_id, component_id, &msg , packet1.time_boot_ms , packet1.target_system , packet1.target_component , packet1.coordinate_frame , packet1.type_mask , packet1.lat_int , packet1.lon_int , packet1.alt , packet1.vx , packet1.vy , packet1.vz , packet1.afx , pack

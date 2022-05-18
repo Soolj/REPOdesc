@@ -3967,4 +3967,39 @@ static void mavlink_test_hil_state(uint8_t system_id, uint8_t component_id, mavl
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 }
 
-st
+static void mavlink_test_hil_controls(uint8_t system_id, uint8_t component_id, mavlink_message_t *last_msg)
+{
+#ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
+    mavlink_status_t *status = mavlink_get_channel_status(MAVLINK_COMM_0);
+        if ((status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) && MAVLINK_MSG_ID_HIL_CONTROLS >= 256) {
+            return;
+        }
+#endif
+    mavlink_message_t msg;
+        uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
+        uint16_t i;
+    mavlink_hil_controls_t packet_in = {
+        93372036854775807ULL,73.0,101.0,129.0,157.0,185.0,213.0,241.0,269.0,125,192
+    };
+    mavlink_hil_controls_t packet1, packet2;
+        memset(&packet1, 0, sizeof(packet1));
+        packet1.time_usec = packet_in.time_usec;
+        packet1.roll_ailerons = packet_in.roll_ailerons;
+        packet1.pitch_elevator = packet_in.pitch_elevator;
+        packet1.yaw_rudder = packet_in.yaw_rudder;
+        packet1.throttle = packet_in.throttle;
+        packet1.aux1 = packet_in.aux1;
+        packet1.aux2 = packet_in.aux2;
+        packet1.aux3 = packet_in.aux3;
+        packet1.aux4 = packet_in.aux4;
+        packet1.mode = packet_in.mode;
+        packet1.nav_mode = packet_in.nav_mode;
+        
+        
+#ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
+        if (status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) {
+           // cope with extensions
+           memset(MAVLINK_MSG_ID_HIL_CONTROLS_MIN_LEN + (char *)&packet1, 0, sizeof(packet1)-MAVLINK_MSG_ID_HIL_CONTROLS_MIN_LEN);
+        }
+#endif
+   

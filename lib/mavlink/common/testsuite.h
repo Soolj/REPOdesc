@@ -4026,4 +4026,34 @@ static void mavlink_test_hil_controls(uint8_t system_id, uint8_t component_id, m
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
         
         memset(&packet2, 0, sizeof(packet2));
-    m
+    mavlink_msg_hil_controls_send(MAVLINK_COMM_1 , packet1.time_usec , packet1.roll_ailerons , packet1.pitch_elevator , packet1.yaw_rudder , packet1.throttle , packet1.aux1 , packet1.aux2 , packet1.aux3 , packet1.aux4 , packet1.mode , packet1.nav_mode );
+    mavlink_msg_hil_controls_decode(last_msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+}
+
+static void mavlink_test_hil_rc_inputs_raw(uint8_t system_id, uint8_t component_id, mavlink_message_t *last_msg)
+{
+#ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
+    mavlink_status_t *status = mavlink_get_channel_status(MAVLINK_COMM_0);
+        if ((status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) && MAVLINK_MSG_ID_HIL_RC_INPUTS_RAW >= 256) {
+            return;
+        }
+#endif
+    mavlink_message_t msg;
+        uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
+        uint16_t i;
+    mavlink_hil_rc_inputs_raw_t packet_in = {
+        93372036854775807ULL,17651,17755,17859,17963,18067,18171,18275,18379,18483,18587,18691,18795,101
+    };
+    mavlink_hil_rc_inputs_raw_t packet1, packet2;
+        memset(&packet1, 0, sizeof(packet1));
+        packet1.time_usec = packet_in.time_usec;
+        packet1.chan1_raw = packet_in.chan1_raw;
+        packet1.chan2_raw = packet_in.chan2_raw;
+        packet1.chan3_raw = packet_in.chan3_raw;
+        packet1.chan4_raw = packet_in.chan4_raw;
+        packet1.chan5_raw = packet_in.chan5_raw;
+        packet1.chan6_raw = packet_in.chan6_raw;
+        packet1.chan7_raw = packet_in.chan7_raw;
+        packet1.chan8_raw = packet_in.chan8_raw;
+        packet1.chan9_raw = p

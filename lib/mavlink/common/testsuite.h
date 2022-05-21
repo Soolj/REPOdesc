@@ -4056,4 +4056,28 @@ static void mavlink_test_hil_rc_inputs_raw(uint8_t system_id, uint8_t component_
         packet1.chan6_raw = packet_in.chan6_raw;
         packet1.chan7_raw = packet_in.chan7_raw;
         packet1.chan8_raw = packet_in.chan8_raw;
-        packet1.chan9_raw = p
+        packet1.chan9_raw = packet_in.chan9_raw;
+        packet1.chan10_raw = packet_in.chan10_raw;
+        packet1.chan11_raw = packet_in.chan11_raw;
+        packet1.chan12_raw = packet_in.chan12_raw;
+        packet1.rssi = packet_in.rssi;
+        
+        
+#ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
+        if (status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) {
+           // cope with extensions
+           memset(MAVLINK_MSG_ID_HIL_RC_INPUTS_RAW_MIN_LEN + (char *)&packet1, 0, sizeof(packet1)-MAVLINK_MSG_ID_HIL_RC_INPUTS_RAW_MIN_LEN);
+        }
+#endif
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_hil_rc_inputs_raw_encode(system_id, component_id, &msg, &packet1);
+    mavlink_msg_hil_rc_inputs_raw_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_hil_rc_inputs_raw_pack(system_id, component_id, &msg , packet1.time_usec , packet1.chan1_raw , packet1.chan2_raw , packet1.chan3_raw , packet1.chan4_raw , packet1.chan5_raw , packet1.chan6_raw , packet1.chan7_raw , packet1.chan8_raw , packet1.chan9_raw , packet1.chan10_raw , packet1.chan11_raw , packet1.chan12_raw , packet1.rssi );
+    mavlink_msg_hil_rc_inputs_raw_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_hil_rc_inputs_raw_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.time_usec , packet1.chan1_raw , packet1.chan2_raw , packet1.chan3_raw , packet1.chan4_raw , packet1.ch

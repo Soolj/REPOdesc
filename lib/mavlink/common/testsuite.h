@@ -4169,4 +4169,32 @@ static void mavlink_test_optical_flow(uint8_t system_id, uint8_t component_id, m
     mavlink_optical_flow_t packet_in = {
         93372036854775807ULL,73.0,101.0,129.0,18275,18379,77,144,199.0,227.0
     };
-    mavlink_optical_flow_t packet1, pack
+    mavlink_optical_flow_t packet1, packet2;
+        memset(&packet1, 0, sizeof(packet1));
+        packet1.time_usec = packet_in.time_usec;
+        packet1.flow_comp_m_x = packet_in.flow_comp_m_x;
+        packet1.flow_comp_m_y = packet_in.flow_comp_m_y;
+        packet1.ground_distance = packet_in.ground_distance;
+        packet1.flow_x = packet_in.flow_x;
+        packet1.flow_y = packet_in.flow_y;
+        packet1.sensor_id = packet_in.sensor_id;
+        packet1.quality = packet_in.quality;
+        packet1.flow_rate_x = packet_in.flow_rate_x;
+        packet1.flow_rate_y = packet_in.flow_rate_y;
+        
+        
+#ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
+        if (status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) {
+           // cope with extensions
+           memset(MAVLINK_MSG_ID_OPTICAL_FLOW_MIN_LEN + (char *)&packet1, 0, sizeof(packet1)-MAVLINK_MSG_ID_OPTICAL_FLOW_MIN_LEN);
+        }
+#endif
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_optical_flow_encode(system_id, component_id, &msg, &packet1);
+    mavlink_msg_optical_flow_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_optical_flow_pack(system_id, component_id, &msg , packet1.time_usec , packet1.sensor_id , packet1.flow_x , packet1.flow_y , packet1.flow_comp_m_x , packet1.flow_comp_m_y , packet1.quality , packet1.ground_distance , packet1.flow_rate_x , packet1.flow_rate_y );
+    mavlink_msg_optical_flow_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(pack

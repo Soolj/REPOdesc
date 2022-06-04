@@ -4410,4 +4410,34 @@ static void mavlink_test_vicon_position_estimate(uint8_t system_id, uint8_t comp
         93372036854775807ULL,73.0,101.0,129.0,157.0,185.0,213.0
     };
     mavlink_vicon_position_estimate_t packet1, packet2;
-        memset(&packet1, 0, sizeo
+        memset(&packet1, 0, sizeof(packet1));
+        packet1.usec = packet_in.usec;
+        packet1.x = packet_in.x;
+        packet1.y = packet_in.y;
+        packet1.z = packet_in.z;
+        packet1.roll = packet_in.roll;
+        packet1.pitch = packet_in.pitch;
+        packet1.yaw = packet_in.yaw;
+        
+        
+#ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
+        if (status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) {
+           // cope with extensions
+           memset(MAVLINK_MSG_ID_VICON_POSITION_ESTIMATE_MIN_LEN + (char *)&packet1, 0, sizeof(packet1)-MAVLINK_MSG_ID_VICON_POSITION_ESTIMATE_MIN_LEN);
+        }
+#endif
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_vicon_position_estimate_encode(system_id, component_id, &msg, &packet1);
+    mavlink_msg_vicon_position_estimate_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_vicon_position_estimate_pack(system_id, component_id, &msg , packet1.usec , packet1.x , packet1.y , packet1.z , packet1.roll , packet1.pitch , packet1.yaw );
+    mavlink_msg_vicon_position_estimate_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_vicon_position_estimate_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.usec , packet1.x , packet1.y , packet1.z , packet1.roll , packet1.pitch , packet1.yaw );
+    mavlink_msg_vicon_position_estimate_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+

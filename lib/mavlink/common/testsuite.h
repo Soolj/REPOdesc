@@ -4560,4 +4560,24 @@ static void mavlink_test_optical_flow_rad(uint8_t system_id, uint8_t component_i
         }
 #endif
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_optical_flow_rad_encode(system_id, component_id, &m
+    mavlink_msg_optical_flow_rad_encode(system_id, component_id, &msg, &packet1);
+    mavlink_msg_optical_flow_rad_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_optical_flow_rad_pack(system_id, component_id, &msg , packet1.time_usec , packet1.sensor_id , packet1.integration_time_us , packet1.integrated_x , packet1.integrated_y , packet1.integrated_xgyro , packet1.integrated_ygyro , packet1.integrated_zgyro , packet1.temperature , packet1.quality , packet1.time_delta_distance_us , packet1.distance );
+    mavlink_msg_optical_flow_rad_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_optical_flow_rad_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.time_usec , packet1.sensor_id , packet1.integration_time_us , packet1.integrated_x , packet1.integrated_y , packet1.integrated_xgyro , packet1.integrated_ygyro , packet1.integrated_zgyro , packet1.temperature , packet1.quality , packet1.time_delta_distance_us , packet1.distance );
+    mavlink_msg_optical_flow_rad_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+        mavlink_msg_to_send_buffer(buffer, &msg);
+        for (i=0; i<mavlink_msg_get_send_buffer_length(&msg); i++) {
+            comm_send_ch(MAVLINK_COMM_0, buffer[i]);
+        }
+    mavlink_msg_optical_flow_rad_decode(last_msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) =

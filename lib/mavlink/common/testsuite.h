@@ -4610,4 +4610,32 @@ static void mavlink_test_hil_sensor(uint8_t system_id, uint8_t component_id, mav
         packet1.zacc = packet_in.zacc;
         packet1.xgyro = packet_in.xgyro;
         packet1.ygyro = packet_in.ygyro;
-        packet1.zgyro = packet_in.zg
+        packet1.zgyro = packet_in.zgyro;
+        packet1.xmag = packet_in.xmag;
+        packet1.ymag = packet_in.ymag;
+        packet1.zmag = packet_in.zmag;
+        packet1.abs_pressure = packet_in.abs_pressure;
+        packet1.diff_pressure = packet_in.diff_pressure;
+        packet1.pressure_alt = packet_in.pressure_alt;
+        packet1.temperature = packet_in.temperature;
+        packet1.fields_updated = packet_in.fields_updated;
+        
+        
+#ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
+        if (status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) {
+           // cope with extensions
+           memset(MAVLINK_MSG_ID_HIL_SENSOR_MIN_LEN + (char *)&packet1, 0, sizeof(packet1)-MAVLINK_MSG_ID_HIL_SENSOR_MIN_LEN);
+        }
+#endif
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_hil_sensor_encode(system_id, component_id, &msg, &packet1);
+    mavlink_msg_hil_sensor_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_hil_sensor_pack(system_id, component_id, &msg , packet1.time_usec , packet1.xacc , packet1.yacc , packet1.zacc , packet1.xgyro , packet1.ygyro , packet1.zgyro , packet1.xmag , packet1.ymag , packet1.zmag , packet1.abs_pressure , packet1.diff_pressure , packet1.pressure_alt , packet1.temperature , packet1.fields_updated );
+    mavlink_msg_hil_sensor_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_hil_sensor_pack_chan(system_id, component_id, MA

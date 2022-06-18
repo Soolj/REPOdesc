@@ -4659,4 +4659,43 @@ static void mavlink_test_hil_sensor(uint8_t system_id, uint8_t component_id, mav
 static void mavlink_test_sim_state(uint8_t system_id, uint8_t component_id, mavlink_message_t *last_msg)
 {
 #ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
-    mavlink_status_t *status = mavlink_get_channel_status
+    mavlink_status_t *status = mavlink_get_channel_status(MAVLINK_COMM_0);
+        if ((status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) && MAVLINK_MSG_ID_SIM_STATE >= 256) {
+            return;
+        }
+#endif
+    mavlink_message_t msg;
+        uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
+        uint16_t i;
+    mavlink_sim_state_t packet_in = {
+        17.0,45.0,73.0,101.0,129.0,157.0,185.0,213.0,241.0,269.0,297.0,325.0,353.0,381.0,409.0,437.0,465.0,493.0,521.0,549.0,577.0
+    };
+    mavlink_sim_state_t packet1, packet2;
+        memset(&packet1, 0, sizeof(packet1));
+        packet1.q1 = packet_in.q1;
+        packet1.q2 = packet_in.q2;
+        packet1.q3 = packet_in.q3;
+        packet1.q4 = packet_in.q4;
+        packet1.roll = packet_in.roll;
+        packet1.pitch = packet_in.pitch;
+        packet1.yaw = packet_in.yaw;
+        packet1.xacc = packet_in.xacc;
+        packet1.yacc = packet_in.yacc;
+        packet1.zacc = packet_in.zacc;
+        packet1.xgyro = packet_in.xgyro;
+        packet1.ygyro = packet_in.ygyro;
+        packet1.zgyro = packet_in.zgyro;
+        packet1.lat = packet_in.lat;
+        packet1.lon = packet_in.lon;
+        packet1.alt = packet_in.alt;
+        packet1.std_dev_horz = packet_in.std_dev_horz;
+        packet1.std_dev_vert = packet_in.std_dev_vert;
+        packet1.vn = packet_in.vn;
+        packet1.ve = packet_in.ve;
+        packet1.vd = packet_in.vd;
+        
+        
+#ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
+        if (status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) {
+           // cope with extensions
+           memset(MAVLINK_MSG_ID_SIM_STATE_MIN_LEN + (char *)&packet1, 0, sizeof(packet

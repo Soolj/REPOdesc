@@ -5016,3 +5016,34 @@ static void mavlink_test_hil_gps(uint8_t system_id, uint8_t component_id, mavlin
         }
     mavlink_msg_hil_gps_decode(last_msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+        
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_hil_gps_send(MAVLINK_COMM_1 , packet1.time_usec , packet1.fix_type , packet1.lat , packet1.lon , packet1.alt , packet1.eph , packet1.epv , packet1.vel , packet1.vn , packet1.ve , packet1.vd , packet1.cog , packet1.satellites_visible );
+    mavlink_msg_hil_gps_decode(last_msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+}
+
+static void mavlink_test_hil_optical_flow(uint8_t system_id, uint8_t component_id, mavlink_message_t *last_msg)
+{
+#ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
+    mavlink_status_t *status = mavlink_get_channel_status(MAVLINK_COMM_0);
+        if ((status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) && MAVLINK_MSG_ID_HIL_OPTICAL_FLOW >= 256) {
+            return;
+        }
+#endif
+    mavlink_message_t msg;
+        uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
+        uint16_t i;
+    mavlink_hil_optical_flow_t packet_in = {
+        93372036854775807ULL,963497880,101.0,129.0,157.0,185.0,213.0,963499128,269.0,19315,3,70
+    };
+    mavlink_hil_optical_flow_t packet1, packet2;
+        memset(&packet1, 0, sizeof(packet1));
+        packet1.time_usec = packet_in.time_usec;
+        packet1.integration_time_us = packet_in.integration_time_us;
+        packet1.integrated_x = packet_in.integrated_x;
+        packet1.integrated_y = packet_in.integrated_y;
+        packet1.integrated_xgyro = packet_in.integrated_xgyro;
+        packet1.integrated_ygyro = packet_in.integrated_ygyro;
+        packet1.integrated_zgyro = packet_in.integrated_zgyro;
+        packet1.ti

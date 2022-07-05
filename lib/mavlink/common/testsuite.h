@@ -5046,4 +5046,28 @@ static void mavlink_test_hil_optical_flow(uint8_t system_id, uint8_t component_i
         packet1.integrated_xgyro = packet_in.integrated_xgyro;
         packet1.integrated_ygyro = packet_in.integrated_ygyro;
         packet1.integrated_zgyro = packet_in.integrated_zgyro;
-        packet1.ti
+        packet1.time_delta_distance_us = packet_in.time_delta_distance_us;
+        packet1.distance = packet_in.distance;
+        packet1.temperature = packet_in.temperature;
+        packet1.sensor_id = packet_in.sensor_id;
+        packet1.quality = packet_in.quality;
+        
+        
+#ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
+        if (status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) {
+           // cope with extensions
+           memset(MAVLINK_MSG_ID_HIL_OPTICAL_FLOW_MIN_LEN + (char *)&packet1, 0, sizeof(packet1)-MAVLINK_MSG_ID_HIL_OPTICAL_FLOW_MIN_LEN);
+        }
+#endif
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_hil_optical_flow_encode(system_id, component_id, &msg, &packet1);
+    mavlink_msg_hil_optical_flow_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_hil_optical_flow_pack(system_id, component_id, &msg , packet1.time_usec , packet1.sensor_id , packet1.integration_time_us , packet1.integrated_x , packet1.integrated_y , packet1.integrated_xgyro , packet1.integrated_ygyro , packet1.integrated_zgyro , packet1.temperature , packet1.quality , packet1.time_delta_distance_us , packet1.distance );
+    mavlink_msg_hil_optical_flow_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_hil_optical_flow_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.time_usec , packet1.sensor_id , packet1.integration_time_us , packet1.integrated_x , packet1.

@@ -5887,4 +5887,28 @@ static void mavlink_test_gps2_rtk(uint8_t system_id, uint8_t component_id, mavli
         packet1.accuracy = packet_in.accuracy;
         packet1.iar_num_hypotheses = packet_in.iar_num_hypotheses;
         packet1.wn = packet_in.wn;
-        pa
+        packet1.rtk_receiver_id = packet_in.rtk_receiver_id;
+        packet1.rtk_health = packet_in.rtk_health;
+        packet1.rtk_rate = packet_in.rtk_rate;
+        packet1.nsats = packet_in.nsats;
+        packet1.baseline_coords_type = packet_in.baseline_coords_type;
+        
+        
+#ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
+        if (status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) {
+           // cope with extensions
+           memset(MAVLINK_MSG_ID_GPS2_RTK_MIN_LEN + (char *)&packet1, 0, sizeof(packet1)-MAVLINK_MSG_ID_GPS2_RTK_MIN_LEN);
+        }
+#endif
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_gps2_rtk_encode(system_id, component_id, &msg, &packet1);
+    mavlink_msg_gps2_rtk_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_gps2_rtk_pack(system_id, component_id, &msg , packet1.time_last_baseline_ms , packet1.rtk_receiver_id , packet1.wn , packet1.tow , packet1.rtk_health , packet1.rtk_rate , packet1.nsats , packet1.baseline_coords_type , packet1.baseline_a_mm , packet1.baseline_b_mm , packet1.baseline_c_mm , packet1.accuracy , packet1.iar_num_hypotheses );
+    mavlink_msg_gps2_rtk_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_gps2_rtk_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.time_last_baseline_ms , packet1.rtk_receiver_id , packet1.wn , packet1.tow , packet1.rtk_health , pa

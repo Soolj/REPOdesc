@@ -6452,4 +6452,42 @@ static void mavlink_test_scaled_pressure2(uint8_t system_id, uint8_t component_i
         memset(&packet2, 0, sizeof(packet2));
     mavlink_msg_scaled_pressure2_send(MAVLINK_COMM_1 , packet1.time_boot_ms , packet1.press_abs , packet1.press_diff , packet1.temperature );
     mavlink_msg_scaled_pressure2_decode(last_msg, &packet2);
- 
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+}
+
+static void mavlink_test_att_pos_mocap(uint8_t system_id, uint8_t component_id, mavlink_message_t *last_msg)
+{
+#ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
+    mavlink_status_t *status = mavlink_get_channel_status(MAVLINK_COMM_0);
+        if ((status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) && MAVLINK_MSG_ID_ATT_POS_MOCAP >= 256) {
+            return;
+        }
+#endif
+    mavlink_message_t msg;
+        uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
+        uint16_t i;
+    mavlink_att_pos_mocap_t packet_in = {
+        93372036854775807ULL,{ 73.0, 74.0, 75.0, 76.0 },185.0,213.0,241.0
+    };
+    mavlink_att_pos_mocap_t packet1, packet2;
+        memset(&packet1, 0, sizeof(packet1));
+        packet1.time_usec = packet_in.time_usec;
+        packet1.x = packet_in.x;
+        packet1.y = packet_in.y;
+        packet1.z = packet_in.z;
+        
+        mav_array_memcpy(packet1.q, packet_in.q, sizeof(float)*4);
+        
+#ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
+        if (status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) {
+           // cope with extensions
+           memset(MAVLINK_MSG_ID_ATT_POS_MOCAP_MIN_LEN + (char *)&packet1, 0, sizeof(packet1)-MAVLINK_MSG_ID_ATT_POS_MOCAP_MIN_LEN);
+        }
+#endif
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_att_pos_mocap_encode(system_id, component_id, &msg, &packet1);
+    mavlink_msg_att_pos_mocap_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_att_pos_moca

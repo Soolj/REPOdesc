@@ -6636,4 +6636,32 @@ static void mavlink_test_altitude(uint8_t system_id, uint8_t component_id, mavli
         }
 #endif
     mavlink_message_t msg;
-        uint8_t buffer[MA
+        uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
+        uint16_t i;
+    mavlink_altitude_t packet_in = {
+        93372036854775807ULL,73.0,101.0,129.0,157.0,185.0,213.0
+    };
+    mavlink_altitude_t packet1, packet2;
+        memset(&packet1, 0, sizeof(packet1));
+        packet1.time_usec = packet_in.time_usec;
+        packet1.altitude_monotonic = packet_in.altitude_monotonic;
+        packet1.altitude_amsl = packet_in.altitude_amsl;
+        packet1.altitude_local = packet_in.altitude_local;
+        packet1.altitude_relative = packet_in.altitude_relative;
+        packet1.altitude_terrain = packet_in.altitude_terrain;
+        packet1.bottom_clearance = packet_in.bottom_clearance;
+        
+        
+#ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
+        if (status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) {
+           // cope with extensions
+           memset(MAVLINK_MSG_ID_ALTITUDE_MIN_LEN + (char *)&packet1, 0, sizeof(packet1)-MAVLINK_MSG_ID_ALTITUDE_MIN_LEN);
+        }
+#endif
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_altitude_encode(system_id, component_id, &msg, &packet1);
+    mavlink_msg_altitude_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_altitude_pack(system_id, component_id, &msg , packet1.time_usec , packet1.altitude_monotonic , packet1.altitude_amsl , packet1.altitude_local , packet1.altitude_relative , packet1.altitude_terrain , packet1.bottom_clearance

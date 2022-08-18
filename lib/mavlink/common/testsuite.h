@@ -6701,4 +6701,32 @@ static void mavlink_test_resource_request(uint8_t system_id, uint8_t component_i
     mavlink_resource_request_t packet_in = {
         5,72,{ 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255, 0, 1, 2 },243,{ 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173 }
     };
-    mavlink_resource_request_t packet1, pack
+    mavlink_resource_request_t packet1, packet2;
+        memset(&packet1, 0, sizeof(packet1));
+        packet1.request_id = packet_in.request_id;
+        packet1.uri_type = packet_in.uri_type;
+        packet1.transfer_type = packet_in.transfer_type;
+        
+        mav_array_memcpy(packet1.uri, packet_in.uri, sizeof(uint8_t)*120);
+        mav_array_memcpy(packet1.storage, packet_in.storage, sizeof(uint8_t)*120);
+        
+#ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
+        if (status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) {
+           // cope with extensions
+           memset(MAVLINK_MSG_ID_RESOURCE_REQUEST_MIN_LEN + (char *)&packet1, 0, sizeof(packet1)-MAVLINK_MSG_ID_RESOURCE_REQUEST_MIN_LEN);
+        }
+#endif
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_resource_request_encode(system_id, component_id, &msg, &packet1);
+    mavlink_msg_resource_request_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_resource_request_pack(system_id, component_id, &msg , packet1.request_id , packet1.uri_type , packet1.uri , packet1.transfer_type , packet1.storage );
+    mavlink_msg_resource_request_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_resource_request_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.request_id , packet1.uri_type , packet1.uri , packet1.transfer_type , packet1.storage );
+    mavlink_msg_resource_request_decode(&msg, &packet2);
+        MAVLINK_ASSE

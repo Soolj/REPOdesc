@@ -6826,4 +6826,26 @@ static void mavlink_test_follow_target(uint8_t system_id, uint8_t component_id, 
         packet1.est_capabilities = packet_in.est_capabilities;
         
         mav_array_memcpy(packet1.vel, packet_in.vel, sizeof(float)*3);
-      
+        mav_array_memcpy(packet1.acc, packet_in.acc, sizeof(float)*3);
+        mav_array_memcpy(packet1.attitude_q, packet_in.attitude_q, sizeof(float)*4);
+        mav_array_memcpy(packet1.rates, packet_in.rates, sizeof(float)*3);
+        mav_array_memcpy(packet1.position_cov, packet_in.position_cov, sizeof(float)*3);
+        
+#ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
+        if (status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) {
+           // cope with extensions
+           memset(MAVLINK_MSG_ID_FOLLOW_TARGET_MIN_LEN + (char *)&packet1, 0, sizeof(packet1)-MAVLINK_MSG_ID_FOLLOW_TARGET_MIN_LEN);
+        }
+#endif
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_follow_target_encode(system_id, component_id, &msg, &packet1);
+    mavlink_msg_follow_target_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_follow_target_pack(system_id, component_id, &msg , packet1.timestamp , packet1.est_capabilities , packet1.lat , packet1.lon , packet1.alt , packet1.vel , packet1.acc , packet1.attitude_q , packet1.rates , packet1.position_cov , packet1.custom_state );
+    mavlink_msg_follow_target_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_follow_target_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.timestamp , packet1.est_capabilities , packet1.lat , packet1.lon , packet1.alt , packet1.vel , packet1.acc , packet1.attitude_q , packet1.rate

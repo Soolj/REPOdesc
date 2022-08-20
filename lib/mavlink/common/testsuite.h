@@ -6927,4 +6927,31 @@ static void mavlink_test_control_system_state(uint8_t system_id, uint8_t compone
         for (i=0; i<mavlink_msg_get_send_buffer_length(&msg); i++) {
             comm_send_ch(MAVLINK_COMM_0, buffer[i]);
         }
-    mavlink_msg_control_system_state_decode(last_msg, &packet2)
+    mavlink_msg_control_system_state_decode(last_msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+        
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_control_system_state_send(MAVLINK_COMM_1 , packet1.time_usec , packet1.x_acc , packet1.y_acc , packet1.z_acc , packet1.x_vel , packet1.y_vel , packet1.z_vel , packet1.x_pos , packet1.y_pos , packet1.z_pos , packet1.airspeed , packet1.vel_variance , packet1.pos_variance , packet1.q , packet1.roll_rate , packet1.pitch_rate , packet1.yaw_rate );
+    mavlink_msg_control_system_state_decode(last_msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+}
+
+static void mavlink_test_battery_status(uint8_t system_id, uint8_t component_id, mavlink_message_t *last_msg)
+{
+#ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
+    mavlink_status_t *status = mavlink_get_channel_status(MAVLINK_COMM_0);
+        if ((status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) && MAVLINK_MSG_ID_BATTERY_STATUS >= 256) {
+            return;
+        }
+#endif
+    mavlink_message_t msg;
+        uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
+        uint16_t i;
+    mavlink_battery_status_t packet_in = {
+        963497464,963497672,17651,{ 17755, 17756, 17757, 17758, 17759, 17760, 17761, 17762, 17763, 17764 },18795,101,168,235,46
+    };
+    mavlink_battery_status_t packet1, packet2;
+        memset(&packet1, 0, sizeof(packet1));
+        packet1.current_consumed = packet_in.current_consumed;
+        packet1.energy_consumed = packet_in.energy_consumed;
+        packet1.tempe

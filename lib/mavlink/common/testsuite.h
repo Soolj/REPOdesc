@@ -6954,4 +6954,30 @@ static void mavlink_test_battery_status(uint8_t system_id, uint8_t component_id,
         memset(&packet1, 0, sizeof(packet1));
         packet1.current_consumed = packet_in.current_consumed;
         packet1.energy_consumed = packet_in.energy_consumed;
-        packet1.tempe
+        packet1.temperature = packet_in.temperature;
+        packet1.current_battery = packet_in.current_battery;
+        packet1.id = packet_in.id;
+        packet1.battery_function = packet_in.battery_function;
+        packet1.type = packet_in.type;
+        packet1.battery_remaining = packet_in.battery_remaining;
+        
+        mav_array_memcpy(packet1.voltages, packet_in.voltages, sizeof(uint16_t)*10);
+        
+#ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
+        if (status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) {
+           // cope with extensions
+           memset(MAVLINK_MSG_ID_BATTERY_STATUS_MIN_LEN + (char *)&packet1, 0, sizeof(packet1)-MAVLINK_MSG_ID_BATTERY_STATUS_MIN_LEN);
+        }
+#endif
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_battery_status_encode(system_id, component_id, &msg, &packet1);
+    mavlink_msg_battery_status_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_battery_status_pack(system_id, component_id, &msg , packet1.id , packet1.battery_function , packet1.type , packet1.temperature , packet1.voltages , packet1.current_battery , packet1.current_consumed , packet1.energy_consumed , packet1.battery_remaining );
+    mavlink_msg_battery_status_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_battery_status_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.id , packet1.battery_function , packet1.type , packet1.temperature , packet1.voltages 

@@ -6909,4 +6909,22 @@ static void mavlink_test_control_system_state(uint8_t system_id, uint8_t compone
 #endif
         memset(&packet2, 0, sizeof(packet2));
     mavlink_msg_control_system_state_encode(system_id, component_id, &msg, &packet1);
-    mavlink_msg_control_syste
+    mavlink_msg_control_system_state_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_control_system_state_pack(system_id, component_id, &msg , packet1.time_usec , packet1.x_acc , packet1.y_acc , packet1.z_acc , packet1.x_vel , packet1.y_vel , packet1.z_vel , packet1.x_pos , packet1.y_pos , packet1.z_pos , packet1.airspeed , packet1.vel_variance , packet1.pos_variance , packet1.q , packet1.roll_rate , packet1.pitch_rate , packet1.yaw_rate );
+    mavlink_msg_control_system_state_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_control_system_state_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.time_usec , packet1.x_acc , packet1.y_acc , packet1.z_acc , packet1.x_vel , packet1.y_vel , packet1.z_vel , packet1.x_pos , packet1.y_pos , packet1.z_pos , packet1.airspeed , packet1.vel_variance , packet1.pos_variance , packet1.q , packet1.roll_rate , packet1.pitch_rate , packet1.yaw_rate );
+    mavlink_msg_control_system_state_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+        mavlink_msg_to_send_buffer(buffer, &msg);
+        for (i=0; i<mavlink_msg_get_send_buffer_length(&msg); i++) {
+            comm_send_ch(MAVLINK_COMM_0, buffer[i]);
+        }
+    mavlink_msg_control_system_state_decode(last_msg, &packet2)

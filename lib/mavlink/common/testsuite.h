@@ -6878,4 +6878,35 @@ static void mavlink_test_control_system_state(uint8_t system_id, uint8_t compone
         uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
         uint16_t i;
     mavlink_control_system_state_t packet_in = {
-        93372036854775807ULL,73.0,1
+        93372036854775807ULL,73.0,101.0,129.0,157.0,185.0,213.0,241.0,269.0,297.0,325.0,{ 353.0, 354.0, 355.0 },{ 437.0, 438.0, 439.0 },{ 521.0, 522.0, 523.0, 524.0 },633.0,661.0,689.0
+    };
+    mavlink_control_system_state_t packet1, packet2;
+        memset(&packet1, 0, sizeof(packet1));
+        packet1.time_usec = packet_in.time_usec;
+        packet1.x_acc = packet_in.x_acc;
+        packet1.y_acc = packet_in.y_acc;
+        packet1.z_acc = packet_in.z_acc;
+        packet1.x_vel = packet_in.x_vel;
+        packet1.y_vel = packet_in.y_vel;
+        packet1.z_vel = packet_in.z_vel;
+        packet1.x_pos = packet_in.x_pos;
+        packet1.y_pos = packet_in.y_pos;
+        packet1.z_pos = packet_in.z_pos;
+        packet1.airspeed = packet_in.airspeed;
+        packet1.roll_rate = packet_in.roll_rate;
+        packet1.pitch_rate = packet_in.pitch_rate;
+        packet1.yaw_rate = packet_in.yaw_rate;
+        
+        mav_array_memcpy(packet1.vel_variance, packet_in.vel_variance, sizeof(float)*3);
+        mav_array_memcpy(packet1.pos_variance, packet_in.pos_variance, sizeof(float)*3);
+        mav_array_memcpy(packet1.q, packet_in.q, sizeof(float)*4);
+        
+#ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
+        if (status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) {
+           // cope with extensions
+           memset(MAVLINK_MSG_ID_CONTROL_SYSTEM_STATE_MIN_LEN + (char *)&packet1, 0, sizeof(packet1)-MAVLINK_MSG_ID_CONTROL_SYSTEM_STATE_MIN_LEN);
+        }
+#endif
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_control_system_state_encode(system_id, component_id, &msg, &packet1);
+    mavlink_msg_control_syste

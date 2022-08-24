@@ -7010,4 +7010,25 @@ static void mavlink_test_autopilot_version(uint8_t system_id, uint8_t component_
         uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
         uint16_t i;
     mavlink_autopilot_version_t packet_in = {
-   
+        93372036854775807ULL,93372036854776311ULL,963498296,963498504,963498712,963498920,18899,19003,{ 113, 114, 115, 116, 117, 118, 119, 120 },{ 137, 138, 139, 140, 141, 142, 143, 144 },{ 161, 162, 163, 164, 165, 166, 167, 168 },{ 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202 }
+    };
+    mavlink_autopilot_version_t packet1, packet2;
+        memset(&packet1, 0, sizeof(packet1));
+        packet1.capabilities = packet_in.capabilities;
+        packet1.uid = packet_in.uid;
+        packet1.flight_sw_version = packet_in.flight_sw_version;
+        packet1.middleware_sw_version = packet_in.middleware_sw_version;
+        packet1.os_sw_version = packet_in.os_sw_version;
+        packet1.board_version = packet_in.board_version;
+        packet1.vendor_id = packet_in.vendor_id;
+        packet1.product_id = packet_in.product_id;
+        
+        mav_array_memcpy(packet1.flight_custom_version, packet_in.flight_custom_version, sizeof(uint8_t)*8);
+        mav_array_memcpy(packet1.middleware_custom_version, packet_in.middleware_custom_version, sizeof(uint8_t)*8);
+        mav_array_memcpy(packet1.os_custom_version, packet_in.os_custom_version, sizeof(uint8_t)*8);
+        mav_array_memcpy(packet1.uid2, packet_in.uid2, sizeof(uint8_t)*18);
+        
+#ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
+        if (status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) {
+           // cope with extensions
+           memset(MAVLINK_MSG_ID_AUTOPILOT_VERSION_MIN_LEN + (char *)&packet1, 0, sizeof(pac

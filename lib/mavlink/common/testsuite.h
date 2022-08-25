@@ -7080,4 +7080,35 @@ static void mavlink_test_landing_target(uint8_t system_id, uint8_t component_id,
     mavlink_landing_target_t packet1, packet2;
         memset(&packet1, 0, sizeof(packet1));
         packet1.time_usec = packet_in.time_usec;
-        packet1.angle_x = pack
+        packet1.angle_x = packet_in.angle_x;
+        packet1.angle_y = packet_in.angle_y;
+        packet1.distance = packet_in.distance;
+        packet1.size_x = packet_in.size_x;
+        packet1.size_y = packet_in.size_y;
+        packet1.target_num = packet_in.target_num;
+        packet1.frame = packet_in.frame;
+        packet1.x = packet_in.x;
+        packet1.y = packet_in.y;
+        packet1.z = packet_in.z;
+        packet1.type = packet_in.type;
+        packet1.position_valid = packet_in.position_valid;
+        
+        mav_array_memcpy(packet1.q, packet_in.q, sizeof(float)*4);
+        
+#ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
+        if (status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) {
+           // cope with extensions
+           memset(MAVLINK_MSG_ID_LANDING_TARGET_MIN_LEN + (char *)&packet1, 0, sizeof(packet1)-MAVLINK_MSG_ID_LANDING_TARGET_MIN_LEN);
+        }
+#endif
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_landing_target_encode(system_id, component_id, &msg, &packet1);
+    mavlink_msg_landing_target_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_landing_target_pack(system_id, component_id, &msg , packet1.time_usec , packet1.target_num , packet1.frame , packet1.angle_x , packet1.angle_y , packet1.distance , packet1.size_x , packet1.size_y , packet1.x , packet1.y , packet1.z , packet1.q , packet1.type , packet1.position_valid );
+    mavlink_msg_landing_target_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        

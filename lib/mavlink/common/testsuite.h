@@ -7188,4 +7188,39 @@ static void mavlink_test_estimator_status(uint8_t system_id, uint8_t component_i
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
         
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_estimator_status_send(MAVLINK_COMM_1 , packet1.time_usec , packet1.flags , packet1.vel_ratio , packet1.pos_horiz_ratio , packet1.pos_vert_ratio , packet1.mag_ratio , packet1.hagl_r
+    mavlink_msg_estimator_status_send(MAVLINK_COMM_1 , packet1.time_usec , packet1.flags , packet1.vel_ratio , packet1.pos_horiz_ratio , packet1.pos_vert_ratio , packet1.mag_ratio , packet1.hagl_ratio , packet1.tas_ratio , packet1.pos_horiz_accuracy , packet1.pos_vert_accuracy );
+    mavlink_msg_estimator_status_decode(last_msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+}
+
+static void mavlink_test_wind_cov(uint8_t system_id, uint8_t component_id, mavlink_message_t *last_msg)
+{
+#ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
+    mavlink_status_t *status = mavlink_get_channel_status(MAVLINK_COMM_0);
+        if ((status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) && MAVLINK_MSG_ID_WIND_COV >= 256) {
+            return;
+        }
+#endif
+    mavlink_message_t msg;
+        uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
+        uint16_t i;
+    mavlink_wind_cov_t packet_in = {
+        93372036854775807ULL,73.0,101.0,129.0,157.0,185.0,213.0,241.0,269.0
+    };
+    mavlink_wind_cov_t packet1, packet2;
+        memset(&packet1, 0, sizeof(packet1));
+        packet1.time_usec = packet_in.time_usec;
+        packet1.wind_x = packet_in.wind_x;
+        packet1.wind_y = packet_in.wind_y;
+        packet1.wind_z = packet_in.wind_z;
+        packet1.var_horiz = packet_in.var_horiz;
+        packet1.var_vert = packet_in.var_vert;
+        packet1.wind_alt = packet_in.wind_alt;
+        packet1.horiz_accuracy = packet_in.horiz_accuracy;
+        packet1.vert_accuracy = packet_in.vert_accuracy;
+        
+        
+#ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
+        if (status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) {
+           // cope with extensions
+           memset(MAVLINK_MSG_ID_WIND_COV_MIN_LE

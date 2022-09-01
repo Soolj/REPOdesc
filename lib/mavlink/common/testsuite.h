@@ -7308,4 +7308,26 @@ static void mavlink_test_gps_input(uint8_t system_id, uint8_t component_id, mavl
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_gps_input_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.time_usec , packet1.gps_id , packet1.ign
+    mavlink_msg_gps_input_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.time_usec , packet1.gps_id , packet1.ignore_flags , packet1.time_week_ms , packet1.time_week , packet1.fix_type , packet1.lat , packet1.lon , packet1.alt , packet1.hdop , packet1.vdop , packet1.vn , packet1.ve , packet1.vd , packet1.speed_accuracy , packet1.horiz_accuracy , packet1.vert_accuracy , packet1.satellites_visible );
+    mavlink_msg_gps_input_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+        mavlink_msg_to_send_buffer(buffer, &msg);
+        for (i=0; i<mavlink_msg_get_send_buffer_length(&msg); i++) {
+            comm_send_ch(MAVLINK_COMM_0, buffer[i]);
+        }
+    mavlink_msg_gps_input_decode(last_msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+        
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_gps_input_send(MAVLINK_COMM_1 , packet1.time_usec , packet1.gps_id , packet1.ignore_flags , packet1.time_week_ms , packet1.time_week , packet1.fix_type , packet1.lat , packet1.lon , packet1.alt , packet1.hdop , packet1.vdop , packet1.vn , packet1.ve , packet1.vd , packet1.speed_accuracy , packet1.horiz_accuracy , packet1.vert_accuracy , packet1.satellites_visible );
+    mavlink_msg_gps_input_decode(last_msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+}
+
+static void mavlink_test_gps_rtcm_data(uint8_t system_id, uint8_t component_id, mavlink_message_t *last_msg)
+{
+#ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
+    mavlink_status_t *status = mavlink_get_channel_status(MAVLINK_COMM_0);
+        if ((status->flag

@@ -7415,4 +7415,25 @@ static void mavlink_test_high_latency(uint8_t system_id, uint8_t component_id, m
         packet1.airspeed_sp = packet_in.airspeed_sp;
         packet1.groundspeed = packet_in.groundspeed;
         packet1.climb_rate = packet_in.climb_rate;
- 
+        packet1.gps_nsat = packet_in.gps_nsat;
+        packet1.gps_fix_type = packet_in.gps_fix_type;
+        packet1.battery_remaining = packet_in.battery_remaining;
+        packet1.temperature = packet_in.temperature;
+        packet1.temperature_air = packet_in.temperature_air;
+        packet1.failsafe = packet_in.failsafe;
+        packet1.wp_num = packet_in.wp_num;
+        
+        
+#ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
+        if (status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) {
+           // cope with extensions
+           memset(MAVLINK_MSG_ID_HIGH_LATENCY_MIN_LEN + (char *)&packet1, 0, sizeof(packet1)-MAVLINK_MSG_ID_HIGH_LATENCY_MIN_LEN);
+        }
+#endif
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_high_latency_encode(system_id, component_id, &msg, &packet1);
+    mavlink_msg_high_latency_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_high_latency_pack(system_id, component_id, &msg , packet1.base_mode , packet1.custom_mode , packet1.landed_state , packet1.roll , packet1.pitch , packet1.heading , packet1.throttle , packet1.heading_sp , packet1.latitude , packet1.longitude , packet1.altitude_amsl , packet1.altitude_sp , packet1.airspeed , packet1.airspeed_sp , packet1.groundspeed , packet1.climb_rate , packet1.gps_nsat , packet1.gps_fix_type , packet1.battery_remaining , packet1.temperature , packet1.temperature_air , packet1.failsafe , packet1.wp_num , packe

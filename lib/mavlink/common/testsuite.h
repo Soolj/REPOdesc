@@ -7436,4 +7436,22 @@ static void mavlink_test_high_latency(uint8_t system_id, uint8_t component_id, m
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_high_latency_pack(system_id, component_id, &msg , packet1.base_mode , packet1.custom_mode , packet1.landed_state , packet1.roll , packet1.pitch , packet1.heading , packet1.throttle , packet1.heading_sp , packet1.latitude , packet1.longitude , packet1.altitude_amsl , packet1.altitude_sp , packet1.airspeed , packet1.airspeed_sp , packet1.groundspeed , packet1.climb_rate , packet1.gps_nsat , packet1.gps_fix_type , packet1.battery_remaining , packet1.temperature , packet1.temperature_air , packet1.failsafe , packet1.wp_num , packe
+    mavlink_msg_high_latency_pack(system_id, component_id, &msg , packet1.base_mode , packet1.custom_mode , packet1.landed_state , packet1.roll , packet1.pitch , packet1.heading , packet1.throttle , packet1.heading_sp , packet1.latitude , packet1.longitude , packet1.altitude_amsl , packet1.altitude_sp , packet1.airspeed , packet1.airspeed_sp , packet1.groundspeed , packet1.climb_rate , packet1.gps_nsat , packet1.gps_fix_type , packet1.battery_remaining , packet1.temperature , packet1.temperature_air , packet1.failsafe , packet1.wp_num , packet1.wp_distance );
+    mavlink_msg_high_latency_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_high_latency_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.base_mode , packet1.custom_mode , packet1.landed_state , packet1.roll , packet1.pitch , packet1.heading , packet1.throttle , packet1.heading_sp , packet1.latitude , packet1.longitude , packet1.altitude_amsl , packet1.altitude_sp , packet1.airspeed , packet1.airspeed_sp , packet1.groundspeed , packet1.climb_rate , packet1.gps_nsat , packet1.gps_fix_type , packet1.battery_remaining , packet1.temperature , packet1.temperature_air , packet1.failsafe , packet1.wp_num , packet1.wp_distance );
+    mavlink_msg_high_latency_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+        mavlink_msg_to_send_buffer(buffer, &msg);
+        for (i=0; i<mavlink_msg_get_send_buffer_length(&msg); i++) {
+            comm_send_ch(MAVLINK_COMM_0, buffer[i]);
+        }
+    mavlink_msg_high_latency_decode(last_msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+        
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_high_latency_send(MAVLINK_COMM_1 , packet1.base_mode , packet1.custom_mode , packet1.landed_state , packet1.roll , packet1.pitch , packet1.heading , packet1.throttle , packet1.heading_sp 

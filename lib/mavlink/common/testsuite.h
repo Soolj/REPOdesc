@@ -7523,4 +7523,27 @@ static void mavlink_test_high_latency2(uint8_t system_id, uint8_t component_id, 
         memset(&packet2, 0, sizeof(packet2));
     mavlink_msg_high_latency2_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.timestamp , packet1.type , packet1.autopilot , packet1.custom_mode , packet1.latitude , packet1.longitude , packet1.altitude , packet1.target_altitude , packet1.heading , packet1.target_heading , packet1.target_distance , packet1.throttle , packet1.airspeed , packet1.airspeed_sp , packet1.groundspeed , packet1.windspeed , packet1.wind_heading , packet1.eph , packet1.epv , packet1.temperature_air , packet1.climb_rate , packet1.battery , packet1.wp_num , packet1.failure_flags , packet1.custom0 , packet1.custom1 , packet1.custom2 );
     mavlink_msg_high_latency2_decode(&msg, &packet2);
-        MAVLINK_ASSERT(memcmp(&packet1, &packet
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+        mavlink_msg_to_send_buffer(buffer, &msg);
+        for (i=0; i<mavlink_msg_get_send_buffer_length(&msg); i++) {
+            comm_send_ch(MAVLINK_COMM_0, buffer[i]);
+        }
+    mavlink_msg_high_latency2_decode(last_msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+        
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_high_latency2_send(MAVLINK_COMM_1 , packet1.timestamp , packet1.type , packet1.autopilot , packet1.custom_mode , packet1.latitude , packet1.longitude , packet1.altitude , packet1.target_altitude , packet1.heading , packet1.target_heading , packet1.target_distance , packet1.throttle , packet1.airspeed , packet1.airspeed_sp , packet1.groundspeed , packet1.windspeed , packet1.wind_heading , packet1.eph , packet1.epv , packet1.temperature_air , packet1.climb_rate , packet1.battery , packet1.wp_num , packet1.failure_flags , packet1.custom0 , packet1.custom1 , packet1.custom2 );
+    mavlink_msg_high_latency2_decode(last_msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+}
+
+static void mavlink_test_vibration(uint8_t system_id, uint8_t component_id, mavlink_message_t *last_msg)
+{
+#ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
+    mavlink_status_t *status = mavlink_get_channel_status(MAVLINK_COMM_0);
+        if ((status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) && MAVLINK_MSG_ID_VIBRATION >= 256) {
+            return;
+        }
+#endi

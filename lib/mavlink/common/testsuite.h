@@ -7665,4 +7665,39 @@ static void mavlink_test_home_position(uint8_t system_id, uint8_t component_id, 
 
 static void mavlink_test_set_home_position(uint8_t system_id, uint8_t component_id, mavlink_message_t *last_msg)
 {
-#ifdef MAVLINK
+#ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
+    mavlink_status_t *status = mavlink_get_channel_status(MAVLINK_COMM_0);
+        if ((status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) && MAVLINK_MSG_ID_SET_HOME_POSITION >= 256) {
+            return;
+        }
+#endif
+    mavlink_message_t msg;
+        uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
+        uint16_t i;
+    mavlink_set_home_position_t packet_in = {
+        963497464,963497672,963497880,101.0,129.0,157.0,{ 185.0, 186.0, 187.0, 188.0 },297.0,325.0,353.0,161,93372036854779146ULL
+    };
+    mavlink_set_home_position_t packet1, packet2;
+        memset(&packet1, 0, sizeof(packet1));
+        packet1.latitude = packet_in.latitude;
+        packet1.longitude = packet_in.longitude;
+        packet1.altitude = packet_in.altitude;
+        packet1.x = packet_in.x;
+        packet1.y = packet_in.y;
+        packet1.z = packet_in.z;
+        packet1.approach_x = packet_in.approach_x;
+        packet1.approach_y = packet_in.approach_y;
+        packet1.approach_z = packet_in.approach_z;
+        packet1.target_system = packet_in.target_system;
+        packet1.time_usec = packet_in.time_usec;
+        
+        mav_array_memcpy(packet1.q, packet_in.q, sizeof(float)*4);
+        
+#ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
+        if (status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) {
+           // cope with extensions
+           memset(MAVLINK_MSG_ID_SET_HOME_POSITION_MIN_LEN + (char *)&packet1, 0, sizeof(packet1)-MAVLINK_MSG_ID_SET_HOME_POSITION_MIN_LEN);
+        }
+#endif
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_set_home_position_encode(system_id, co

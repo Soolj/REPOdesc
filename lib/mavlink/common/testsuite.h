@@ -7546,4 +7546,36 @@ static void mavlink_test_vibration(uint8_t system_id, uint8_t component_id, mavl
         if ((status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) && MAVLINK_MSG_ID_VIBRATION >= 256) {
             return;
         }
-#endi
+#endif
+    mavlink_message_t msg;
+        uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
+        uint16_t i;
+    mavlink_vibration_t packet_in = {
+        93372036854775807ULL,73.0,101.0,129.0,963498504,963498712,963498920
+    };
+    mavlink_vibration_t packet1, packet2;
+        memset(&packet1, 0, sizeof(packet1));
+        packet1.time_usec = packet_in.time_usec;
+        packet1.vibration_x = packet_in.vibration_x;
+        packet1.vibration_y = packet_in.vibration_y;
+        packet1.vibration_z = packet_in.vibration_z;
+        packet1.clipping_0 = packet_in.clipping_0;
+        packet1.clipping_1 = packet_in.clipping_1;
+        packet1.clipping_2 = packet_in.clipping_2;
+        
+        
+#ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
+        if (status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) {
+           // cope with extensions
+           memset(MAVLINK_MSG_ID_VIBRATION_MIN_LEN + (char *)&packet1, 0, sizeof(packet1)-MAVLINK_MSG_ID_VIBRATION_MIN_LEN);
+        }
+#endif
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_vibration_encode(system_id, component_id, &msg, &packet1);
+    mavlink_msg_vibration_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_vibration_pack(system_id, component_id, &msg , packet1.time_usec , packet1.vibration_x , packet1.vibration_y , packet1.vibration_z , packet1.clipping_0 , packet1.clipping_1 , packet1.clipping_2 );
+    mavlink_msg_vibration_decode(&msg, &packet2);
+        MAVLINK_ASSER

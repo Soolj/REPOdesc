@@ -8376,4 +8376,32 @@ static void mavlink_test_setup_signing(uint8_t system_id, uint8_t component_id, 
     };
     mavlink_setup_signing_t packet1, packet2;
         memset(&packet1, 0, sizeof(packet1));
-        packet1.initial_times
+        packet1.initial_timestamp = packet_in.initial_timestamp;
+        packet1.target_system = packet_in.target_system;
+        packet1.target_component = packet_in.target_component;
+        
+        mav_array_memcpy(packet1.secret_key, packet_in.secret_key, sizeof(uint8_t)*32);
+        
+#ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
+        if (status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) {
+           // cope with extensions
+           memset(MAVLINK_MSG_ID_SETUP_SIGNING_MIN_LEN + (char *)&packet1, 0, sizeof(packet1)-MAVLINK_MSG_ID_SETUP_SIGNING_MIN_LEN);
+        }
+#endif
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_setup_signing_encode(system_id, component_id, &msg, &packet1);
+    mavlink_msg_setup_signing_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_setup_signing_pack(system_id, component_id, &msg , packet1.target_system , packet1.target_component , packet1.secret_key , packet1.initial_timestamp );
+    mavlink_msg_setup_signing_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_setup_signing_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.target_system , packet1.target_component , packet1.secret_key , packet1.initial_timestamp );
+    mavlink_msg_setup_signing_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+        mav

@@ -8539,4 +8539,26 @@ static void mavlink_test_camera_information(uint8_t system_id, uint8_t component
 #endif
     mavlink_message_t msg;
         uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
-      
+        uint16_t i;
+    mavlink_camera_information_t packet_in = {
+        963497464,963497672,73.0,101.0,129.0,963498504,18483,18587,18691,{ 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254 },{ 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94 },159,"RSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    };
+    mavlink_camera_information_t packet1, packet2;
+        memset(&packet1, 0, sizeof(packet1));
+        packet1.time_boot_ms = packet_in.time_boot_ms;
+        packet1.firmware_version = packet_in.firmware_version;
+        packet1.focal_length = packet_in.focal_length;
+        packet1.sensor_size_h = packet_in.sensor_size_h;
+        packet1.sensor_size_v = packet_in.sensor_size_v;
+        packet1.flags = packet_in.flags;
+        packet1.resolution_h = packet_in.resolution_h;
+        packet1.resolution_v = packet_in.resolution_v;
+        packet1.cam_definition_version = packet_in.cam_definition_version;
+        packet1.lens_id = packet_in.lens_id;
+        
+        mav_array_memcpy(packet1.vendor_name, packet_in.vendor_name, sizeof(uint8_t)*32);
+        mav_array_memcpy(packet1.model_name, packet_in.model_name, sizeof(uint8_t)*32);
+        mav_array_memcpy(packet1.cam_definition_uri, packet_in.cam_definition_uri, sizeof(char)*140);
+        
+#ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
+        if (status->flags & MAVLINK_STATUS_FL

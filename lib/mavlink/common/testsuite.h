@@ -8579,4 +8579,34 @@ static void mavlink_test_camera_information(uint8_t system_id, uint8_t component
         memset(&packet2, 0, sizeof(packet2));
     mavlink_msg_camera_information_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.time_boot_ms , packet1.vendor_name , packet1.model_name , packet1.firmware_version , packet1.focal_length , packet1.sensor_size_h , packet1.sensor_size_v , packet1.resolution_h , packet1.resolution_v , packet1.lens_id , packet1.flags , packet1.cam_definition_version , packet1.cam_definition_uri );
     mavlink_msg_camera_information_decode(&msg, &packet2);
-        MAVLINK_ASS
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+        mavlink_msg_to_send_buffer(buffer, &msg);
+        for (i=0; i<mavlink_msg_get_send_buffer_length(&msg); i++) {
+            comm_send_ch(MAVLINK_COMM_0, buffer[i]);
+        }
+    mavlink_msg_camera_information_decode(last_msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+        
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_camera_information_send(MAVLINK_COMM_1 , packet1.time_boot_ms , packet1.vendor_name , packet1.model_name , packet1.firmware_version , packet1.focal_length , packet1.sensor_size_h , packet1.sensor_size_v , packet1.resolution_h , packet1.resolution_v , packet1.lens_id , packet1.flags , packet1.cam_definition_version , packet1.cam_definition_uri );
+    mavlink_msg_camera_information_decode(last_msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+}
+
+static void mavlink_test_camera_settings(uint8_t system_id, uint8_t component_id, mavlink_message_t *last_msg)
+{
+#ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
+    mavlink_status_t *status = mavlink_get_channel_status(MAVLINK_COMM_0);
+        if ((status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) && MAVLINK_MSG_ID_CAMERA_SETTINGS >= 256) {
+            return;
+        }
+#endif
+    mavlink_message_t msg;
+        uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
+        uint16_t i;
+    mavlink_camera_settings_t packet_in = {
+        963497464,17
+    };
+    mavlink_camer

@@ -8730,4 +8730,29 @@ static void mavlink_test_camera_capture_status(uint8_t system_id, uint8_t compon
         memset(&packet1, 0, sizeof(packet1));
         packet1.time_boot_ms = packet_in.time_boot_ms;
         packet1.image_interval = packet_in.image_interval;
-        packet1.recording_time_ms = packet_i
+        packet1.recording_time_ms = packet_in.recording_time_ms;
+        packet1.available_capacity = packet_in.available_capacity;
+        packet1.image_status = packet_in.image_status;
+        packet1.video_status = packet_in.video_status;
+        
+        
+#ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
+        if (status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) {
+           // cope with extensions
+           memset(MAVLINK_MSG_ID_CAMERA_CAPTURE_STATUS_MIN_LEN + (char *)&packet1, 0, sizeof(packet1)-MAVLINK_MSG_ID_CAMERA_CAPTURE_STATUS_MIN_LEN);
+        }
+#endif
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_camera_capture_status_encode(system_id, component_id, &msg, &packet1);
+    mavlink_msg_camera_capture_status_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_camera_capture_status_pack(system_id, component_id, &msg , packet1.time_boot_ms , packet1.image_status , packet1.video_status , packet1.image_interval , packet1.recording_time_ms , packet1.available_capacity );
+    mavlink_msg_camera_capture_status_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_camera_capture_status_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.time_boot_ms , packet1.image_status , packet1.video_status , packet1.image_interval , packet1.recording_time_ms , packet1.available_capacity );
+    mavlink_msg_camera_capture_status_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1

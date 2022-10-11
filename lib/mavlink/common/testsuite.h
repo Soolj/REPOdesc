@@ -9041,4 +9041,26 @@ static void mavlink_test_logging_data_acked(uint8_t system_id, uint8_t component
         memset(&packet2, 0, sizeof(packet2));
     mavlink_msg_logging_data_acked_encode(system_id, component_id, &msg, &packet1);
     mavlink_msg_logging_data_acked_decode(&msg, &packet2);
-        MA
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_logging_data_acked_pack(system_id, component_id, &msg , packet1.target_system , packet1.target_component , packet1.sequence , packet1.length , packet1.first_message_offset , packet1.data );
+    mavlink_msg_logging_data_acked_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_logging_data_acked_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.target_system , packet1.target_component , packet1.sequence , packet1.length , packet1.first_message_offset , packet1.data );
+    mavlink_msg_logging_data_acked_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+        mavlink_msg_to_send_buffer(buffer, &msg);
+        for (i=0; i<mavlink_msg_get_send_buffer_length(&msg); i++) {
+            comm_send_ch(MAVLINK_COMM_0, buffer[i]);
+        }
+    mavlink_msg_logging_data_acked_decode(last_msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+        
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_logging_data_acked_send(MAVLINK_COMM_1 , packet1.target_system , packet1.target_component , packet1.sequence , packet1.length , packet1.first_message_offset , packet1.data );
+    mavlink_msg_logging_data_acked_decode(last_msg, &

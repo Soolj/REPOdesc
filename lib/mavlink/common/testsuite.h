@@ -9132,4 +9132,33 @@ static void mavlink_test_video_stream_information(uint8_t system_id, uint8_t com
         }
 #endif
     mavlink_message_t msg;
-     
+        uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
+        uint16_t i;
+    mavlink_video_stream_information_t packet_in = {
+        17.0,963497672,17651,17755,17859,175,242,"QRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJK"
+    };
+    mavlink_video_stream_information_t packet1, packet2;
+        memset(&packet1, 0, sizeof(packet1));
+        packet1.framerate = packet_in.framerate;
+        packet1.bitrate = packet_in.bitrate;
+        packet1.resolution_h = packet_in.resolution_h;
+        packet1.resolution_v = packet_in.resolution_v;
+        packet1.rotation = packet_in.rotation;
+        packet1.camera_id = packet_in.camera_id;
+        packet1.status = packet_in.status;
+        
+        mav_array_memcpy(packet1.uri, packet_in.uri, sizeof(char)*230);
+        
+#ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
+        if (status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) {
+           // cope with extensions
+           memset(MAVLINK_MSG_ID_VIDEO_STREAM_INFORMATION_MIN_LEN + (char *)&packet1, 0, sizeof(packet1)-MAVLINK_MSG_ID_VIDEO_STREAM_INFORMATION_MIN_LEN);
+        }
+#endif
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_video_stream_information_encode(system_id, component_id, &msg, &packet1);
+    mavlink_msg_video_stream_information_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_video_stream_i

@@ -9448,4 +9448,28 @@ static void mavlink_test_uavcan_node_info(uint8_t system_id, uint8_t component_i
 #ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
         if (status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) {
            // cope with extensions
-           memset(MAVLINK_MSG_ID_UAVCAN_NODE_INFO_MIN_LEN 
+           memset(MAVLINK_MSG_ID_UAVCAN_NODE_INFO_MIN_LEN + (char *)&packet1, 0, sizeof(packet1)-MAVLINK_MSG_ID_UAVCAN_NODE_INFO_MIN_LEN);
+        }
+#endif
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_uavcan_node_info_encode(system_id, component_id, &msg, &packet1);
+    mavlink_msg_uavcan_node_info_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_uavcan_node_info_pack(system_id, component_id, &msg , packet1.time_usec , packet1.uptime_sec , packet1.name , packet1.hw_version_major , packet1.hw_version_minor , packet1.hw_unique_id , packet1.sw_version_major , packet1.sw_version_minor , packet1.sw_vcs_commit );
+    mavlink_msg_uavcan_node_info_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_uavcan_node_info_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.time_usec , packet1.uptime_sec , packet1.name , packet1.hw_version_major , packet1.hw_version_minor , packet1.hw_unique_id , packet1.sw_version_major , packet1.sw_version_minor , packet1.sw_vcs_commit );
+    mavlink_msg_uavcan_node_info_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+        mavlink_msg_to_send_buffer(buffer, &msg);
+        for (i=0; i<mavlink_msg_get_send_buffer_length(&msg); i++) {
+            comm_send_ch(MAVLINK_COMM_0, buffer[i]);
+        }
+    mavlink_msg_uavcan_node_info_decode(last_msg, &packet2);
+     

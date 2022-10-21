@@ -9418,4 +9418,34 @@ static void mavlink_test_uavcan_node_status(uint8_t system_id, uint8_t component
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 }
 
-static void mavlink_test_ua
+static void mavlink_test_uavcan_node_info(uint8_t system_id, uint8_t component_id, mavlink_message_t *last_msg)
+{
+#ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
+    mavlink_status_t *status = mavlink_get_channel_status(MAVLINK_COMM_0);
+        if ((status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) && MAVLINK_MSG_ID_UAVCAN_NODE_INFO >= 256) {
+            return;
+        }
+#endif
+    mavlink_message_t msg;
+        uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
+        uint16_t i;
+    mavlink_uavcan_node_info_t packet_in = {
+        93372036854775807ULL,963497880,963498088,"QRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQ",37,104,{ 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186 },219,30
+    };
+    mavlink_uavcan_node_info_t packet1, packet2;
+        memset(&packet1, 0, sizeof(packet1));
+        packet1.time_usec = packet_in.time_usec;
+        packet1.uptime_sec = packet_in.uptime_sec;
+        packet1.sw_vcs_commit = packet_in.sw_vcs_commit;
+        packet1.hw_version_major = packet_in.hw_version_major;
+        packet1.hw_version_minor = packet_in.hw_version_minor;
+        packet1.sw_version_major = packet_in.sw_version_major;
+        packet1.sw_version_minor = packet_in.sw_version_minor;
+        
+        mav_array_memcpy(packet1.name, packet_in.name, sizeof(char)*80);
+        mav_array_memcpy(packet1.hw_unique_id, packet_in.hw_unique_id, sizeof(uint8_t)*16);
+        
+#ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
+        if (status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) {
+           // cope with extensions
+           memset(MAVLINK_MSG_ID_UAVCAN_NODE_INFO_MIN_LEN 

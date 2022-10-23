@@ -9826,4 +9826,27 @@ static void mavlink_test_obstacle_distance(uint8_t system_id, uint8_t component_
 
 static void mavlink_test_common(uint8_t system_id, uint8_t component_id, mavlink_message_t *last_msg)
 {
-    mavlin
+    mavlink_test_heartbeat(system_id, component_id, last_msg);
+    mavlink_test_sys_status(system_id, component_id, last_msg);
+    mavlink_test_system_time(system_id, component_id, last_msg);
+    mavlink_test_ping(system_id, component_id, last_msg);
+    mavlink_test_change_operator_control(system_id, component_id, last_msg);
+    mavlink_test_change_operator_control_ack(system_id, component_id, last_msg);
+    mavlink_test_auth_key(system_id, component_id, last_msg);
+    mavlink_test_set_mode(system_id, component_id, last_msg);
+    mavlink_test_param_request_read(system_id, component_id, last_msg);
+    mavlink_test_param_request_list(system_id, component_id, last_msg);
+    mavlink_test_param_value(system_id, component_id, last_msg);
+    mavlink_test_param_set(system_id, component_id, last_msg);
+    mavlink_test_gps_raw_int(system_id, component_id, last_msg);
+    mavlink_test_gps_status(system_id, component_id, last_msg);
+    mavlink_test_scaled_imu(system_id, component_id, last_msg);
+    mavlink_test_raw_imu(system_id, component_id, last_msg);
+    mavlink_test_raw_pressure(system_id, component_id, last_msg);
+    mavlink_test_scaled_pressure(system_id, component_id, last_msg);
+    mavlink_test_attitude(system_id, component_id, last_msg);
+    mavlink_test_attitude_quaternion(system_id, component_id, last_msg);
+    mavlink_test_local_position_ned(system_id, component_id, last_msg);
+    mavlink_test_global_position_int(system_id, component_id, last_msg);
+    mavlink_test_rc_channels_scaled(system_id, component_id, last_msg);
+    mavlink_test_rc_c

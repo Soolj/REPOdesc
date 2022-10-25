@@ -9916,4 +9916,28 @@ static void mavlink_test_common(uint8_t system_id, uint8_t component_id, mavlink
     mavlink_test_log_request_data(system_id, component_id, last_msg);
     mavlink_test_log_data(system_id, component_id, last_msg);
     mavlink_test_log_erase(system_id, component_id, last_msg);
-    mavlink_test_log_request_end(system_id, component
+    mavlink_test_log_request_end(system_id, component_id, last_msg);
+    mavlink_test_gps_inject_data(system_id, component_id, last_msg);
+    mavlink_test_gps2_raw(system_id, component_id, last_msg);
+    mavlink_test_power_status(system_id, component_id, last_msg);
+    mavlink_test_serial_control(system_id, component_id, last_msg);
+    mavlink_test_gps_rtk(system_id, component_id, last_msg);
+    mavlink_test_gps2_rtk(system_id, component_id, last_msg);
+    mavlink_test_scaled_imu3(system_id, component_id, last_msg);
+    mavlink_test_data_transmission_handshake(system_id, component_id, last_msg);
+    mavlink_test_encapsulated_data(system_id, component_id, last_msg);
+    mavlink_test_distance_sensor(system_id, component_id, last_msg);
+    mavlink_test_terrain_request(system_id, component_id, last_msg);
+    mavlink_test_terrain_data(system_id, component_id, last_msg);
+    mavlink_test_terrain_check(system_id, component_id, last_msg);
+    mavlink_test_terrain_report(system_id, component_id, last_msg);
+    mavlink_test_scaled_pressure2(system_id, component_id, last_msg);
+    mavlink_test_att_pos_mocap(system_id, component_id, last_msg);
+    mavlink_test_set_actuator_control_target(system_id, component_id, last_msg);
+    mavlink_test_actuator_control_target(system_id, component_id, last_msg);
+    mavlink_test_altitude(system_id, component_id, last_msg);
+    mavlink_test_resource_request(system_id, component_id, last_msg);
+    mavlink_test_scaled_pressure3(system_id, component_id, last_msg);
+    mavlink_test_follow_target(system_id, component_id, last_msg);
+    mavlink_test_control_system_state(system_id, component_id, last_msg);
+    m

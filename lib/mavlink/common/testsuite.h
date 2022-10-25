@@ -9985,4 +9985,12 @@ static void mavlink_test_common(uint8_t system_id, uint8_t component_id, mavlink
     mavlink_test_param_ext_request_read(system_id, component_id, last_msg);
     mavlink_test_param_ext_request_list(system_id, component_id, last_msg);
     mavlink_test_param_ext_value(system_id, component_id, last_msg);
-    mavlink_test_param_ext_set(system_id, component_id, las
+    mavlink_test_param_ext_set(system_id, component_id, last_msg);
+    mavlink_test_param_ext_ack(system_id, component_id, last_msg);
+    mavlink_test_obstacle_distance(system_id, component_id, last_msg);
+}
+
+#ifdef __cplusplus
+}
+#endif // __cplusplus
+#endif // COMMON_TESTSUITE_H

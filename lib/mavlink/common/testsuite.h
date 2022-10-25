@@ -9893,4 +9893,27 @@ static void mavlink_test_common(uint8_t system_id, uint8_t component_id, mavlink
     mavlink_test_hil_state(system_id, component_id, last_msg);
     mavlink_test_hil_controls(system_id, component_id, last_msg);
     mavlink_test_hil_rc_inputs_raw(system_id, component_id, last_msg);
-    mavlin
+    mavlink_test_hil_actuator_controls(system_id, component_id, last_msg);
+    mavlink_test_optical_flow(system_id, component_id, last_msg);
+    mavlink_test_global_vision_position_estimate(system_id, component_id, last_msg);
+    mavlink_test_vision_position_estimate(system_id, component_id, last_msg);
+    mavlink_test_vision_speed_estimate(system_id, component_id, last_msg);
+    mavlink_test_vicon_position_estimate(system_id, component_id, last_msg);
+    mavlink_test_highres_imu(system_id, component_id, last_msg);
+    mavlink_test_optical_flow_rad(system_id, component_id, last_msg);
+    mavlink_test_hil_sensor(system_id, component_id, last_msg);
+    mavlink_test_sim_state(system_id, component_id, last_msg);
+    mavlink_test_radio_status(system_id, component_id, last_msg);
+    mavlink_test_file_transfer_protocol(system_id, component_id, last_msg);
+    mavlink_test_timesync(system_id, component_id, last_msg);
+    mavlink_test_camera_trigger(system_id, component_id, last_msg);
+    mavlink_test_hil_gps(system_id, component_id, last_msg);
+    mavlink_test_hil_optical_flow(system_id, component_id, last_msg);
+    mavlink_test_hil_state_quaternion(system_id, component_id, last_msg);
+    mavlink_test_scaled_imu2(system_id, component_id, last_msg);
+    mavlink_test_log_request_list(system_id, component_id, last_msg);
+    mavlink_test_log_entry(system_id, component_id, last_msg);
+    mavlink_test_log_request_data(system_id, component_id, last_msg);
+    mavlink_test_log_data(system_id, component_id, last_msg);
+    mavlink_test_log_erase(system_id, component_id, last_msg);
+    mavlink_test_log_request_end(system_id, component

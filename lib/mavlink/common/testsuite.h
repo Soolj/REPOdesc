@@ -9940,4 +9940,28 @@ static void mavlink_test_common(uint8_t system_id, uint8_t component_id, mavlink
     mavlink_test_scaled_pressure3(system_id, component_id, last_msg);
     mavlink_test_follow_target(system_id, component_id, last_msg);
     mavlink_test_control_system_state(system_id, component_id, last_msg);
+    mavlink_test_battery_status(system_id, component_id, last_msg);
+    mavlink_test_autopilot_version(system_id, component_id, last_msg);
+    mavlink_test_landing_target(system_id, component_id, last_msg);
+    mavlink_test_estimator_status(system_id, component_id, last_msg);
+    mavlink_test_wind_cov(system_id, component_id, last_msg);
+    mavlink_test_gps_input(system_id, component_id, last_msg);
+    mavlink_test_gps_rtcm_data(system_id, component_id, last_msg);
+    mavlink_test_high_latency(system_id, component_id, last_msg);
+    mavlink_test_high_latency2(system_id, component_id, last_msg);
+    mavlink_test_vibration(system_id, component_id, last_msg);
+    mavlink_test_home_position(system_id, component_id, last_msg);
+    mavlink_test_set_home_position(system_id, component_id, last_msg);
+    mavlink_test_message_interval(system_id, component_id, last_msg);
+    mavlink_test_extended_sys_state(system_id, component_id, last_msg);
+    mavlink_test_adsb_vehicle(system_id, component_id, last_msg);
+    mavlink_test_collision(system_id, component_id, last_msg);
+    mavlink_test_v2_extension(system_id, component_id, last_msg);
+    mavlink_test_memory_vect(system_id, component_id, last_msg);
+    mavlink_test_debug_vect(system_id, component_id, last_msg);
+    mavlink_test_named_value_float(system_id, component_id, last_msg);
+    mavlink_test_named_value_int(system_id, component_id, last_msg);
+    mavlink_test_statustext(system_id, component_id, last_msg);
+    mavlink_test_debug(system_id, component_id, last_msg);
+    mavlink_test_setup_signing(system_id, component_id, last_msg);
     m

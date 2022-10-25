@@ -9849,4 +9849,26 @@ static void mavlink_test_common(uint8_t system_id, uint8_t component_id, mavlink
     mavlink_test_local_position_ned(system_id, component_id, last_msg);
     mavlink_test_global_position_int(system_id, component_id, last_msg);
     mavlink_test_rc_channels_scaled(system_id, component_id, last_msg);
-    mavlink_test_rc_c
+    mavlink_test_rc_channels_raw(system_id, component_id, last_msg);
+    mavlink_test_servo_output_raw(system_id, component_id, last_msg);
+    mavlink_test_mission_request_partial_list(system_id, component_id, last_msg);
+    mavlink_test_mission_write_partial_list(system_id, component_id, last_msg);
+    mavlink_test_mission_item(system_id, component_id, last_msg);
+    mavlink_test_mission_request(system_id, component_id, last_msg);
+    mavlink_test_mission_set_current(system_id, component_id, last_msg);
+    mavlink_test_mission_current(system_id, component_id, last_msg);
+    mavlink_test_mission_request_list(system_id, component_id, last_msg);
+    mavlink_test_mission_count(system_id, component_id, last_msg);
+    mavlink_test_mission_clear_all(system_id, component_id, last_msg);
+    mavlink_test_mission_item_reached(system_id, component_id, last_msg);
+    mavlink_test_mission_ack(system_id, component_id, last_msg);
+    mavlink_test_set_gps_global_origin(system_id, component_id, last_msg);
+    mavlink_test_gps_global_origin(system_id, component_id, last_msg);
+    mavlink_test_param_map_rc(system_id, component_id, last_msg);
+    mavlink_test_mission_request_int(system_id, component_id, last_msg);
+    mavlink_test_safety_set_allowed_area(system_id, component_id, last_msg);
+    mavlink_test_safety_allowed_area(system_id, component_id, last_msg);
+    mavlink_test_attitude_quaternion_cov(system_id, component_id, last_msg);
+    mavlink_test_nav_controller_output(system_id, component_id, last_msg);
+    mavlink_test_global_position_int_cov(system_id, component_id, last_msg);
+    mavlink_test_loca

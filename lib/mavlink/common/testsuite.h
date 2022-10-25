@@ -9871,4 +9871,26 @@ static void mavlink_test_common(uint8_t system_id, uint8_t component_id, mavlink
     mavlink_test_attitude_quaternion_cov(system_id, component_id, last_msg);
     mavlink_test_nav_controller_output(system_id, component_id, last_msg);
     mavlink_test_global_position_int_cov(system_id, component_id, last_msg);
-    mavlink_test_loca
+    mavlink_test_local_position_ned_cov(system_id, component_id, last_msg);
+    mavlink_test_rc_channels(system_id, component_id, last_msg);
+    mavlink_test_request_data_stream(system_id, component_id, last_msg);
+    mavlink_test_data_stream(system_id, component_id, last_msg);
+    mavlink_test_manual_control(system_id, component_id, last_msg);
+    mavlink_test_rc_channels_override(system_id, component_id, last_msg);
+    mavlink_test_mission_item_int(system_id, component_id, last_msg);
+    mavlink_test_vfr_hud(system_id, component_id, last_msg);
+    mavlink_test_command_int(system_id, component_id, last_msg);
+    mavlink_test_command_long(system_id, component_id, last_msg);
+    mavlink_test_command_ack(system_id, component_id, last_msg);
+    mavlink_test_manual_setpoint(system_id, component_id, last_msg);
+    mavlink_test_set_attitude_target(system_id, component_id, last_msg);
+    mavlink_test_attitude_target(system_id, component_id, last_msg);
+    mavlink_test_set_position_target_local_ned(system_id, component_id, last_msg);
+    mavlink_test_position_target_local_ned(system_id, component_id, last_msg);
+    mavlink_test_set_position_target_global_int(system_id, component_id, last_msg);
+    mavlink_test_position_target_global_int(system_id, component_id, last_msg);
+    mavlink_test_local_position_ned_system_global_offset(system_id, component_id, last_msg);
+    mavlink_test_hil_state(system_id, component_id, last_msg);
+    mavlink_test_hil_controls(system_id, component_id, last_msg);
+    mavlink_test_hil_rc_inputs_raw(system_id, component_id, last_msg);
+    mavlin

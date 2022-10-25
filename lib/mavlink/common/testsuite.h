@@ -9964,4 +9964,25 @@ static void mavlink_test_common(uint8_t system_id, uint8_t component_id, mavlink
     mavlink_test_statustext(system_id, component_id, last_msg);
     mavlink_test_debug(system_id, component_id, last_msg);
     mavlink_test_setup_signing(system_id, component_id, last_msg);
-    m
+    mavlink_test_button_change(system_id, component_id, last_msg);
+    mavlink_test_play_tune(system_id, component_id, last_msg);
+    mavlink_test_camera_information(system_id, component_id, last_msg);
+    mavlink_test_camera_settings(system_id, component_id, last_msg);
+    mavlink_test_storage_information(system_id, component_id, last_msg);
+    mavlink_test_camera_capture_status(system_id, component_id, last_msg);
+    mavlink_test_camera_image_captured(system_id, component_id, last_msg);
+    mavlink_test_flight_information(system_id, component_id, last_msg);
+    mavlink_test_mount_orientation(system_id, component_id, last_msg);
+    mavlink_test_logging_data(system_id, component_id, last_msg);
+    mavlink_test_logging_data_acked(system_id, component_id, last_msg);
+    mavlink_test_logging_ack(system_id, component_id, last_msg);
+    mavlink_test_video_stream_information(system_id, component_id, last_msg);
+    mavlink_test_set_video_stream_settings(system_id, component_id, last_msg);
+    mavlink_test_wifi_config_ap(system_id, component_id, last_msg);
+    mavlink_test_protocol_version(system_id, component_id, last_msg);
+    mavlink_test_uavcan_node_status(system_id, component_id, last_msg);
+    mavlink_test_uavcan_node_info(system_id, component_id, last_msg);
+    mavlink_test_param_ext_request_read(system_id, component_id, last_msg);
+    mavlink_test_param_ext_request_list(system_id, component_id, last_msg);
+    mavlink_test_param_ext_value(system_id, component_id, last_msg);
+    mavlink_test_param_ext_set(system_id, component_id, las

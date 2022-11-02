@@ -123,4 +123,59 @@ MAVLINK_HELPER bool mavlink_signature_check(mavlink_signing_t *signing,
 
 	mavlink_sha256_init(&ctx);
 	mavlink_sha256_update(&ctx, signing->secret_key, sizeof(signing->secret_key));
-	mavlink_sha256_update(&ctx, p, MAVLINK_CORE_HEADER_
+	mavlink_sha256_update(&ctx, p, MAVLINK_CORE_HEADER_LEN+1+msg->len);
+	mavlink_sha256_update(&ctx, msg->ck, 2);
+	mavlink_sha256_update(&ctx, psig, 1+6);
+	mavlink_sha256_final_48(&ctx, signature);
+	if (memcmp(signature, incoming_signature, 6) != 0) {
+		return false;
+	}
+
+	// now check timestamp
+	bool timestamp_checks = !(signing->flags & MAVLINK_SIGNING_FLAG_NO_TIMESTAMPS);
+	union tstamp {
+	    uint64_t t64;
+	    uint8_t t8[8];
+	} tstamp;
+	uint8_t link_id = psig[0];
+	tstamp.t64 = 0;
+	memcpy(tstamp.t8, psig+1, 6);
+
+	if (signing_streams == NULL) {
+		return false;
+	}
+
+	// find stream
+	for (i=0; i<signing_streams->num_signing_streams; i++) {
+		if (msg->sysid == signing_streams->stream[i].sysid &&
+		    msg->compid == signing_streams->stream[i].compid &&
+		    link_id == signing_streams->stream[i].link_id) {
+			break;
+		}
+	}
+	if (i == signing_streams->num_signing_streams) {
+		if (signing_streams->num_signing_streams >= MAVLINK_MAX_SIGNING_STREAMS) {
+			// over max number of streams
+			return false;
+		}
+		// new stream. Only accept if timestamp is not more than 1 minute old
+		if (timestamp_checks && (tstamp.t64 + 6000*1000UL < signing->timestamp)) {
+			return false;
+		}
+		// add new stream
+		signing_streams->stream[i].sysid = msg->sysid;
+		signing_streams->stream[i].compid = msg->compid;
+		signing_streams->stream[i].link_id = link_id;
+		signing_streams->num_signing_streams++;
+	} else {
+		union tstamp last_tstamp;
+		last_tstamp.t64 = 0;
+		memcpy(last_tstamp.t8, signing_streams->stream[i].timestamp_bytes, 6);
+		if (timestamp_checks && tstamp.t64 <= last_tstamp.t64) {
+			// repeating old timestamp
+			return false;
+		}
+	}
+
+	// remember last timestamp
+	memcpy(signing_stream

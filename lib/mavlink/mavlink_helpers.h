@@ -178,4 +178,41 @@ MAVLINK_HELPER bool mavlink_signature_check(mavlink_signing_t *signing,
 	}
 
 	// remember last timestamp
-	memcpy(signing_stream
+	memcpy(signing_streams->stream[i].timestamp_bytes, psig+1, 6);
+
+	// our next timestamp must be at least this timestamp
+	if (tstamp.t64 > signing->timestamp) {
+		signing->timestamp = tstamp.t64;
+	}
+	return true;
+}
+
+
+/**
+ * @brief Finalize a MAVLink message with channel assignment
+ *
+ * This function calculates the checksum and sets length and aircraft id correctly.
+ * It assumes that the message id and the payload are already correctly set. This function
+ * can also be used if the message header has already been written before (as in mavlink_msg_xxx_pack
+ * instead of mavlink_msg_xxx_pack_headerless), it just introduces little extra overhead.
+ *
+ * @param msg Message to finalize
+ * @param system_id Id of the sending (this) system, 1-127
+ * @param length Message length
+ */
+MAVLINK_HELPER uint16_t mavlink_finalize_message_buffer(mavlink_message_t* msg, uint8_t system_id, uint8_t component_id,
+						      mavlink_status_t* status, uint8_t min_length, uint8_t length, uint8_t crc_extra)
+{
+	bool mavlink1 = (status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) != 0;
+	bool signing = 	(!mavlink1) && status->signing && (status->signing->flags & MAVLINK_SIGNING_FLAG_SIGN_OUTGOING);
+	uint8_t signature_len = signing? MAVLINK_SIGNATURE_BLOCK_LEN : 0;
+        uint8_t header_len = MAVLINK_CORE_HEADER_LEN+1;
+	uint8_t buf[MAVLINK_CORE_HEADER_LEN+1];
+	if (mavlink1) {
+		msg->magic = MAVLINK_STX_MAVLINK1;
+		header_len = MAVLINK_CORE_HEADER_MAVLINK1_LEN+1;
+	} else {
+		msg->magic = MAVLINK_STX;
+	}
+	msg->len = mavlink1?min_length:_mav_trim_payload(_MAV_PAYLOAD(msg), length);
+	msg->sysid = system

@@ -215,4 +215,54 @@ MAVLINK_HELPER uint16_t mavlink_finalize_message_buffer(mavlink_message_t* msg, 
 		msg->magic = MAVLINK_STX;
 	}
 	msg->len = mavlink1?min_length:_mav_trim_payload(_MAV_PAYLOAD(msg), length);
-	msg->sysid = system
+	msg->sysid = system_id;
+	msg->compid = component_id;
+	msg->incompat_flags = 0;
+	if (signing) {
+		msg->incompat_flags |= MAVLINK_IFLAG_SIGNED;
+	}
+	msg->compat_flags = 0;
+	msg->seq = status->current_tx_seq;
+	status->current_tx_seq = status->current_tx_seq + 1;
+
+	// form the header as a byte array for the crc
+	buf[0] = msg->magic;
+	buf[1] = msg->len;
+	if (mavlink1) {
+		buf[2] = msg->seq;
+		buf[3] = msg->sysid;
+		buf[4] = msg->compid;
+		buf[5] = msg->msgid & 0xFF;
+	} else {
+		buf[2] = msg->incompat_flags;
+		buf[3] = msg->compat_flags;
+		buf[4] = msg->seq;
+		buf[5] = msg->sysid;
+		buf[6] = msg->compid;
+		buf[7] = msg->msgid & 0xFF;
+		buf[8] = (msg->msgid >> 8) & 0xFF;
+		buf[9] = (msg->msgid >> 16) & 0xFF;
+	}
+
+	msg->checksum = crc_calculate(&buf[1], header_len-1);
+	crc_accumulate_buffer(&msg->checksum, _MAV_PAYLOAD(msg), msg->len);
+	crc_accumulate(crc_extra, &msg->checksum);
+	mavlink_ck_a(msg) = (uint8_t)(msg->checksum & 0xFF);
+	mavlink_ck_b(msg) = (uint8_t)(msg->checksum >> 8);
+
+	if (signing) {
+		mavlink_sign_packet(status->signing,
+				    msg->signature,
+				    (const uint8_t *)buf, header_len,
+				    (const uint8_t *)_MAV_PAYLOAD(msg), msg->len,
+				    (const uint8_t *)_MAV_PAYLOAD(msg)+(uint16_t)msg->len);
+	}
+
+	return msg->len + header_len + 2 + signature_len;
+}
+
+MAVLINK_HELPER uint16_t mavlink_finalize_message_chan(mavlink_message_t* msg, uint8_t system_id, uint8_t component_id,
+						      uint8_t chan, uint8_t min_length, uint8_t length, uint8_t crc_extra)
+{
+	mavlink_status_t *status = mavlink_get_channel_status(chan);
+	return mavlink_fi

@@ -305,4 +305,47 @@ MAVLINK_HELPER void _mav_finalize_message_chan_send(mavlink_channel_t chan, uint
         if (mavlink1) {
             length = min_length;
             if (msgid > 255) {
-       
+                // can't send 16 bit messages
+                _mav_parse_error(status);
+                return;
+            }
+            header_len = MAVLINK_CORE_HEADER_MAVLINK1_LEN;
+            buf[0] = MAVLINK_STX_MAVLINK1;
+            buf[1] = length;
+            buf[2] = status->current_tx_seq;
+            buf[3] = mavlink_system.sysid;
+            buf[4] = mavlink_system.compid;
+            buf[5] = msgid & 0xFF;
+        } else {
+	    uint8_t incompat_flags = 0;
+	    if (signing) {
+		incompat_flags |= MAVLINK_IFLAG_SIGNED;
+	    }
+            length = _mav_trim_payload(packet, length);
+            buf[0] = MAVLINK_STX;
+            buf[1] = length;
+            buf[2] = incompat_flags;
+            buf[3] = 0; // compat_flags
+            buf[4] = status->current_tx_seq;
+            buf[5] = mavlink_system.sysid;
+            buf[6] = mavlink_system.compid;
+            buf[7] = msgid & 0xFF;
+            buf[8] = (msgid >> 8) & 0xFF;
+            buf[9] = (msgid >> 16) & 0xFF;
+        }
+	status->current_tx_seq++;
+	checksum = crc_calculate((const uint8_t*)&buf[1], header_len);
+	crc_accumulate_buffer(&checksum, packet, length);
+	crc_accumulate(crc_extra, &checksum);
+	ck[0] = (uint8_t)(checksum & 0xFF);
+	ck[1] = (uint8_t)(checksum >> 8);
+
+	if (signing) {
+		// possibly add a signature
+		signature_len = mavlink_sign_packet(status->signing, signature, buf, header_len+1,
+						    (const uint8_t *)packet, length, ck);
+	}
+
+	MAVLINK_START_UART_SEND(chan, header_len + 3 + (uint16_t)length + (uint16_t)signature_len);
+	_mavlink_send_uart(chan, (const char *)buf, header_len+1);
+	_ma

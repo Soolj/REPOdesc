@@ -348,4 +348,44 @@ MAVLINK_HELPER void _mav_finalize_message_chan_send(mavlink_channel_t chan, uint
 
 	MAVLINK_START_UART_SEND(chan, header_len + 3 + (uint16_t)length + (uint16_t)signature_len);
 	_mavlink_send_uart(chan, (const char *)buf, header_len+1);
-	_ma
+	_mavlink_send_uart(chan, packet, length);
+	_mavlink_send_uart(chan, (const char *)ck, 2);
+	if (signature_len != 0) {
+		_mavlink_send_uart(chan, (const char *)signature, signature_len);
+	}
+	MAVLINK_END_UART_SEND(chan, header_len + 3 + (uint16_t)length + (uint16_t)signature_len);
+}
+
+/**
+ * @brief re-send a message over a uart channel
+ * this is more stack efficient than re-marshalling the message
+ * If the message is signed then the original signature is also sent
+ */
+MAVLINK_HELPER void _mavlink_resend_uart(mavlink_channel_t chan, const mavlink_message_t *msg)
+{
+	uint8_t ck[2];
+
+	ck[0] = (uint8_t)(msg->checksum & 0xFF);
+	ck[1] = (uint8_t)(msg->checksum >> 8);
+	// XXX use the right sequence here
+
+        uint8_t header_len;
+        uint8_t signature_len;
+
+        if (msg->magic == MAVLINK_STX_MAVLINK1) {
+            header_len = MAVLINK_CORE_HEADER_MAVLINK1_LEN + 1;
+            signature_len = 0;
+            MAVLINK_START_UART_SEND(chan, header_len + msg->len + 2 + signature_len);
+            // we can't send the structure directly as it has extra mavlink2 elements in it
+            uint8_t buf[MAVLINK_CORE_HEADER_MAVLINK1_LEN + 1];
+            buf[0] = msg->magic;
+            buf[1] = msg->len;
+            buf[2] = msg->seq;
+            buf[3] = msg->sysid;
+            buf[4] = msg->compid;
+            buf[5] = msg->msgid & 0xFF;
+            _mavlink_send_uart(chan, (const char*)buf, header_len);
+        } else {
+            header_len = MAVLINK_CORE_HEADER_LEN + 1;
+            signature_len = (msg->incompat_flags & MAVLINK_IFLAG_SIGNED)?MAVLINK_SIGNATURE_BLOCK_LEN:0;
+            MAVL

@@ -265,4 +265,44 @@ MAVLINK_HELPER uint16_t mavlink_finalize_message_chan(mavlink_message_t* msg, ui
 						      uint8_t chan, uint8_t min_length, uint8_t length, uint8_t crc_extra)
 {
 	mavlink_status_t *status = mavlink_get_channel_status(chan);
-	return mavlink_fi
+	return mavlink_finalize_message_buffer(msg, system_id, component_id, status, min_length, length, crc_extra);
+}
+
+/**
+ * @brief Finalize a MAVLink message with MAVLINK_COMM_0 as default channel
+ */
+MAVLINK_HELPER uint16_t mavlink_finalize_message(mavlink_message_t* msg, uint8_t system_id, uint8_t component_id,
+						 uint8_t min_length, uint8_t length, uint8_t crc_extra)
+{
+    return mavlink_finalize_message_chan(msg, system_id, component_id, MAVLINK_COMM_0, min_length, length, crc_extra);
+}
+
+static inline void _mav_parse_error(mavlink_status_t *status)
+{
+    status->parse_error++;
+}
+
+#ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
+MAVLINK_HELPER void _mavlink_send_uart(mavlink_channel_t chan, const char *buf, uint16_t len);
+
+/**
+ * @brief Finalize a MAVLink message with channel assignment and send
+ */
+MAVLINK_HELPER void _mav_finalize_message_chan_send(mavlink_channel_t chan, uint32_t msgid,
+                                                    const char *packet,
+						    uint8_t min_length, uint8_t length, uint8_t crc_extra)
+{
+	uint16_t checksum;
+	uint8_t buf[MAVLINK_NUM_HEADER_BYTES];
+	uint8_t ck[2];
+	mavlink_status_t *status = mavlink_get_channel_status(chan);
+        uint8_t header_len = MAVLINK_CORE_HEADER_LEN;
+	uint8_t signature_len = 0;
+	uint8_t signature[MAVLINK_SIGNATURE_BLOCK_LEN];
+	bool mavlink1 = (status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) != 0;
+	bool signing = 	(!mavlink1) && status->signing && (status->signing->flags & MAVLINK_SIGNING_FLAG_SIGN_OUTGOING);
+
+        if (mavlink1) {
+            length = min_length;
+            if (msgid > 255) {
+       

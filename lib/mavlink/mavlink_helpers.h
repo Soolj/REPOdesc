@@ -430,4 +430,60 @@ MAVLINK_HELPER uint16_t mavlink_msg_to_send_buffer(uint8_t *buf, const mavlink_m
 		buf[4] = msg->compid;
 		buf[5] = msg->msgid & 0xFF;
 		memcpy(&buf[6], _MAV_PAYLOAD(msg), msg->len);
-		ck = buf + header_len + 1 + (uint16_t)msg->l
+		ck = buf + header_len + 1 + (uint16_t)msg->len;
+	} else {
+		length = _mav_trim_payload(_MAV_PAYLOAD(msg), length);
+		header_len = MAVLINK_CORE_HEADER_LEN;
+		buf[0] = msg->magic;
+		buf[1] = length;
+		buf[2] = msg->incompat_flags;
+		buf[3] = msg->compat_flags;
+		buf[4] = msg->seq;
+		buf[5] = msg->sysid;
+		buf[6] = msg->compid;
+		buf[7] = msg->msgid & 0xFF;
+		buf[8] = (msg->msgid >> 8) & 0xFF;
+		buf[9] = (msg->msgid >> 16) & 0xFF;
+		memcpy(&buf[10], _MAV_PAYLOAD(msg), length);
+		ck = buf + header_len + 1 + (uint16_t)length;
+		signature_len = (msg->incompat_flags & MAVLINK_IFLAG_SIGNED)?MAVLINK_SIGNATURE_BLOCK_LEN:0;
+	}
+	ck[0] = (uint8_t)(msg->checksum & 0xFF);
+	ck[1] = (uint8_t)(msg->checksum >> 8);
+	if (signature_len > 0) {
+		memcpy(&ck[2], msg->signature, signature_len);
+	}
+
+	return header_len + 1 + 2 + (uint16_t)length + (uint16_t)signature_len;
+}
+
+union __mavlink_bitfield {
+	uint8_t uint8;
+	int8_t int8;
+	uint16_t uint16;
+	int16_t int16;
+	uint32_t uint32;
+	int32_t int32;
+};
+
+
+MAVLINK_HELPER void mavlink_start_checksum(mavlink_message_t* msg)
+{
+	crc_init(&msg->checksum);
+}
+
+MAVLINK_HELPER void mavlink_update_checksum(mavlink_message_t* msg, uint8_t c)
+{
+	crc_accumulate(c, &msg->checksum);
+}
+
+/*
+  return the crc_entry value for a msgid
+*/
+#ifndef MAVLINK_GET_MSG_ENTRY
+MAVLINK_HELPER const mavlink_msg_entry_t *mavlink_get_msg_entry(uint32_t msgid)
+{
+	static const mavlink_msg_entry_t mavlink_message_crcs[] = MAVLINK_MESSAGE_CRCS;
+        /*
+	  use a bisection search to find the right entry. A perfect hash may be better
+	  Note that this as

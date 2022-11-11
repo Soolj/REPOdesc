@@ -486,4 +486,54 @@ MAVLINK_HELPER const mavlink_msg_entry_t *mavlink_get_msg_entry(uint32_t msgid)
 	static const mavlink_msg_entry_t mavlink_message_crcs[] = MAVLINK_MESSAGE_CRCS;
         /*
 	  use a bisection search to find the right entry. A perfect hash may be better
-	  Note that this as
+	  Note that this assumes the table is sorted by msgid
+	*/
+        uint32_t low=0, high=sizeof(mavlink_message_crcs)/sizeof(mavlink_message_crcs[0]);
+        while (low < high) {
+            uint32_t mid = (low+1+high)/2;
+            if (msgid < mavlink_message_crcs[mid].msgid) {
+                high = mid-1;
+                continue;
+            }
+            if (msgid > mavlink_message_crcs[mid].msgid) {
+                low = mid;
+                continue;
+            }
+            low = mid;
+            break;
+        }
+        if (mavlink_message_crcs[low].msgid != msgid) {
+            // msgid is not in the table
+            return NULL;
+        }
+        return &mavlink_message_crcs[low];
+}
+#endif // MAVLINK_GET_MSG_ENTRY
+
+/*
+  return the crc_extra value for a message
+*/
+MAVLINK_HELPER uint8_t mavlink_get_crc_extra(const mavlink_message_t *msg)
+{
+	const mavlink_msg_entry_t *e = mavlink_get_msg_entry(msg->msgid);
+	return e?e->crc_extra:0;
+}
+
+/*
+  return the expected message length
+*/
+#define MAVLINK_HAVE_EXPECTED_MESSAGE_LENGTH
+MAVLINK_HELPER uint8_t mavlink_expected_message_length(const mavlink_message_t *msg)
+{
+	const mavlink_msg_entry_t *e = mavlink_get_msg_entry(msg->msgid);
+	return e?e->msg_len:0;
+}
+
+/**
+ * This is a varient of mavlink_frame_char() but with caller supplied
+ * parsing buffers. It is useful when you want to create a MAVLink
+ * parser in a library that doesn't use any global variables
+ *
+ * @param rxmsg    parsing message buffer
+ * @param status   parsing starus buffer
+ * @param c        The cha

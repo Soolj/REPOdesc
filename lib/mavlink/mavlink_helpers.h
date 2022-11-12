@@ -578,4 +578,58 @@ MAVLINK_HELPER uint8_t mavlink_frame_char_buffer(mavlink_message_t* rxmsg,
 #ifdef MAVLINK_CHECK_MESSAGE_LENGTH
 #ifndef MAVLINK_MESSAGE_LENGTH
 	static const uint8_t mavlink_message_lengths[256] = MAVLINK_MESSAGE_LENGTHS;
-#define MAVLINK_MESSAGE_LENGTH(msgid) mavlink_message_len
+#define MAVLINK_MESSAGE_LENGTH(msgid) mavlink_message_lengths[msgid]
+#endif
+#endif
+
+	int bufferIndex = 0;
+
+	status->msg_received = MAVLINK_FRAMING_INCOMPLETE;
+
+	switch (status->parse_state)
+	{
+	case MAVLINK_PARSE_STATE_UNINIT:
+	case MAVLINK_PARSE_STATE_IDLE:
+		if (c == MAVLINK_STX)
+		{
+			status->parse_state = MAVLINK_PARSE_STATE_GOT_STX;
+			rxmsg->len = 0;
+			rxmsg->magic = c;
+                        status->flags &= ~MAVLINK_STATUS_FLAG_IN_MAVLINK1;
+			mavlink_start_checksum(rxmsg);
+		} else if (c == MAVLINK_STX_MAVLINK1)
+		{
+			status->parse_state = MAVLINK_PARSE_STATE_GOT_STX;
+			rxmsg->len = 0;
+			rxmsg->magic = c;
+                        status->flags |= MAVLINK_STATUS_FLAG_IN_MAVLINK1;
+			mavlink_start_checksum(rxmsg);
+		}
+		break;
+
+	case MAVLINK_PARSE_STATE_GOT_STX:
+			if (status->msg_received
+/* Support shorter buffers than the
+   default maximum packet size */
+#if (MAVLINK_MAX_PAYLOAD_LEN < 255)
+				|| c > MAVLINK_MAX_PAYLOAD_LEN
+#endif
+				)
+		{
+			status->buffer_overrun++;
+			_mav_parse_error(status);
+			status->msg_received = 0;
+			status->parse_state = MAVLINK_PARSE_STATE_IDLE;
+		}
+		else
+		{
+			// NOT counting STX, LENGTH, SEQ, SYSID, COMPID, MSGID, CRC1 and CRC2
+			rxmsg->len = c;
+			status->packet_idx = 0;
+			mavlink_update_checksum(rxmsg, c);
+                        if (status->flags & MAVLINK_STATUS_FLAG_IN_MAVLINK1) {
+                            rxmsg->incompat_flags = 0;
+                            rxmsg->compat_flags = 0;
+                            status->parse_state = MAVLINK_PARSE_STATE_GOT_COMPAT_FLAGS;
+                        } else {
+                            status->parse_state = MAVLINK_PARSE_STATE_GOT_LENGTH;

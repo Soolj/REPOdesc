@@ -536,4 +536,46 @@ MAVLINK_HELPER uint8_t mavlink_expected_message_length(const mavlink_message_t *
  *
  * @param rxmsg    parsing message buffer
  * @param status   parsing starus buffer
- * @param c        The cha
+ * @param c        The char to parse
+ *
+ * @param returnMsg NULL if no message could be decoded, the message data else
+ * @param returnStats if a message was decoded, this is filled with the channel's stats
+ * @return 0 if no message could be decoded, 1 on good message and CRC, 2 on bad CRC
+ *
+ * A typical use scenario of this function call is:
+ *
+ * @code
+ * #include <mavlink.h>
+ *
+ * mavlink_message_t msg;
+ * int chan = 0;
+ *
+ *
+ * while(serial.bytesAvailable > 0)
+ * {
+ *   uint8_t byte = serial.getNextByte();
+ *   if (mavlink_frame_char(chan, byte, &msg) != MAVLINK_FRAMING_INCOMPLETE)
+ *     {
+ *     printf("Received message with ID %d, sequence: %d from component %d of system %d", msg.msgid, msg.seq, msg.compid, msg.sysid);
+ *     }
+ * }
+ *
+ *
+ * @endcode
+ */
+MAVLINK_HELPER uint8_t mavlink_frame_char_buffer(mavlink_message_t* rxmsg,
+                                                 mavlink_status_t* status,
+                                                 uint8_t c,
+                                                 mavlink_message_t* r_message,
+                                                 mavlink_status_t* r_mavlink_status)
+{
+	/* Enable this option to check the length of each message.
+	   This allows invalid messages to be caught much sooner. Use if the transmission
+	   medium is prone to missing (or extra) characters (e.g. a radio that fades in
+	   and out). Only use if the channel will only contain messages types listed in
+	   the headers.
+	*/
+#ifdef MAVLINK_CHECK_MESSAGE_LENGTH
+#ifndef MAVLINK_MESSAGE_LENGTH
+	static const uint8_t mavlink_message_lengths[256] = MAVLINK_MESSAGE_LENGTHS;
+#define MAVLINK_MESSAGE_LENGTH(msgid) mavlink_message_len

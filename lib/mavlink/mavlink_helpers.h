@@ -633,3 +633,54 @@ MAVLINK_HELPER uint8_t mavlink_frame_char_buffer(mavlink_message_t* rxmsg,
                             status->parse_state = MAVLINK_PARSE_STATE_GOT_COMPAT_FLAGS;
                         } else {
                             status->parse_state = MAVLINK_PARSE_STATE_GOT_LENGTH;
+                        }
+		}
+		break;
+
+	case MAVLINK_PARSE_STATE_GOT_LENGTH:
+		rxmsg->incompat_flags = c;
+		if ((rxmsg->incompat_flags & ~MAVLINK_IFLAG_MASK) != 0) {
+			// message includes an incompatible feature flag
+			_mav_parse_error(status);
+			status->msg_received = 0;
+			status->parse_state = MAVLINK_PARSE_STATE_IDLE;
+			break;
+		}
+		mavlink_update_checksum(rxmsg, c);
+		status->parse_state = MAVLINK_PARSE_STATE_GOT_INCOMPAT_FLAGS;
+		break;
+
+	case MAVLINK_PARSE_STATE_GOT_INCOMPAT_FLAGS:
+		rxmsg->compat_flags = c;
+		mavlink_update_checksum(rxmsg, c);
+		status->parse_state = MAVLINK_PARSE_STATE_GOT_COMPAT_FLAGS;
+		break;
+
+	case MAVLINK_PARSE_STATE_GOT_COMPAT_FLAGS:
+		rxmsg->seq = c;
+		mavlink_update_checksum(rxmsg, c);
+		status->parse_state = MAVLINK_PARSE_STATE_GOT_SEQ;
+		break;
+
+	case MAVLINK_PARSE_STATE_GOT_SEQ:
+		rxmsg->sysid = c;
+		mavlink_update_checksum(rxmsg, c);
+		status->parse_state = MAVLINK_PARSE_STATE_GOT_SYSID;
+		break;
+
+	case MAVLINK_PARSE_STATE_GOT_SYSID:
+		rxmsg->compid = c;
+		mavlink_update_checksum(rxmsg, c);
+                status->parse_state = MAVLINK_PARSE_STATE_GOT_COMPID;
+		break;
+
+	case MAVLINK_PARSE_STATE_GOT_COMPID:
+		rxmsg->msgid = c;
+		mavlink_update_checksum(rxmsg, c);
+                if (status->flags & MAVLINK_STATUS_FLAG_IN_MAVLINK1) {
+                    if(rxmsg->len > 0){
+                        status->parse_state = MAVLINK_PARSE_STATE_GOT_MSGID3;
+                    } else {
+                        status->parse_state = MAVLINK_PARSE_STATE_GOT_PAYLOAD;
+                    }
+#ifdef MAVLINK_CHECK_MESSA

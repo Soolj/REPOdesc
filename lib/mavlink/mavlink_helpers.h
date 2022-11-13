@@ -683,4 +683,56 @@ MAVLINK_HELPER uint8_t mavlink_frame_char_buffer(mavlink_message_t* rxmsg,
                     } else {
                         status->parse_state = MAVLINK_PARSE_STATE_GOT_PAYLOAD;
                     }
-#ifdef MAVLINK_CHECK_MESSA
+#ifdef MAVLINK_CHECK_MESSAGE_LENGTH
+                    if (rxmsg->len != MAVLINK_MESSAGE_LENGTH(rxmsg->msgid))
+                    {
+			_mav_parse_error(status);
+			status->parse_state = MAVLINK_PARSE_STATE_IDLE;
+			break;
+                    }
+#endif
+                } else {
+                    status->parse_state = MAVLINK_PARSE_STATE_GOT_MSGID1;
+                }
+		break;
+
+	case MAVLINK_PARSE_STATE_GOT_MSGID1:
+		rxmsg->msgid |= c<<8;
+		mavlink_update_checksum(rxmsg, c);
+		status->parse_state = MAVLINK_PARSE_STATE_GOT_MSGID2;
+		break;
+
+	case MAVLINK_PARSE_STATE_GOT_MSGID2:
+		rxmsg->msgid |= ((uint32_t)c)<<16;
+		mavlink_update_checksum(rxmsg, c);
+		if(rxmsg->len > 0){
+			status->parse_state = MAVLINK_PARSE_STATE_GOT_MSGID3;
+		} else {
+			status->parse_state = MAVLINK_PARSE_STATE_GOT_PAYLOAD;
+		}
+#ifdef MAVLINK_CHECK_MESSAGE_LENGTH
+	        if (rxmsg->len != MAVLINK_MESSAGE_LENGTH(rxmsg->msgid))
+		{
+			_mav_parse_error(status);
+			status->parse_state = MAVLINK_PARSE_STATE_IDLE;
+			break;
+                }
+#endif
+		break;
+
+	case MAVLINK_PARSE_STATE_GOT_MSGID3:
+		_MAV_PAYLOAD_NON_CONST(rxmsg)[status->packet_idx++] = (char)c;
+		mavlink_update_checksum(rxmsg, c);
+		if (status->packet_idx == rxmsg->len)
+		{
+			status->parse_state = MAVLINK_PARSE_STATE_GOT_PAYLOAD;
+		}
+		break;
+
+	case MAVLINK_PARSE_STATE_GOT_PAYLOAD: {
+		const mavlink_msg_entry_t *e = mavlink_get_msg_entry(rxmsg->msgid);
+		uint8_t crc_extra = e?e->crc_extra:0;
+		mavlink_update_checksum(rxmsg, crc_extra);
+		if (c != (rxmsg->checksum & 0xFF)) {
+			status->parse_state = MAVLINK_PARSE_STATE_GOT_BAD_CRC1;
+		}

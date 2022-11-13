@@ -735,4 +735,47 @@ MAVLINK_HELPER uint8_t mavlink_frame_char_buffer(mavlink_message_t* rxmsg,
 		mavlink_update_checksum(rxmsg, crc_extra);
 		if (c != (rxmsg->checksum & 0xFF)) {
 			status->parse_state = MAVLINK_PARSE_STATE_GOT_BAD_CRC1;
+		} else {
+			status->parse_state = MAVLINK_PARSE_STATE_GOT_CRC1;
 		}
+                rxmsg->ck[0] = c;
+
+		// zero-fill the packet to cope with short incoming packets
+		if (e && status->packet_idx < e->msg_len) {
+			memset(&_MAV_PAYLOAD_NON_CONST(rxmsg)[status->packet_idx], 0, e->msg_len - status->packet_idx);
+		}
+		break;
+        }
+
+	case MAVLINK_PARSE_STATE_GOT_CRC1:
+	case MAVLINK_PARSE_STATE_GOT_BAD_CRC1:
+		if (status->parse_state == MAVLINK_PARSE_STATE_GOT_BAD_CRC1 || c != (rxmsg->checksum >> 8)) {
+			// got a bad CRC message
+			status->msg_received = MAVLINK_FRAMING_BAD_CRC;
+		} else {
+			// Successfully got message
+			status->msg_received = MAVLINK_FRAMING_OK;
+		}
+		rxmsg->ck[1] = c;
+
+		if (rxmsg->incompat_flags & MAVLINK_IFLAG_SIGNED) {
+			status->parse_state = MAVLINK_PARSE_STATE_SIGNATURE_WAIT;
+			status->signature_wait = MAVLINK_SIGNATURE_BLOCK_LEN;
+
+			// If the CRC is already wrong, don't overwrite msg_received,
+			// otherwise we can end up with garbage flagged as valid.
+			if (status->msg_received != MAVLINK_FRAMING_BAD_CRC) {
+				status->msg_received = MAVLINK_FRAMING_INCOMPLETE;
+			}
+		} else {
+			if (status->signing &&
+			   	(status->signing->accept_unsigned_callback == NULL ||
+			   	 !status->signing->accept_unsigned_callback(status, rxmsg->msgid))) {
+
+				// If the CRC is already wrong, don't overwrite msg_received.
+				if (status->msg_received != MAVLINK_FRAMING_BAD_CRC) {
+					status->msg_received = MAVLINK_FRAMING_BAD_SIGNATURE;
+				}
+			}
+			status->parse_state = MAVLINK_PARSE_STATE_IDLE;
+			memcpy(r_message, rxmsg, sizeof(mavlink_message

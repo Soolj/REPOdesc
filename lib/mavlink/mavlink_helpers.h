@@ -824,4 +824,38 @@ MAVLINK_HELPER uint8_t mavlink_frame_char_buffer(mavlink_message_t* rxmsg,
 
 	r_message->len = rxmsg->len; // Provide visibility on how far we are into current msg
 	r_mavlink_status->parse_state = status->parse_state;
-	r_mavlink_status-
+	r_mavlink_status->packet_idx = status->packet_idx;
+	r_mavlink_status->current_rx_seq = status->current_rx_seq+1;
+	r_mavlink_status->packet_rx_success_count = status->packet_rx_success_count;
+	r_mavlink_status->packet_rx_drop_count = status->parse_error;
+	r_mavlink_status->flags = status->flags;
+	status->parse_error = 0;
+
+	if (status->msg_received == MAVLINK_FRAMING_BAD_CRC) {
+		/*
+		  the CRC came out wrong. We now need to overwrite the
+		  msg CRC with the one on the wire so that if the
+		  caller decides to forward the message anyway that
+		  mavlink_msg_to_send_buffer() won't overwrite the
+		  checksum
+		 */
+		r_message->checksum = rxmsg->ck[0] | (rxmsg->ck[1]<<8);
+	}
+
+	return status->msg_received;
+}
+
+/**
+ * This is a convenience function which handles the complete MAVLink parsing.
+ * the function will parse one byte at a time and return the complete packet once
+ * it could be successfully decoded. This function will return 0, 1 or
+ * 2 (MAVLINK_FRAMING_INCOMPLETE, MAVLINK_FRAMING_OK or MAVLINK_FRAMING_BAD_CRC)
+ *
+ * Messages are parsed into an internal buffer (one for each channel). When a complete
+ * message is received it is copies into *returnMsg and the channel's status is
+ * copied into *returnStats.
+ *
+ * @param chan     ID of the current channel. This allows to parse different channels with this function.
+ *                 a channel is not a physical message channel like a serial port, but a logic partition of
+ *                 the communication streams in this case. COMM_NB is the limit for the number of channels
+ *                 on MCU (e.g. ARM7), while COMM_NB_HIGH is the lim

@@ -778,4 +778,50 @@ MAVLINK_HELPER uint8_t mavlink_frame_char_buffer(mavlink_message_t* rxmsg,
 				}
 			}
 			status->parse_state = MAVLINK_PARSE_STATE_IDLE;
-			memcpy(r_message, rxmsg, sizeof(mavlink_message
+			memcpy(r_message, rxmsg, sizeof(mavlink_message_t));
+		}
+		break;
+	case MAVLINK_PARSE_STATE_SIGNATURE_WAIT:
+		rxmsg->signature[MAVLINK_SIGNATURE_BLOCK_LEN-status->signature_wait] = c;
+		status->signature_wait--;
+		if (status->signature_wait == 0) {
+			// we have the whole signature, check it is OK
+			MAVLINK_START_SIGN_STREAM(status->signing->link_id);
+			bool sig_ok = mavlink_signature_check(status->signing, status->signing_streams, rxmsg);
+			MAVLINK_END_SIGN_STREAM(status->signing->link_id);
+			if (!sig_ok &&
+			   	(status->signing->accept_unsigned_callback &&
+			   	 status->signing->accept_unsigned_callback(status, rxmsg->msgid))) {
+				// accepted via application level override
+				sig_ok = true;
+			}
+			if (sig_ok) {
+				status->msg_received = MAVLINK_FRAMING_OK;
+			} else {
+				status->msg_received = MAVLINK_FRAMING_BAD_SIGNATURE;
+			}
+			status->parse_state = MAVLINK_PARSE_STATE_IDLE;
+			memcpy(r_message, rxmsg, sizeof(mavlink_message_t));
+		}
+		break;
+	}
+
+	bufferIndex++;
+	// If a message has been sucessfully decoded, check index
+	if (status->msg_received == MAVLINK_FRAMING_OK)
+	{
+		//while(status->current_seq != rxmsg->seq)
+		//{
+		//	status->packet_rx_drop_count++;
+		//               status->current_seq++;
+		//}
+		status->current_rx_seq = rxmsg->seq;
+		// Initial condition: If no packet has been received so far, drop count is undefined
+		if (status->packet_rx_success_count == 0) status->packet_rx_drop_count = 0;
+		// Count this packet as received
+		status->packet_rx_success_count++;
+	}
+
+	r_message->len = rxmsg->len; // Provide visibility on how far we are into current msg
+	r_mavlink_status->parse_state = status->parse_state;
+	r_mavlink_status-

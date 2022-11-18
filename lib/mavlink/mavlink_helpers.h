@@ -858,4 +858,59 @@ MAVLINK_HELPER uint8_t mavlink_frame_char_buffer(mavlink_message_t* rxmsg,
  * @param chan     ID of the current channel. This allows to parse different channels with this function.
  *                 a channel is not a physical message channel like a serial port, but a logic partition of
  *                 the communication streams in this case. COMM_NB is the limit for the number of channels
- *                 on MCU (e.g. ARM7), while COMM_NB_HIGH is the lim
+ *                 on MCU (e.g. ARM7), while COMM_NB_HIGH is the limit for the number of channels in Linux/Windows
+ * @param c        The char to parse
+ *
+ * @param returnMsg NULL if no message could be decoded, the message data else
+ * @param returnStats if a message was decoded, this is filled with the channel's stats
+ * @return 0 if no message could be decoded, 1 on good message and CRC, 2 on bad CRC
+ *
+ * A typical use scenario of this function call is:
+ *
+ * @code
+ * #include <mavlink.h>
+ *
+ * mavlink_message_t msg;
+ * int chan = 0;
+ *
+ *
+ * while(serial.bytesAvailable > 0)
+ * {
+ *   uint8_t byte = serial.getNextByte();
+ *   if (mavlink_frame_char(chan, byte, &msg) != MAVLINK_FRAMING_INCOMPLETE)
+ *     {
+ *     printf("Received message with ID %d, sequence: %d from component %d of system %d", msg.msgid, msg.seq, msg.compid, msg.sysid);
+ *     }
+ * }
+ *
+ *
+ * @endcode
+ */
+MAVLINK_HELPER uint8_t mavlink_frame_char(uint8_t chan, uint8_t c, mavlink_message_t* r_message, mavlink_status_t* r_mavlink_status)
+{
+	return mavlink_frame_char_buffer(mavlink_get_channel_buffer(chan),
+					 mavlink_get_channel_status(chan),
+					 c,
+					 r_message,
+					 r_mavlink_status);
+}
+
+/**
+ * Set the protocol version
+ */
+MAVLINK_HELPER void mavlink_set_proto_version(uint8_t chan, unsigned int version)
+{
+	mavlink_status_t *status = mavlink_get_channel_status(chan);
+	if (version > 1) {
+		status->flags &= ~(MAVLINK_STATUS_FLAG_OUT_MAVLINK1);
+	} else {
+		status->flags |= MAVLINK_STATUS_FLAG_OUT_MAVLINK1;
+	}
+}
+
+/**
+ * Get the protocol version
+ *
+ * @return 1 for v1, 2 for v2
+ */
+MAVLINK_HEL

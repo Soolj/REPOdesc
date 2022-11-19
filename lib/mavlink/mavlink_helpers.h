@@ -913,4 +913,42 @@ MAVLINK_HELPER void mavlink_set_proto_version(uint8_t chan, unsigned int version
  *
  * @return 1 for v1, 2 for v2
  */
-MAVLINK_HEL
+MAVLINK_HELPER unsigned int mavlink_get_proto_version(uint8_t chan)
+{
+	mavlink_status_t *status = mavlink_get_channel_status(chan);
+	if ((status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) > 0) {
+		return 1;
+	} else {
+		return 2;
+	}
+}
+
+/**
+ * This is a convenience function which handles the complete MAVLink parsing.
+ * the function will parse one byte at a time and return the complete packet once
+ * it could be successfully decoded. This function will return 0 or 1.
+ *
+ * Messages are parsed into an internal buffer (one for each channel). When a complete
+ * message is received it is copies into *returnMsg and the channel's status is
+ * copied into *returnStats.
+ *
+ * @param chan     ID of the current channel. This allows to parse different channels with this function.
+ *                 a channel is not a physical message channel like a serial port, but a logic partition of
+ *                 the communication streams in this case. COMM_NB is the limit for the number of channels
+ *                 on MCU (e.g. ARM7), while COMM_NB_HIGH is the limit for the number of channels in Linux/Windows
+ * @param c        The char to parse
+ *
+ * @param returnMsg NULL if no message could be decoded, the message data else
+ * @param returnStats if a message was decoded, this is filled with the channel's stats
+ * @return 0 if no message could be decoded or bad CRC, 1 on good message and CRC
+ *
+ * A typical use scenario of this function call is:
+ *
+ * @code
+ * #include <mavlink.h>
+ *
+ * mavlink_message_t msg;
+ * int chan = 0;
+ *
+ *
+ * while(serial.bytesAvailable

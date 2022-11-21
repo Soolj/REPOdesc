@@ -951,4 +951,46 @@ MAVLINK_HELPER unsigned int mavlink_get_proto_version(uint8_t chan)
  * int chan = 0;
  *
  *
- * while(serial.bytesAvailable
+ * while(serial.bytesAvailable > 0)
+ * {
+ *   uint8_t byte = serial.getNextByte();
+ *   if (mavlink_parse_char(chan, byte, &msg))
+ *     {
+ *     printf("Received message with ID %d, sequence: %d from component %d of system %d", msg.msgid, msg.seq, msg.compid, msg.sysid);
+ *     }
+ * }
+ *
+ *
+ * @endcode
+ */
+MAVLINK_HELPER uint8_t mavlink_parse_char(uint8_t chan, uint8_t c, mavlink_message_t* r_message, mavlink_status_t* r_mavlink_status)
+{
+    uint8_t msg_received = mavlink_frame_char(chan, c, r_message, r_mavlink_status);
+    if (msg_received == MAVLINK_FRAMING_BAD_CRC ||
+	msg_received == MAVLINK_FRAMING_BAD_SIGNATURE) {
+	    // we got a bad CRC. Treat as a parse failure
+	    mavlink_message_t* rxmsg = mavlink_get_channel_buffer(chan);
+	    mavlink_status_t* status = mavlink_get_channel_status(chan);
+	    _mav_parse_error(status);
+	    status->msg_received = MAVLINK_FRAMING_INCOMPLETE;
+	    status->parse_state = MAVLINK_PARSE_STATE_IDLE;
+	    if (c == MAVLINK_STX)
+	    {
+		    status->parse_state = MAVLINK_PARSE_STATE_GOT_STX;
+		    rxmsg->len = 0;
+		    mavlink_start_checksum(rxmsg);
+	    }
+	    return 0;
+    }
+    return msg_received;
+}
+
+/**
+ * @brief Put a bitfield of length 1-32 bit into the buffer
+ *
+ * @param b the value to add, will be encoded in the bitfield
+ * @param bits number of bits to use to encode b, e.g. 1 for boolean, 2, 3, etc.
+ * @param packet_index the position in the packet (the index of the first byte to use)
+ * @param bit_index the position in the byte (the index of the first bit to use)
+ * @param buffer packet buffer to write into
+ * @return new posit

@@ -1054,4 +1054,68 @@ MAVLINK_HELPER uint8_t put_bitfield_n_by_index(int32_t b, uint8_t bits, uint8_t 
 		if (bits_remain <= (uint8_t)(8 - i_bit_index))
 		{
 			// Enough space
-			curr_
+			curr_bits_n = (uint8_t)bits_remain;
+		}
+		else
+		{
+			curr_bits_n = (8 - i_bit_index);
+		}
+
+		// Pack these n bits into the current byte
+		// Mask out whatever was at that position with ones (xxx11111)
+		buffer[i_byte_index] &= (0xFF >> (8 - curr_bits_n));
+		// Put content to this position, by masking out the non-used part
+		buffer[i_byte_index] |= ((0x00 << curr_bits_n) & v);
+
+		// Increment the bit index
+		i_bit_index += curr_bits_n;
+
+		// Now proceed to the next byte, if necessary
+		bits_remain -= curr_bits_n;
+		if (bits_remain > 0)
+		{
+			// Offer another 8 bits / one byte
+			i_byte_index++;
+			i_bit_index = 0;
+		}
+	}
+
+	*r_bit_index = i_bit_index;
+	// If a partly filled byte is present, mark this as consumed
+	if (i_bit_index != 7) i_byte_index++;
+	return i_byte_index - packet_index;
+}
+
+#ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
+
+// To make MAVLink work on your MCU, define comm_send_ch() if you wish
+// to send 1 byte at a time, or MAVLINK_SEND_UART_BYTES() to send a
+// whole packet at a time
+
+/*
+
+#include "mavlink_types.h"
+
+void comm_send_ch(mavlink_channel_t chan, uint8_t ch)
+{
+    if (chan == MAVLINK_COMM_0)
+    {
+        uart0_transmit(ch);
+    }
+    if (chan == MAVLINK_COMM_1)
+    {
+    	uart1_transmit(ch);
+    }
+}
+ */
+
+MAVLINK_HELPER void _mavlink_send_uart(mavlink_channel_t chan, const char *buf, uint16_t len)
+{
+#ifdef MAVLINK_SEND_UART_BYTES
+	/* this is the more efficient approach, if the platform
+	   defines it */
+	MAVLINK_SEND_UART_BYTES(chan, (const uint8_t *)buf, len);
+#else
+	/* fallback to one byte at a time */
+	uint16_t i;
+	for (i = 0; i < len; i+

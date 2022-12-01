@@ -62,4 +62,46 @@ void BaseController::OnSensor_Range(float z)
   range = z;
 }
 
-// Allows the simulator to provid
+// Allows the simulator to provide perfect state data to the controller
+void BaseController::OverrideEstimates(V3F pos, V3F vel, Quaternion<float> attitude, V3F omega)
+{
+  estAtt = attitude;
+  estOmega = omega;
+  estPos = pos;
+  estVel = vel;
+}
+
+TrajectoryPoint BaseController::GetNextTrajectoryPoint(float mission_time)
+{
+  TrajectoryPoint pt = trajectory.NextTrajectoryPoint(mission_time + _trajectoryTimeOffset);
+  pt.position += _trajectoryOffset;
+  return pt;  
+}
+
+// Access functions for graphing variables
+bool BaseController::GetData(const string& name, float& ret) const
+{
+  if (name.find_first_of(".") == string::npos) return false;
+  string leftPart = LeftOf(name, '.');
+  string rightPart = RightOf(name, '.');
+
+  if (ToUpper(leftPart) == ToUpper(_config))
+  {
+#define GETTER_HELPER(A,B) if (SLR::ToUpper(rightPart) == SLR::ToUpper(A)){ ret=(B); return true; }
+    // UDACITY CONVENTION
+    GETTER_HELPER("Ref.X", curTrajPoint.position.x);
+    GETTER_HELPER("Ref.Y", curTrajPoint.position.y);
+    GETTER_HELPER("Ref.Z", curTrajPoint.position.z);
+#undef GETTER_HELPER
+  }
+  return false;
+}
+
+vector<string> BaseController::GetFields() const
+{
+  vector<string> ret;
+  ret.push_back(_config + ".Ref.X");
+  ret.push_back(_config + ".Ref.Y");
+  ret.push_back(_config + ".Ref.Z");
+  return ret;
+}

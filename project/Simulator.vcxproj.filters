@@ -101,4 +101,52 @@
     <ClInclude Include="..\src\Math\Angles.h">
       <Filter>Math</Filter>
     </ClInclude>
-    <ClInclude Include="..
+    <ClInclude Include="..\src\Utility\Camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Math\Random.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Common.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Types.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Math\V4D.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Math\V3D.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\OnboardControls.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Drawing\ColorUtils.h">
+      <Filter>Drawing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Drawing\DrawingFuncs.h">
+      <Filter>Drawing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Math\Geometry.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Utility\SimpleConfig.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Utility\Mutex.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Drawing\Graph.h">
+      <Filter>Drawing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Utility\StringUtils.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Utility\FixedQueue.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\DataSource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Simulation\Quad

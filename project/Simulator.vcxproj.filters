@@ -193,4 +193,7 @@
       <Filter>MavlinkNode</Filter>
     </ClInclude>
     <ClInclude Include="..\src\MavlinkNode\MavlinkTranslation.h">
-   
+      <Filter>MavlinkNode</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

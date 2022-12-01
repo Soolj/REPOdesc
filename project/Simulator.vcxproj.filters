@@ -56,4 +56,49 @@
     <ClCompile Include="..\src\Simulation\QuadDynamics.cpp">
       <Filter>Simulation</Filter>
     </ClCompile>
-    <ClComp
+    <ClCompile Include="..\src\Drawing\Visualizer_GLUT.cpp">
+      <Filter>Drawing</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Drawing\GLUTMenu.cpp">
+      <Filter>Drawing</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Trajectory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Simulation\Simulator.cpp">
+      <Filter>Simulation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\BaseController.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Drawing\GraphManager.cpp">
+      <Filter>Drawing</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Simulation\BaseDynamics.cpp">
+      <Filter>Simulation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\QuadControl.cpp" />
+    <ClCompile Include="..\src\MavlinkNode\PracticalSocket.cpp">
+      <Filter>MavlinkNode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\MavlinkNode\MavlinkNode.cpp">
+      <Filter>MavlinkNode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\MavlinkNode\MavlinkTranslation.cpp">
+      <Filter>MavlinkNode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Math\Geometry.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\Math\Quaternion.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Math\V3F.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Math\Angles.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..

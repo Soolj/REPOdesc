@@ -96,4 +96,68 @@ namespace SLR {
     va_end(args);
 
     // push everything out to stderr
-    sprintf
+    sprintf_s(buf3, 2047, "%s%s\n", buf, buf2);
+    fprintf(stderr,"%s",buf3);
+    fflush(stderr);
+  }
+
+  inline void PrintWarning(const char* funcName, const int lineNum, const char* format, ...)
+  {
+    char tsBuf[100]; tsBuf[99]=0;
+    char buf[512]; buf[511] = 0;
+    char buf2[2048]; buf2[2047] = 0;
+    char buf3[2560]; buf3[2559] = 0;
+
+    TimestampString(tsBuf,99,"%d-%H.%M.%S");
+
+    // error location
+    sprintf_s(buf, 511, "%s WRN %s(%d) : ", tsBuf, funcName, lineNum);
+
+    va_list args;
+    va_start(args, format);
+    vsprintf_s(buf2, 2047, format, args);
+    va_end(args);
+
+    // push everything out to stderr
+    sprintf_s(buf3, 2047, "%s%s\n", buf, buf2);
+    fprintf(stderr,"%s",buf3);
+    fflush(stderr);
+  }
+
+
+} //namespace SLR
+
+#ifdef _WIN32
+
+
+namespace SLR {
+  inline void PrintError(const char* funcName, const int lineNum, const char* format, ...);
+  inline void PrintWarning(const char* funcName, const int lineNum, const char* format, ...);
+}
+
+
+
+// boost::numeric::ublas shortcuts
+#define BNU boost::numeric::ublas
+#define BNUV BNU::bounded_vector
+#define BNUM BNU::c_matrix
+
+#if _MSC_VER>=1600 // visual studio 2010
+#include <memory>
+#include <functional>
+using std::shared_ptr;
+using std::weak_ptr;
+using std::placeholders::_1;
+#define TR1 std
+#else
+#include <boost/shared_ptr.hpp>
+#include <boost/weak_ptr.hpp>
+#include <boost/bind.hpp>
+#include <boost/numeric/ublas/vector.hpp>
+#include "Common/Math/Attitude.h"
+#include "Common/Math/Transform3D.h"
+using boost::shared_ptr;
+using boost::weak_ptr;
+using boost::static_pointer_cast;
+#define TR1 boost
+#endif

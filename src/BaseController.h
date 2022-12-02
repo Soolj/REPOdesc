@@ -68,4 +68,7 @@ public:
   TrajectoryPoint curTrajPoint;
   string _config;
 
-  V3F _trajectoryOffs
+  V3F _trajectoryOffset;
+  float _trajectoryTimeOffset;
+};
+

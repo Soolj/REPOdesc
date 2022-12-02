@@ -34,4 +34,66 @@
 #define SLR_WARNING0(A) SLR::PrintWarning(__FUNCTION__,__LINE__,A)
 #define SLR_WARNING1(A,B) SLR::PrintWarning(__FUNCTION__,__LINE__,A,B)
 #define SLR_WARNING2(A,B,C) SLR::PrintWarning(__FUNCTION__,__LINE__,A,B,C)
-#define SLR_WARNING3(A,B,C,D) SLR::PrintWarning(__FUNCTION__,__LINE__
+#define SLR_WARNING3(A,B,C,D) SLR::PrintWarning(__FUNCTION__,__LINE__,A,B,C,D)
+#define SLR_WARNING4(A,B,C,D,E) SLR::PrintWarning(__FUNCTION__,__LINE__,A,B,C,D,E)
+#define SLR_WARNING5(A,B,C,D,E,F) SLR::PrintWarning(__FUNCTION__,__LINE__,A,B,C,D,E,F)
+
+#ifndef _WIN32
+// not technically 100% correct, but lets us move on with our lives
+#define sprintf_s snprintf
+#define vsprintf_s vsnprintf
+#else
+#ifndef _SCL_SECURE_NO_WARNINGS
+#define _SCL_SECURE_NO_WARNINGS
+#endif
+#pragma warning(disable: 4996) //strcpy unsafe
+#endif
+
+namespace SLR {
+  inline void TimestampString(char* buf, int cnt, const char* format="%y.%m.%d.%H.%M.%S")
+  {
+#ifndef __PX4_NUTTX
+    // timestamp
+    struct tm   newTime;
+    time_t      szClock;
+    time(&szClock);
+#ifdef _WIN32
+    _timeb tstruct;
+    _ftime(&tstruct);
+    localtime_s(&newTime, &szClock);
+#else
+    // linux and apple
+    timeb tstruct;
+    ftime(&tstruct);
+    localtime_r(&szClock,&newTime);
+#endif
+    strftime(buf, cnt, format, &newTime);
+    sprintf_s(buf, cnt, "%s.%03d", buf, tstruct.millitm);
+#else
+    if(cnt>0)
+    {
+      buf[0]=0;
+    }
+
+#endif
+  }
+
+  inline void PrintError(const char* funcName, const int lineNum, const char* format, ...)
+  {
+    char tsBuf[100]; tsBuf[99]=0;
+    char buf[512]; buf[511] = 0;
+    char buf2[2048]; buf2[2047] = 0;
+    char buf3[2560]; buf3[2559] = 0;
+
+    TimestampString(tsBuf,99,"%d-%H.%M.%S");
+
+    // error location
+    sprintf_s(buf, 511, "%s ERR %s(%d) : ", tsBuf, funcName, lineNum);
+
+    va_list args;
+    va_start(args, format);
+    vsprintf_s(buf2, 2047, format, args);
+    va_end(args);
+
+    // push everything out to stderr
+    sprintf

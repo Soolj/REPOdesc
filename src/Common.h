@@ -161,3 +161,35 @@ using boost::weak_ptr;
 using boost::static_pointer_cast;
 #define TR1 boost
 #endif
+
+#include <winsock2.h> 
+#include <Windows.h>
+
+
+#else
+// not _WIN32
+#include <stdint.h>
+#include <inttypes.h>
+#include <unistd.h>
+inline void Sleep(int msec)
+{
+  usleep(msec*1000);
+}
+
+#include <memory>
+#include <functional>
+using std::shared_ptr;
+using std::weak_ptr;
+using std::placeholders::_1;
+
+#ifndef __PX4_NUTTX
+#include <cmath>
+inline bool _isnan(const double& v){return std::isnan(v);}
+inline bool _isnan(const float& v){return std::isnan(v);}
+#endif
+
+#endif // #ifdef _WIN32
+
+#include "Math/Constants.h"
+#include "Math/V3F.h"
+#include "Math/V3D.h"

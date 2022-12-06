@@ -60,4 +60,48 @@ V3F FalseColorBGR(float v, float intensityMult)
 {
 	if(v<=.5f)
   {
-    float b = (1.0f-v*2.0f
+    float b = (1.0f-v*2.0f);
+    float g = 1.0f-b;
+    float norm = (b+g)/(2.0f);
+    b = b*intensityMult/norm;
+    g = g*intensityMult/norm;
+    return V3F(CONSTRAIN(b,0,1.0f),CONSTRAIN(g,0,1.0f),0);
+  }
+  else
+  {
+    float r = (2.0f*(v-.5f));
+    float g = 1.0f-r;
+    float norm = (r+g)/(2.0f);
+    r = r*intensityMult/norm;
+    g = g*intensityMult/norm;
+    return V3F(0,CONSTRAIN(g,0,1.0f),CONSTRAIN(r,0,1.0f));
+  }
+}
+
+V3F FalseColorRGB(float v, float intensityMult)
+{
+  V3F bgr = FalseColorBGR(v, intensityMult);
+  return V3F(bgr[2], bgr[1], bgr[0]);
+}
+
+V3F FalseColor_RedGreen(float v, float intensityMult)
+{
+	V3F ret; // rgb
+	ret[0] = CONSTRAIN(1.0f-v,0,1);
+	ret[1] = CONSTRAIN(v,0,1);
+	return ret.norm()*intensityMult;
+}
+
+void SetConsoleColor(unsigned char attr)
+{
+#ifdef _WIN32
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), attr);
+#endif
+}
+
+void ResetConsoleColor()
+{
+#ifdef _WIN32
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_BLUE|FOREGROUND_GREEN|FOREGROUND_RED);
+#endif
+}

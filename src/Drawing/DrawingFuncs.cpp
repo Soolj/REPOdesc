@@ -141,4 +141,64 @@ void DrawQuarterX3D_TransparentPart(double alpha, GLUquadricObj *glQuadric, floa
 	glTranslatef(0,0,.01f);
 	
 	// props!
-	gl
+	glColor4d(.4,.4,.4,.4*alpha);
+	glTranslated(0,0,.005);
+
+	glDisable(GL_CULL_FACE);
+	glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
+
+  glEnable(GL_POLYGON_OFFSET_FILL);
+  glPolygonOffset(1.f, 1.f);
+	gluDisk(glQuadric,0, propR,24,3);
+	
+  glDisable(GL_POLYGON_OFFSET_FILL);
+	//glRotatef(180,1,0,0);
+	//gluDisk(q,0,.1,24,3);
+
+	// line highlight  
+
+	glColor4d(.4,.4,.4,alpha);
+	glBegin(GL_LINES);
+	for(int i=0;i<24;i++)
+	{
+		double angle = (double)i/24.0 * M_PI * 2.0;
+		double angle2 = (double)(i+1)/24.0 * M_PI * 2.0;
+		double r = propR+.001;
+		glVertex3d(r*sin(angle),r*cos(angle),0);
+		glVertex3d(r*sin(angle2),r*cos(angle2),0);
+	}
+	glEnd();
+	/*glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
+	glLineWidth(1);
+	glColor4d(0,0,0,alpha);
+	gluDisk(q,0,.1,24,2);*/
+	//glPolygonMode(GL_FRONT,GL_FILL);
+
+	glEnable(GL_CULL_FACE);
+	glPopMatrix();
+}
+
+void DrawStrokeText(const char* str, float x, float y, float z, float lineWidth, float scaleX, float scaleY)
+{
+  char *c;
+  glPushMatrix();
+  glTranslatef(x, y, z);
+  glScalef(0.0006f*scaleX, 0.0008f*scaleY, z);
+
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  glEnable(GL_LINE_SMOOTH);
+  glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+  glEnable(GL_LINE_SMOOTH);
+  glLineWidth(lineWidth);
+  for (c = (char*)str; *c != 0; c++)
+  {
+    glutStrokeCharacter(GLUT_STROKE_ROMAN, *c);
+  }
+  glLineWidth(1.0);
+  glPopMatrix();
+}
+
+void DrawX3D(V3D markingColor, V3D bodyColor, double alpha, bool solidPart, bool transPart, GLUquadricObj *glQuadric)
+{	
+  const float armL = .17f;    // .17 for h

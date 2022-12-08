@@ -72,4 +72,73 @@ void GLCross(const V3F& center, const V3F& dims, bool gl_begin_line)
 }
 
 
-const float propR = .1f;   // .1 fo
+const float propR = .1f;   // .1 for hummingbird
+const float motorR = .02f; // .03 for hummingbird
+
+void DrawQuarterX3D(bool front, V3D markingColor, V3D bodyColor, double alpha, GLUquadricObj *glQuadric, float armL)
+{	
+	if(front)
+	{
+		glColor4d(markingColor[0],markingColor[1],markingColor[2],alpha);
+	}
+	else
+	{
+		glColor4d(bodyColor[0],bodyColor[1],bodyColor[2],alpha);
+	}
+	// arm
+	GLCube(V3F(armL/2.f,0,0),V3F(armL,.03f,.005f));
+	
+	glPushMatrix();
+	glTranslated(armL,0,.005);
+	
+	// shaft + nut
+	glPushMatrix();
+	glColor4d(bodyColor[0],bodyColor[1],bodyColor[2],alpha);
+	glTranslatef(0,0,.005f);
+	gluCylinder(glQuadric,.003,.003,.015,8,1);
+	glTranslatef(0,0,.015f);
+	gluDisk(glQuadric,0,.003,8,1);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslated(0,0,-.01);
+
+	float mcolor[] = { 1.f, 1.f, 1.f, 1.0f };
+	mcolor[3] = (float)alpha;
+	float noSpecular[] = {0,0,0,1};
+	glColor4d(0,0,.8,alpha);
+
+	glMaterialfv(GL_FRONT, GL_SPECULAR, mcolor);
+	glMaterialf(GL_FRONT,GL_SHININESS,1.5f);
+
+	gluCylinder(glQuadric, motorR, motorR, .02,16,2);	// motor
+
+	glMaterialfv(GL_FRONT, GL_SPECULAR, noSpecular);
+	glMaterialf(GL_FRONT,GL_SHININESS,0);
+	glPopMatrix();
+
+	glColor4d(.1,.1,.1,alpha);
+	// bottom cap
+	glPushMatrix();
+	glTranslatef(0,0,-.01f);
+	glRotatef(180,1,0,0);
+	gluDisk(glQuadric,0, motorR,16,2);
+	glPopMatrix();
+
+	// top cap
+	glTranslatef(0,0,.01f);
+	gluDisk(glQuadric,0, motorR,16,2);
+	
+	glPopMatrix();
+}
+
+void DrawQuarterX3D_TransparentPart(double alpha, GLUquadricObj *glQuadric, float armL)
+{
+	glPushMatrix();
+	glTranslated(armL,0,.005);
+
+	// top cap
+	glTranslatef(0,0,.01f);
+	
+	// props!
+	gl

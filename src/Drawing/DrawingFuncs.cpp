@@ -258,4 +258,51 @@ void OpenGLDrawer::DrawQuadrotor2(V3F pos, Quaternion<float> att, V3F color, V3F
   glRotated(ypr[2] / M_PI * 180.0, 1, 0, 0);
 
   glRotatef(45, 0, 0, 1);
-  g
+  glRotatef(180, 1, 0, 0);
+
+  V3D bodyColor = V3D(.7, .7, 1);
+
+  bool cleanup = (_glQuadric == NULL);
+  if (_glQuadric == NULL)
+  {
+    _glQuadric = gluNewQuadric();
+  }
+  float alpha = 1;
+  if (1)
+  {
+    // center -- a box.
+    glPushMatrix();
+    glRotatef(45, 0, 0, 1);
+    glTranslated(centerOffset.x, centerOffset.y, centerOffset.z);
+    glScalef(centerScale, centerScale, centerScale);
+    
+    glEnable(GL_POLYGON_OFFSET_FILL);
+    glPolygonOffset(1.f, 1.f);
+    glPolygonMode(GL_FRONT, GL_FILL);
+    glColor4d(bodyColor[0], bodyColor[1], bodyColor[2], alpha);
+    GLCube(V3F(), V3F(.07f, .07f, .04f));
+    glDisable(GL_POLYGON_OFFSET_FILL);
+
+    glPolygonMode(GL_FRONT, GL_LINE);
+    glColor4d(.1,.1,.1, alpha);
+    GLCube(V3F(), V3F(.07f, .07f, .04f),1);
+    glPopMatrix();
+    glPolygonMode(GL_FRONT, GL_FILL);
+
+    DrawQuarterX3D(true, color, bodyColor*.8, alpha, _glQuadric, armL);
+    glRotatef(90, 0, 0, 1);
+    DrawQuarterX3D(true, color, bodyColor*.8, alpha, _glQuadric, armL);
+    glRotatef(90, 0, 0, 1);
+    DrawQuarterX3D(false, V3D(), bodyColor*.8, alpha, _glQuadric, armL);
+    glRotatef(90, 0, 0, 1);
+    DrawQuarterX3D(false, V3D(), bodyColor*.8, alpha, _glQuadric, armL);
+  }
+  if (1)
+  {
+    DrawQuarterX3D_TransparentPart(alpha, _glQuadric, armL);
+    glRotatef(90, 0, 0, 1);
+    DrawQuarterX3D_TransparentPart(alpha, _glQuadric, armL);
+    glRotatef(90, 0, 0, 1);
+    DrawQuarterX3D_TransparentPart(alpha, _glQuadric, armL);
+    glRotatef(90, 0, 0, 1);
+    DrawQuarterX3D_TransparentPart(alpha, _glQuadric, armL);

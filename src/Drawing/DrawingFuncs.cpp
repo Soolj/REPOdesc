@@ -306,3 +306,81 @@ void OpenGLDrawer::DrawQuadrotor2(V3F pos, Quaternion<float> att, V3F color, V3F
     DrawQuarterX3D_TransparentPart(alpha, _glQuadric, armL);
     glRotatef(90, 0, 0, 1);
     DrawQuarterX3D_TransparentPart(alpha, _glQuadric, armL);
+  }
+  if (cleanup)
+  {
+    gluDeleteQuadric(_glQuadric);
+  }
+
+  glPolygonMode(GL_FRONT, GL_FILL);
+
+  glPopMatrix();
+}
+
+void glCircle(float radius, int numSegments)
+{
+	glBegin(GL_LINE_LOOP);
+	for(int i=0;i<numSegments;i++)
+	{
+		glVertex3f(radius*sinf(i*F_PI*2.f/(float)numSegments),radius*cosf(i*F_PI*2.f/ (float)numSegments),0);
+	}
+	glEnd();
+}
+
+#ifdef _MSC_VER //  visual studio
+#pragma warning(disable:4100) //supress unused arguments warning
+#endif
+
+
+void OpenGLDrawer::DrawArrow(double len, double r1, double r2, double arrowLen)
+{
+  glPushMatrix();
+	glRotated(180,1,0,0);
+	gluDisk(_glQuadric,0,r1,12,5);
+	glRotated(180,1,0,0);
+	gluCylinder(_glQuadric,r1,r1,len,10,10);
+	glTranslated(0,0,len);
+	glRotated(180,1,0,0);
+	gluDisk(_glQuadric,0,r2,12,5);
+	glRotated(180,1,0,0);
+	gluCylinder(_glQuadric,r2,0,arrowLen,12,5);
+	glPopMatrix();
+}
+
+void OpenGLDrawer::DrawArrow(V3D from, V3D to, V3D color)
+{
+  V3D vec = (to-from).norm();
+  double yaw = atan2(vec.y,vec.x);
+  double pitch = -atan2(vec.z,vec.magXY());
+
+  glPushMatrix();
+
+  glTranslated(from.x, from.y, from.z);
+	glRotated(yaw/M_PI*180.0,0,0,1);
+	glRotated(pitch/M_PI*180.0,0,1,0);
+  glRotated(90,0,1,0);
+
+  glColor4d(color[0],color[1],color[2],1);
+
+  double len = (to-from).mag();
+  
+  DrawArrow(len,.015,.035,MAX(MIN(.1,len/4),.2));
+
+  glPopMatrix();
+}
+
+
+
+OpenGLDrawer::OpenGLDrawer()
+{
+	_glQuadric = gluNewQuadric();
+}
+
+OpenGLDrawer::~OpenGLDrawer()
+{
+	gluDeleteQuadric(_glQuadric);
+}
+
+void OpenGLDrawer::PushLighting()
+{
+	glPushAttrib(GL_ENABLE_B

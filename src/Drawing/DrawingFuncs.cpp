@@ -201,4 +201,61 @@ void DrawStrokeText(const char* str, float x, float y, float z, float lineWidth,
 
 void DrawX3D(V3D markingColor, V3D bodyColor, double alpha, bool solidPart, bool transPart, GLUquadricObj *glQuadric)
 {	
-  const float armL = .17f;    // .17 for h
+  const float armL = .17f;    // .17 for hummingbird
+
+	bool cleanup = (glQuadric==NULL);
+	if(glQuadric==NULL)
+	{
+		glQuadric = gluNewQuadric();
+	}
+	if(solidPart)
+	{
+		// center -- a box.
+		glPushMatrix();
+		glRotatef(45,0,0,1);
+		glColor4d(bodyColor[0],bodyColor[1],bodyColor[2],alpha);
+		GLCube(V3F(),V3F(.07f,.07f,.04f));
+		glPopMatrix();
+
+		DrawQuarterX3D(true, markingColor,bodyColor*.8,alpha,glQuadric, armL);
+		glRotatef(90,0,0,1);
+    DrawQuarterX3D(true, markingColor, bodyColor*.8, alpha, glQuadric, armL);
+		glRotatef(90,0,0,1);
+		DrawQuarterX3D(false,V3D(),bodyColor*.8,alpha,glQuadric, armL);
+		glRotatef(90,0,0,1);
+		DrawQuarterX3D(false,V3D(),bodyColor*.8,alpha,glQuadric, armL);
+	}
+	if(transPart)
+	{
+		DrawQuarterX3D_TransparentPart(alpha,glQuadric, armL);
+		glRotatef(90,0,0,1);
+		DrawQuarterX3D_TransparentPart(alpha,glQuadric, armL);
+		glRotatef(90,0,0,1);
+		DrawQuarterX3D_TransparentPart(alpha,glQuadric, armL);
+		glRotatef(90,0,0,1);
+		DrawQuarterX3D_TransparentPart(alpha,glQuadric, armL);
+	}
+	if(cleanup)
+	{
+		gluDeleteQuadric(glQuadric);
+	}
+}
+
+
+void OpenGLDrawer::DrawQuadrotor2(V3F pos, Quaternion<float> att, V3F color, V3F centerOffset, float centerScale, float armL)
+{
+  glPushMatrix();
+
+  // STRANGE: have to enable GL_SMOOTH here for it to work. something is switching the shade model back to flat.
+  glShadeModel(GL_SMOOTH);
+
+  glTranslated(pos[0], pos[1], pos[2]);
+
+  V3D ypr = att.ToEulerYPR();
+
+  glRotated(ypr[0] / M_PI * 180.0, 0, 0, 1);
+  glRotated(ypr[1] / M_PI * 180.0, 0, 1, 0);
+  glRotated(ypr[2] / M_PI * 180.0, 1, 0, 0);
+
+  glRotatef(45, 0, 0, 1);
+  g

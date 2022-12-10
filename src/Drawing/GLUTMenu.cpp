@@ -68,4 +68,55 @@ void GLUTMenu::CreateGLUTMenus(MenuEntry& top)
     CreateGLUTMenus(i->second);
   }
 
-  top.glutMenuHandle = glut
+  top.glutMenuHandle = glutCreateMenu(_g_OnMenu);
+  for (auto i = top.children.begin(); i != top.children.end(); i++)
+  {
+    // add items or submenus
+    if (i->second.glutMenuHandle == -1)
+    {
+      // non-submenu item
+      glutAddMenuEntry(i->first.c_str(), i->second.glutMenuEntryID);
+    }
+    else
+    {
+      glutAddSubMenu(i->first.c_str(), i->second.glutMenuHandle);
+    }
+  }
+}
+
+void GLUTMenu::RemoveGLUTMenus(MenuEntry& top)
+{
+  if (top.children.empty())
+    return;
+
+  for (auto i = top.children.begin(); i != top.children.end(); i++)
+  {
+    // create the submenus
+    RemoveGLUTMenus(i->second);
+  }
+
+  glutDestroyMenu(top.glutMenuHandle);
+  
+}
+
+void GLUTMenu::CreateMenu(const vector<string>& strings)
+{
+  _menuItemCounter = 0;
+  if (menuTree.glutMenuHandle >= 0)
+  {
+    RemoveGLUTMenus(menuTree);
+  }
+  menuTree = StringListToMenuTree(strings);
+
+  CreateGLUTMenus(menuTree);
+ 
+  glutAttachMenu(GLUT_RIGHT_BUTTON);
+}
+
+void GLUTMenu::OnGLUTMenu(int id)
+{
+  if (OnMenu && _menuMap.find(id)!= _menuMap.end())
+  {
+    OnMenu(_menuMap[id]);
+  }
+}

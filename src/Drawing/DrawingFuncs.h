@@ -38,4 +38,15 @@ public:
 
   void DrawQuadrotor2(V3F pos, Quaternion<float> att, V3F color, V3F centerOffset, float centerScale, float armLength);
 
-  void DrawArrow(double len, double r1, double r2, double arr
+  void DrawArrow(double len, double r1, double r2, double arrowLen);
+  void DrawArrow(V3D from, V3D to, V3D color);
+
+  GLUquadricObj* Quadric() { return _glQuadric; };
+
+  V3D cameraPos;
+
+protected:
+  GLUquadricObj* _glQuadric;
+};
+
+} // namespace SLR

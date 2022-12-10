@@ -383,4 +383,27 @@ OpenGLDrawer::~OpenGLDrawer()
 
 void OpenGLDrawer::PushLighting()
 {
-	glPushAttrib(GL_ENABLE_B
+	glPushAttrib(GL_ENABLE_BIT);
+}
+
+void OpenGLDrawer::PopLighting()
+{
+	glPopAttrib();
+}
+
+void OpenGLDrawer::SetLighting(bool enable)
+{
+	if(enable)
+	{
+		glEnable(GL_LIGHTING);
+		glEnable(GL_LIGHT0);
+    glEnable(GL_LIGHT1);
+	}
+	else
+	{
+    glDisable(GL_LIGHT1);
+		glDisable(GL_LIGHT0);
+		glDisable(GL_LIGHTING);
+	}
+}
+

@@ -28,4 +28,6 @@ public:
   std::vector<std::string> GetGraphableStrings();
 
 protected:
-  int 
+  int _glutWindowNum;
+  bool _ownWindow;
+};

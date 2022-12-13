@@ -26,4 +26,14 @@ inline float AngleNormF(float angle)
 {
 	angle = fmod(angle, (2.0f*(float)M_PI));
 
-	if (an
+	if (angle <= -(float)M_PI)
+	{
+	   angle += (2.0f*(float)M_PI);
+	}
+	else if (angle > (float)M_PI)
+	{
+	   angle -= (2.0f*(float)M_PI);
+	}
+
+	return angle;
+}

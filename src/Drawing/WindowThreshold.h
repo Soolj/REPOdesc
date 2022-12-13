@@ -90,4 +90,49 @@ public:
     {
       glBegin(GL_LINES);
       glVertex2f(minX, -_thresh);
-      glVertex2f(maxX, -_thresh)
+      glVertex2f(maxX, -_thresh);
+      glEnd();
+    }
+
+    if (_lastTimeAboveThresh == numeric_limits<float>::infinity() || _lastTimeAboveThresh<minX || _lastTimeAboveThresh>maxX)
+    {
+      return;
+    }
+
+    if (_active)
+    {
+      glColor3f(0, 1, 0);
+      glBegin(GL_LINE_STRIP);
+      glVertex2f(_lastTimeAboveThresh, CONSTRAIN(_thresh,minY,maxY));
+      glVertex2f(_lastTime, CONSTRAIN(_thresh, minY, maxY));
+      glVertex2f(_lastTime, CONSTRAIN(-_thresh, minY, maxY));
+      glVertex2f(_lastTimeAboveThresh, CONSTRAIN(-_thresh, minY, maxY));
+      glVertex2f(_lastTimeAboveThresh, CONSTRAIN(_thresh, minY, maxY));
+      glEnd();
+    }
+    else
+    {
+      glColor3f(.7f, .1f, .1f);
+      if (_thresh > minY && _thresh < maxY)
+      {
+        glBegin(GL_LINES);
+        glVertex2f(minX, _thresh);
+        glVertex2f(maxX, _thresh);
+        glEnd();
+      }
+      if (-_thresh > minY && -_thresh < maxY)
+      {
+        glBegin(GL_LINES);
+        glVertex2f(minX, -_thresh);
+        glVertex2f(maxX, -_thresh);
+        glEnd();
+      }
+    }
+  }
+
+  bool _active;
+  string _var;
+  float _lastTimeAboveThresh;
+  float _thresh, _minWindow;
+  float _lastTime;
+};

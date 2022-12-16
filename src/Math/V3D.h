@@ -31,4 +31,29 @@ public:
 	V3D(const int v):x(v),y(v),z(v){};
 	V3D(const double v):x(v),y(v),z(v){};
   V3D(const double X, const double Y, const double Z):x(X),y(Y),z(Z){};
-	V3D(const double* d):x(d[0]),y(d[1]),
+	V3D(const double* d):x(d[0]),y(d[1]),z(d[2]){};
+  V3D(const float* d):x(d[0]),y(d[1]),z(d[2]){};
+#ifdef BOOST_MSVC
+	V3D(const boost::numeric::ublas::bounded_vector<double,3>& d):x(d(0)),y(d(1)),z(d(2)){};
+	V3D(const boost::numeric::ublas::bounded_vector<float,3>& d):x(d(0)),y(d(1)),z(d(2)){};
+#endif
+  
+  inline V3D operator+(const V3D b) const{    return V3D(x+b.x,y+b.y,z+b.z);  };
+  inline V3D operator*(const V3D b) const{    return V3D(x*b.x,y*b.y,z*b.z);  };
+  inline V3D operator/(const V3D b) const{    return V3D(x/b.x,y/b.y,z/b.z);  };
+  inline V3D operator-(const V3D b) const{    return V3D(x-b.x,y-b.y,z-b.z);  };
+  
+  inline V3D operator+(const double b) const{    return V3D(x+b,y+b,z+b);  };
+  inline V3D operator*(const double b) const{    return V3D(x*b,y*b,z*b);  };
+  inline V3D operator/(const double b) const{    return V3D(x/b,y/b,z/b);  };
+  inline V3D operator-(const double b) const{    return V3D(x-b,y-b,z-b);  };
+
+  inline bool operator==(const V3D& b) const{ return (b.x==x && b.y==y && b.z==z);}
+  inline bool operator!=(const V3D& b) const{ return (b.x!=x || b.y!=y || b.z!=z);}
+	inline bool operator>(const V3D& b) const{ return (b.x>x || b.y>y || b.z>z);}
+	inline bool operator<(const V3D& b) const{ return (b.x<x || b.y<y || b.z<z);}
+
+  inline V3D operator/=(const V3D b){ *this = *this / b; return *this;}
+  inline V3D operator*=(const V3D b){ *this = *this * b; return *this;}
+  inline V3D operator+=(const V3D b){ *this = *this + b; return *this;}
+  inline V3D operator-=(const V

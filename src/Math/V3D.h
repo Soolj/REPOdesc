@@ -110,4 +110,60 @@ public:
   inline double& operator[](const int i){
     switch(i){
       case 0: return x;
-  
+      case 1: return y;
+      default: return z;
+    }
+  }
+
+	inline const double* getArray() const { return &x; };
+  inline void get(double* v) const {v[0] = x;    v[1] = y;    v[2] = z;};
+	inline void get(float* v) const {v[0] = (float)x;    v[1] = (float)y;    v[2] = (float)z;};
+	inline void get(double& X, double& Y, double& Z) const {X = x;    Y = y;    Z = z;};
+  inline void set(double* v)       {x = v[0];    y = v[1];    z = v[2];};
+
+  inline V3D cross(const V3D v) const{
+	  V3D resVector;
+	  resVector.x = y*v.z - z*v.y;
+	  resVector.y = z*v.x - x*v.z;
+	  resVector.z = x*v.y - y*v.x;
+	  return resVector;
+  }
+
+  inline double dot(const V3D a) const{
+    return x*a.x + y*a.y + z*a.z;
+  }
+
+  inline V3D norm() const{
+    V3D res;
+	  double l = mag();
+	  if (l == 0.0) return NULL_VECTOR_D;
+    return operator/(l);
+  }
+
+	inline double sum() const{ return x+y+z;};
+
+  inline double dist(const V3D b) const{    return operator-(b).mag();  }
+	inline double dist_sq(const V3D b) const{    return operator-(b).sq().sum();  }
+
+  inline double distXY(const V3D b) const{    return ::sqrt((x-b.x)*(x-b.x)+(y-b.y)*(y-b.y));  }
+
+#ifdef _WIN32
+  inline string ToString(const char* delim=" ") const
+  {
+    char buf[200];
+    sprintf_s(buf,200,"%.3lf%s%.3lf%s%.3lf",x,delim,y,delim,z);
+    return string(buf);
+  }
+
+  inline string ToString_FullPrecision() const
+  {
+    char buf[200];
+    sprintf_s(buf,200,"%lf %lf %lf",x,y,z);
+    return string(buf);
+  }
+#endif
+};
+
+inline V3D operator*(double a, V3D b)
+{
+	return V3D(a*b.x,a*b.y,a*b.z);

@@ -167,3 +167,22 @@ public:
 inline V3D operator*(double a, V3D b)
 {
 	return V3D(a*b.x,a*b.y,a*b.z);
+}
+
+inline V3D operator/(double a, V3D b)
+{
+	return V3D(a/b.x,a/b.y,a/b.z);
+}
+
+inline V3D operator-(double a, V3D b)
+{
+	return V3D(a-b.x,a-b.y,a-b.z);
+}
+
+inline V3D operator+(double a, V3D b)
+{
+	return b+a;
+}
+
+#pragma pack(pop)
+

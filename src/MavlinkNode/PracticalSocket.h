@@ -114,4 +114,44 @@ public:
 
   /**
    *   If WinSock, unload the WinSock DLLs; otherwise do nothing.  We ignore
-   *   this in our sample client code but include it in the librar
+   *   this in our sample client code but include it in the library for
+   *   completeness.  If you are running on Windows and you are concerned
+   *   about DLL resource consumption, call this after you are done with all
+   *   Socket instances.  If you execute this on Windows while some instance of
+   *   Socket exists, you are toast.  For portability of client code, this is 
+   *   an empty function on non-Windows platforms so you can always include it.
+   *   @param buffer buffer to receive the data
+   *   @param bufferLen maximum number of bytes to read into buffer
+   *   @return number of bytes read, 0 for EOF, and -1 for error
+   *   @exception SocketException thrown WinSock clean up fails
+   */
+  static void cleanUp() throw(SocketException);
+
+  /**
+   *   Resolve the specified service for the specified protocol to the
+   *   corresponding port number in host byte order
+   *   @param service service to resolve (e.g., "http")
+   *   @param protocol protocol of service to resolve.  Default is "tcp".
+   */
+  static unsigned short resolveService(const string &service,
+                                       const string &protocol = "tcp");
+
+private:
+  // Prevent the user from trying to use value semantics on this object
+  Socket(const Socket &sock);
+  void operator=(const Socket &sock);
+
+protected:
+  int sockDesc;              // Socket descriptor
+  Socket(int type, int protocol) throw(SocketException);
+  Socket(int sockDesc);
+};
+
+/**
+ *   Socket which is able to connect, send, and receive
+ */
+class CommunicatingSocket : public Socket {
+public:
+  /**
+   *   Establish a socket connection with the given foreign
+   *   address and p

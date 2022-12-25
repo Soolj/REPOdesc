@@ -40,4 +40,29 @@ public:
 		this->callbackArg = arg;
 	}	
 
-	v
+	void ClearCallback()
+	{
+		this->callback.clear();
+	}
+
+  void Send(const vector<uint8_t>& packet);
+
+private:
+	void UDPPacketCallback(UDPPacket& m);
+
+  MavlinkNodeCallback callback;
+	void* callbackArg;
+
+	unsigned short _lastSeqNum;
+	bool _first;
+	unsigned int _doubleCnt;
+
+	UDPSocket _socket;
+#ifdef _WIN32
+	HANDLE _thread;
+#else
+	pthread_t _thread;
+#endif
+	UDPPacket _packet;
+	bool _running;
+};

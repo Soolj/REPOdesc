@@ -59,4 +59,59 @@ public:
   const char *what() const throw();
 
 private:
-  string userMessage;  // Exception messag
+  string userMessage;  // Exception message
+};
+
+/**
+ *   Base class representing basic communication endpoint
+ */
+class Socket {
+public:
+  /**
+   *   Close and deallocate this socket
+   */
+  ~Socket();
+
+  /**
+   *   Get the local address
+   *   @return local address of socket
+   *   @exception SocketException thrown if fetch fails
+   */
+  string getLocalAddress() throw(SocketException);
+
+#ifndef _WIN32
+  void shutdown()
+  {
+    ::shutdown(sockDesc,SHUT_RDWR);
+  }
+#endif
+
+  /**
+   *   Get the local port
+   *   @return local port of socket
+   *   @exception SocketException thrown if fetch fails
+   */
+  unsigned short getLocalPort() throw(SocketException);
+
+  /**
+   *   Set the local port to the specified port and the local address
+   *   to any interface
+   *   @param localPort local port
+   *   @exception SocketException thrown if setting local port fails
+   */
+  void setLocalPort(unsigned short localPort) throw(SocketException);
+
+  /**
+   *   Set the local port to the specified port and the local address
+   *   to the specified address.  If you omit the port, a random port 
+   *   will be selected.
+   *   @param localAddress local address
+   *   @param localPort local port
+   *   @exception SocketException thrown if setting local port or address fails
+   */
+  void setLocalAddressAndPort(const string &localAddress, 
+    unsigned short localPort = 0) throw(SocketException);
+
+  /**
+   *   If WinSock, unload the WinSock DLLs; otherwise do nothing.  We ignore
+   *   this in our sample client code but include it in the librar

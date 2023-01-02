@@ -196,4 +196,53 @@ public:
   unsigned short getForeignPort() throw(SocketException);
 
 protected:
-  CommunicatingSocket(int type, in
+  CommunicatingSocket(int type, int protocol) throw(SocketException);
+  CommunicatingSocket(int newConnSD);
+};
+
+/**
+ *   TCP socket for communication with other TCP sockets
+ */
+class TCPSocket : public CommunicatingSocket {
+public:
+  /**
+   *   Construct a TCP socket with no connection
+   *   @exception SocketException thrown if unable to create TCP socket
+   */
+  TCPSocket() throw(SocketException);
+
+  /**
+   *   Construct a TCP socket with a connection to the given foreign address
+   *   and port
+   *   @param foreignAddress foreign address (IP address or name)
+   *   @param foreignPort foreign port
+   *   @exception SocketException thrown if unable to create TCP socket
+   */
+  TCPSocket(const string &foreignAddress, unsigned short foreignPort) 
+      throw(SocketException);
+
+private:
+  // Access for TCPServerSocket::accept() connection creation
+  friend class TCPServerSocket;
+  TCPSocket(int newConnSD);
+};
+
+/**
+ *   TCP socket class for servers
+ */
+class TCPServerSocket : public Socket {
+public:
+  /**
+   *   Construct a TCP socket for use with a server, accepting connections
+   *   on the specified port on any interface
+   *   @param localPort local port of server socket, a value of zero will
+   *                   give a system-assigned unused port
+   *   @param queueLen maximum queue length for outstanding 
+   *                   connection requests (default 5)
+   *   @exception SocketException thrown if unable to create TCP server socket
+   */
+  TCPServerSocket(unsigned short localPort, int queueLen = 5) 
+      throw(SocketException);
+
+  /**
+   *   Construct a TCP socket for use with a server, acc

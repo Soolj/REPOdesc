@@ -291,4 +291,44 @@ public:
    *   @param localPort local port
    *   @exception SocketException thrown if unable to create UDP socket
    */
-  UDPSocke
+  UDPSocket(const string &localAddress, unsigned short localPort) 
+      throw(SocketException);
+
+  /**
+   *   Unset foreign address and port
+   *   @return true if disassociation is successful
+   *   @exception SocketException thrown if unable to disconnect UDP socket
+   */
+  void disconnect() throw(SocketException);
+
+  /**
+   *   Send the given buffer as a UDP datagram to the
+   *   specified address/port
+   *   @param buffer buffer to be written
+   *   @param bufferLen number of bytes to write
+   *   @param foreignAddress address (IP address or name) to send to
+   *   @param foreignPort port number to send to
+   *   @return true if send is successful
+   *   @exception SocketException thrown if unable to send datagram
+   */
+  void sendTo(const void *buffer, int bufferLen, const string &foreignAddress,
+            unsigned short foreignPort) throw(SocketException);
+
+  /**
+   *   Read read up to bufferLen bytes data from this socket.  The given buffer
+   *   is where the data will be placed
+   *   @param buffer buffer to receive data
+   *   @param bufferLen maximum number of bytes to receive
+   *   @param sourceAddress address of datagram source
+   *   @param sourcePort port of data source
+   *   @return number of bytes received and -1 for error
+   *   @exception SocketException thrown if unable to receive datagram
+   */
+  int recvFrom(void *buffer, int bufferLen, string &sourceAddress, 
+               unsigned short &sourcePort) throw(SocketException);
+
+  /**
+   *   Set the multicast TTL
+   *   @param multicastTTL multicast TTL
+   *   @exception SocketException thrown if unable to set TTL
+   *

@@ -331,4 +331,26 @@ public:
    *   Set the multicast TTL
    *   @param multicastTTL multicast TTL
    *   @exception SocketException thrown if unable to set TTL
-   *
+   */
+  void setMulticastTTL(unsigned char multicastTTL) throw(SocketException);
+
+  /**
+   *   Join the specified multicast group
+   *   @param multicastGroup multicast group address to join
+   *   @exception SocketException thrown if unable to join group
+   */
+  void joinGroup(const string &multicastGroup) throw(SocketException);
+
+  /**
+   *   Leave the specified multicast group
+   *   @param multicastGroup multicast group address to leave
+   *   @exception SocketException thrown if unable to leave group
+   */
+  void leaveGroup(const string &multicastGroup) throw(SocketException);
+
+private:
+  void setBroadcast();
+  string _myAddr;
+};
+
+#endif

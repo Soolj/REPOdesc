@@ -61,4 +61,25 @@ public:
 
   shared_ptr<Trajectory> _followed_traj;
 
-pr
+protected:
+  string _name;
+
+	// pos, vel, acc are in the global frame while omega is in the local frame (body rates)
+	V3F  pos, vel, acc, omega, old_omega; 
+  Quaternion<float>  quat;
+
+  int _vehicleType;
+
+  // vehicle geometry and mass properties
+  float M; // veh mass, kg
+  float Ixx,Iyy,Izz;
+  float xMin,yMin,bottom,xMax,yMax,top;
+  bool _initialized;
+
+  float _lastTrajPointTime;
+  float _trajLogStepTime;
+};
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif

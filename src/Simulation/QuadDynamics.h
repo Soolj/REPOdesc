@@ -72,4 +72,30 @@ protected:
   matrix::Vector<float, 4> motorCmdsN;
   matrix::Vector<float, 4> motorCmdsOld;
 
-	// useful matrices/vectors that are recomputed from the
+	// useful matrices/vectors that are recomputed from the state at each timestep
+	double YPR[3];
+
+  //////////////////////////////////////////////////////////////////
+  // vehicle geometry and mass properties
+  float cx;
+  float cy;
+  float L; // distance from body z axis to the prop
+
+  // properties of the prop/motor system as modeled
+  double tauaUp, tauaDown; // time constant
+  float kappa; // Nm drag per N lift
+  float minMotorThrust, maxMotorThrust;
+
+	double xyzDisturbanceInt, xyzDisturbanceBW, rotDisturbanceInt, rotDisturbanceBW, gyroNoiseInt;
+	V3D xyzDisturbance, rotDisturbance;
+
+  float randomMotorForceMag;
+
+  double controllerUpdateInterval, timeSinceLastControllerUpdate;
+
+	V3F _rawGyro;
+  float _lastPosFollowErr;
+
+  V3F color;  
+  string _flightMode;
+};

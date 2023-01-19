@@ -12,4 +12,10 @@ class magnetometer
 {
 public:
   V3F mag;
-  float fx_std
+  float fx_stddev = 0.0001f;
+  float fy_stddev = 0.0001f;
+  float fz_stddev = 0.0001f;
+  void magnetometer_sensor(float declination, SLR::Quaternion<float> attitude, V3F &mag_measurement);
+};
+
+#endif // MAGNETOMETER_H

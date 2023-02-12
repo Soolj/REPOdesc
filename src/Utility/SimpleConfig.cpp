@@ -90,4 +90,59 @@ void SimpleConfig::ParseLine(const string& filename, const string& line, int lin
     // need to put the file in the same directory as this one
     auto tmp = filename.find_last_of("/\\");
     string path="";
-    if (tmp != s
+    if (tmp != string::npos)
+    {
+      path = filename.substr(0, tmp+1);
+    }
+    ReadFile(path+filenameToInclude, depth + 1);
+    return;
+  }
+
+  // is it a namespace?
+  std::size_t leftBracket = s.find_first_of("[");
+  std::size_t rightBracket = s.find_last_of("]");
+  if (leftBracket != std::string::npos && rightBracket != std::string::npos)
+  {
+    curNamespace = ToUpper(s.substr(leftBracket + 1, rightBracket - leftBracket - 1));
+    // is it an inherited namespace?
+    if (Contains(curNamespace, ':'))
+    {
+      string baseNamespace = Trim(RightOf(curNamespace, ':'));
+      curNamespace = Trim(LeftOf(curNamespace, ':'));
+      CopyNamespaceParams(baseNamespace, curNamespace);
+    }
+    return;
+  }
+
+  // is there an equals sign?
+  std::size_t equals1 = s.find_first_of("=");
+  std::size_t equals2 = s.find_last_of("=");
+  if (equals1 != equals2 || equals1 == std::string::npos)
+  {
+    SLR_WARNING2("Line %d in config file %s is malformed", lineNum, filename.c_str());
+    return;
+  }
+
+  // must be a parameter. split off the left part and the right part and remove whitespace
+  // TODO: handle "" and '' strings?
+
+  string leftPart = ToUpper(Trim(s.substr(firstNonWS, equals1 - firstNonWS)));
+  string rightPart = Trim(s.substr(equals1 + 1));
+
+  if (leftPart == "" || rightPart == "")
+  {
+    SLR_WARNING2("Line %d in config file %s is malformed", lineNum, filename.c_str());
+    return;
+  }
+
+  if (curNamespace != "")
+  {
+    _params[curNamespace + "." + leftPart] = rightPart;
+  }
+  else
+  {
+    _params[leftPart] = rightPart;
+  }
+}
+
+void SimpleCon

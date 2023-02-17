@@ -207,4 +207,62 @@ bool SimpleConfig::GetV3F(const string& param, V3F& ret)
   std::size_t comma1 = s.find_first_of(",");
   std::size_t comma2 = s.find_last_of(",");
   if(comma1==comma2 || comma1==string::npos || comma2==string::npos) return false;
-  str
+  string a = s.substr(0,comma1);
+  string b = s.substr(comma1+1,comma2-comma1-1);
+  string c = s.substr(comma2+1);
+  try
+  {
+      ret = V3F(std::stof(a),std::stof(b),std::stof(c));
+      return true;
+  }
+  catch(...)
+  {
+      return false;
+  }
+}
+
+bool SimpleConfig::GetFloatVector(const string& param, vector<float>& ret)
+{
+  auto i = _params.find(ToUpper(param));
+  if (i == _params.end()) return false;
+  string s = i->second;
+  vector<string> spl = SLR::Split(s, ',');
+  ret.clear();
+  for (unsigned i = 0; i < s.size(); i++)
+  {
+    try
+    {
+      float tmp = std::stof(spl[i]);
+      ret.push_back(tmp);
+    }
+    catch (...)
+    {
+      return false;
+    }
+  }
+  return true;
+}
+
+
+float SimpleConfig::Get(const string& param, float defaultRet)
+{
+  this->GetFloat(param,defaultRet);
+  return defaultRet;
+}
+
+string SimpleConfig::Get(const string& param, string defaultRet)
+{
+  this->GetString(param,defaultRet);
+  return defaultRet;
+}
+
+V3F SimpleConfig::Get(const string& param, V3F defaultRet)
+{
+  this->GetV3F(param,defaultRet);
+  return defaultRet;
+}
+
+
+
+
+} // namespace SLR

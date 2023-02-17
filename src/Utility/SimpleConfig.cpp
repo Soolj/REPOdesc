@@ -145,4 +145,66 @@ void SimpleConfig::ParseLine(const string& filename, const string& line, int lin
   }
 }
 
-void SimpleCon
+void SimpleConfig::CopyNamespaceParams(const string& fromNamespace, const string& toNamespace)
+{
+  string searchString = ToUpper(fromNamespace + ".");
+  // very lazy implementation
+  map<string, string> pCopy = _params;
+  for (map<string,string>::iterator i = pCopy.begin(); i != pCopy.end(); i++)
+  {
+    if (i->first.compare(0, searchString.length(), searchString) == 0)
+    {
+      string tmp = i->first.substr(searchString.size());
+      tmp = toNamespace + "." + tmp;
+      _params[tmp] = i->second;
+    }
+
+  }
+
+}
+
+void SimpleConfig::PrintAll()
+{
+  for(auto i=_params.begin(); i!=_params.end(); i++)
+  {
+    printf("%s=%s\n",i->first.c_str(),i->second.c_str());
+  }
+}
+
+bool SimpleConfig::Exists(const string& param)
+{
+  return _params.find(ToUpper(param)) != _params.end();
+}
+
+bool SimpleConfig::GetFloat(const string& param, float& ret)
+{
+  auto i = _params.find(ToUpper(param));
+  if(i==_params.end()) return false;
+  try
+  {
+      ret = std::stof(i->second);
+      return true;
+  }
+  catch(...)
+  {
+      return false;
+  }
+}
+
+bool SimpleConfig::GetString(const string& param, string& ret)
+{
+  auto i = _params.find(ToUpper(param));
+  if(i==_params.end()) return false;
+  ret = i->second;
+  return true;
+}
+
+bool SimpleConfig::GetV3F(const string& param, V3F& ret)
+{
+  auto i = _params.find(ToUpper(param));
+  if(i==_params.end()) return false;
+  string s = i->second;
+  std::size_t comma1 = s.find_first_of(",");
+  std::size_t comma2 = s.find_last_of(",");
+  if(comma1==comma2 || comma1==string::npos || comma2==string::npos) return false;
+  str
